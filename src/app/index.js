@@ -12,7 +12,16 @@ const theme = {
   colors: customLightColors.colors,
 };
 
-const Home = () => {
+
+// export default function Main() {
+//   return (
+//     <PaperProvider theme={theme}>
+//       <App />
+//     </PaperProvider>
+//   );
+// }
+
+export default function Home() {
   return (
     <PaperProvider theme={theme}>
       <View>
@@ -23,5 +32,3 @@ const Home = () => {
     </PaperProvider>
   );
 };
-
-export default Home;

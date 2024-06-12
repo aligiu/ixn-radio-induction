@@ -25,12 +25,28 @@ export default function Layout() {
   const renderHeaderLeft = () => {
     if (!navigation.canGoBack()) {
       // define navigation.openDrawer()
-      return <IconButton icon="menu" onPress={() => {}} />;
+      return (
+        <View style={[styles.headerLeftContainer]}>
+          <IconButton
+            // size={24}
+            style={styles.iconButtonContent}
+            icon="menu"
+            onPress={() => {}}
+          />
+        </View>
+      );
     }
-    return <IconButton icon="arrow-left" onPress={() => navigation.goBack()} />;
+    return (
+      <IconButton
+        // size={24}
+        style={styles.iconButtonContent}
+        icon="arrow-left"
+        onPress={() => navigation.goBack()}
+      />
+    );
   };
 
-  const headerHeight = 60;
+  const headerHeight = 40;
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -47,7 +63,6 @@ export default function Layout() {
         >
           <Stack
             screenOptions={{
-              headerStyle: {},
               headerLeft: renderHeaderLeft,
               headerRight: ({}) => (
                 <View style={[styles.headerRightContainer]}>
@@ -72,6 +87,13 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  headerLeftContainer: {
+    flex: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "lightblue",
+    borderWidth: 1,
+  },
   headerRightContainer: {
     flex: 1,
     justifyContent: "center",
@@ -81,8 +103,12 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 20,
     backgroundColor: "white",
-    height: 30,
+    height: 40,
     borderColor: "lightblue",
     borderWidth: 1,
+  },
+  iconButtonContent: {
+    padding: 0,
+    margin: 0,
   },
 });

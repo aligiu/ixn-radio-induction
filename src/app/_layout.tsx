@@ -22,7 +22,7 @@ export default function Layout() {
 
   const navigation = useNavigation();
 
-  const renderHeaderLeft = () => {
+  function renderHeaderLeft() {
     if (!navigation.canGoBack()) {
       // TODO: define navigation.openDrawer() or method to open hamburger menu
       return (
@@ -37,14 +37,30 @@ export default function Layout() {
       );
     }
     return (
-      <IconButton
-        // size={24}
-        style={styles.iconButtonContent}
-        icon="arrow-left"
-        onPress={() => navigation.goBack()}
-      />
+      <View style={[styles.headerLeftContainer]}>
+        <IconButton
+          // size={24}
+          style={styles.iconButtonContent}
+          icon="arrow-left"
+          onPress={() => navigation.goBack()}
+        />
+      </View>
     );
-  };
+  }
+
+  function renderHeaderRight() {
+    return (
+      <View style={[styles.headerRightContainer]}>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={(text) => setSearchText(text)}
+          style={styles.searchBar}
+          value={searchText}
+          inputStyle={{ minHeight: 0 }}
+        />
+      </View>
+    );
+  }
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -57,26 +73,45 @@ export default function Layout() {
         ]}
       >
         <View
-          style={{ flex: 1, 
+          style={{
+            flex: 1,
             flexDirection: "row",
-            backgroundColor: paperTheme.colors.background }}
+            backgroundColor: paperTheme.colors.background,
+          }}
         >
           <Stack
             screenOptions={{
-              headerLeft: renderHeaderLeft,
-              headerRight: ({}) => (
-                <View style={[styles.headerRightContainer]}>
-                  <Searchbar
-                    placeholder="Search"
-                    onChangeText={(text) => setSearchText(text)}
-                    style={styles.searchBar}
-                    value={searchText}
-                    inputStyle={{ minHeight: 0 }}
-                  />
+              header: () => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: 10,
+                    gap: 10,
+                  }}
+                >
+                  {renderHeaderLeft()}
+                  {renderHeaderRight()}
                 </View>
               ),
               headerTitle: "", // Remove header title
             }}
+
+            //   headerLeft: renderHeaderLeft,
+            // //   headerRight: renderHeaderLeft,
+            //   headerRight: ({}) => (
+            //     <View style={[styles.headerRightContainer]}>
+            //       <Searchbar
+            //         placeholder="Search"
+            //         onChangeText={(text) => setSearchText(text)}
+            //         style={styles.searchBar}
+            //         value={searchText}
+            //         inputStyle={{ minHeight: 0 }}
+            //       />
+            //     </View>
+            //   ),
+            //   headerTitle: "", // Remove header title
+            // }}
           />
         </View>
       </SafeAreaView>
@@ -90,26 +125,26 @@ const styles = StyleSheet.create({
   },
   headerLeftContainer: {
     flex: 0,
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 20,
     borderColor: "lightblue",
     borderWidth: 1,
   },
   headerRightContainer: {
-    width: "85%",
-    flexDirection: 'row',
+    flex: 1,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
-    borderColor: "green",
-    borderWidth: 1,
+    // borderColor: "green",
+    // borderWidth: 1,
   },
   searchBar: {
     width: "100%",
-    borderRadius: 20,
     backgroundColor: "white",
     height: 40,
+    borderRadius: 20,
     borderColor: "lightblue",
     borderWidth: 1,
   },

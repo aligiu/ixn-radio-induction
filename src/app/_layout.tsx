@@ -24,7 +24,7 @@ export default function Layout() {
 
   const renderHeaderLeft = () => {
     if (!navigation.canGoBack()) {
-      // define navigation.openDrawer()
+      // TODO: define navigation.openDrawer() or method to open hamburger menu
       return (
         <View style={[styles.headerLeftContainer]}>
           <IconButton
@@ -46,8 +46,6 @@ export default function Layout() {
     );
   };
 
-  const headerHeight = 40;
-
   return (
     <PaperProvider theme={paperTheme}>
       <SafeAreaView
@@ -59,7 +57,9 @@ export default function Layout() {
         ]}
       >
         <View
-          style={{ flex: 1, backgroundColor: paperTheme.colors.background }}
+          style={{ flex: 1, 
+            flexDirection: "row",
+            backgroundColor: paperTheme.colors.background }}
         >
           <Stack
             screenOptions={{
@@ -75,6 +75,7 @@ export default function Layout() {
                   />
                 </View>
               ),
+              headerTitle: "", // Remove header title
             }}
           />
         </View>
@@ -89,15 +90,20 @@ const styles = StyleSheet.create({
   },
   headerLeftContainer: {
     flex: 0,
+    flexDirection: 'row',
     justifyContent: "center",
     alignItems: "center",
     borderColor: "lightblue",
     borderWidth: 1,
   },
   headerRightContainer: {
-    flex: 1,
+    width: "85%",
+    flexDirection: 'row',
     justifyContent: "center",
     alignItems: "center",
+    marginRight: 10,
+    borderColor: "green",
+    borderWidth: 1,
   },
   searchBar: {
     width: "100%",

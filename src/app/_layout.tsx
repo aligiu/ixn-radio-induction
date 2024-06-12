@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useNavigation } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 import {
   useColorScheme,
@@ -22,11 +22,65 @@ export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");
   const navigation = useNavigation();
+  const searchInputRef = useRef(null);
 
   const paperTheme =
     colorScheme === "dark"
-      ? { ...MD3DarkTheme, colors: customDarkColors.colors }
-      : { ...MD3LightTheme, colors: customLightColors.colors };
+        ? { ...MD3DarkTheme }
+        : { ...MD3LightTheme };
+    //   ? { ...MD3DarkTheme, colors: customDarkColors.colors }
+    //   : { ...MD3LightTheme, colors: customLightColors.colors };
+
+
+const styles = StyleSheet.create({
+    safeArea: {
+      flex: 1,
+    },
+    headerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 10,
+      gap: 10,
+      backgroundColor: paperTheme.colors.background,
+    },
+    headerLeftContainer: {
+      flex: 0,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 20,
+      borderColor: "grey",
+      borderWidth: 1,
+    },
+    headerRightContainer: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 20,
+      borderColor: "grey",
+      borderWidth: 1,
+    },
+    searchBar: {
+      width: "100%",
+      backgroundColor: paperTheme.colors.background,
+      height: 40,
+      overflow: "hidden"
+    },
+    searchBarInput: {
+        minHeight: 0,  // important
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        paddingVertical: 1,
+        margin: 0,
+        borderWidth: 0,
+      },
+    iconButtonContent: {
+      padding: 0,
+      margin: 0,
+    },
+  });
 
 
 
@@ -66,11 +120,12 @@ export default function Layout() {
     return (
         <View style={[styles.headerRightContainer]}>
           <Searchbar
-            placeholder="Search"
+            placeholder=""
+            ref={searchInputRef}
             onChangeText={(text) => setSearchText(text)}
             style={styles.searchBar}
             value={searchText}
-            inputStyle={{ minHeight: 0 }}
+            inputStyle={ styles.searchBarInput }
             onBlur={() => {
                 Keyboard.dismiss()
             }}
@@ -113,42 +168,3 @@ export default function Layout() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
-    backgroundColor: "#fff",
-  },
-  headerLeftContainer: {
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  headerRightContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  searchBar: {
-    width: "100%",
-    backgroundColor: "white",
-    height: 40,
-  },
-  iconButtonContent: {
-    padding: 0,
-    margin: 0,
-  },
-});

@@ -1,14 +1,118 @@
 import * as React from "react";
-import { Text } from 'react-native'
+import { ScrollView, Text } from 'react-native'
 import { Link } from "expo-router";
 
 export default function Home() {
   return (
     <>
+    <ScrollView keyboardDismissMode='on-drag' > 
+      {/* Scroll view needed to dismiss search bar */}
       <Text>This is the index page!!!!!</Text>
       <Link href="/another">
         Go to another page
       </Link>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      <Text>More words</Text>
+      
+      
+      </ScrollView>
     </>
   );
 };

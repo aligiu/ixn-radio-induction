@@ -1,12 +1,29 @@
 import * as React from "react";
-import { AppRegistry } from "react-native";
-import { Button } from "react-native-paper";
+import { View, StyleSheet,  } from "react-native";
+import { useTheme, Button, Searchbar, ProgressBar } from "react-native-paper";
 
-// import { name as appName } from "./app.json";
-// import App from "./src/App";
+export default function Another() {
 
-const Another = () => {
-  return (<Button icon="camera">This is a button</Button>);
-};
+  const theme = useTheme();
+  
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-export default Another;
+  return (
+    <View style={styles.container}>
+      <Searchbar
+        theme={theme}
+        placeholder="Search"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+      />
+      <ProgressBar progress={0.8} theme={theme} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+});

@@ -83,12 +83,7 @@ export default function Layout() {
             screenOptions={{
               header: () => (
                 <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    padding: 10,
-                    gap: 10,
-                  }}
+                  style={styles.headerContainer}
                 >
                   {renderHeaderLeft()}
                   {renderHeaderRight()}
@@ -123,13 +118,20 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    gap: 10,
+    backgroundColor: "#fff",
+  },
   headerLeftContainer: {
     flex: 0,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
-    borderColor: "lightblue",
+    borderColor: "grey",
     borderWidth: 1,
   },
   headerRightContainer: {
@@ -137,16 +139,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // borderColor: "green",
-    // borderWidth: 1,
+    borderRadius: 20,
+    borderColor: "grey",
+    borderWidth: 1,
   },
   searchBar: {
     width: "100%",
     backgroundColor: "white",
     height: 40,
-    borderRadius: 20,
-    borderColor: "lightblue",
-    borderWidth: 1,
   },
   iconButtonContent: {
     padding: 0,

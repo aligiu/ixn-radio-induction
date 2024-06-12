@@ -1,34 +1,16 @@
-import { View, Text } from "react-native";
-import {
-  MD3LightTheme as DefaultTheme,
-  PaperProvider,
+import * as React from "react";
+import { 
+    Button
 } from "react-native-paper";
+import { Text } from 'react-native'
 import { Link } from "expo-router";
-import { customLightColors } from "@theme/colors";
-import { Button } from "react-native-paper";
-
-const theme = {
-  ...DefaultTheme,
-  colors: customLightColors.colors,
-};
-
-
-// export default function Main() {
-//   return (
-//     <PaperProvider theme={theme}>
-//       <App />
-//     </PaperProvider>
-//   );
-// }
 
 export default function Home() {
   return (
-    <PaperProvider theme={theme}>
-      <View>
-        <Text>Home, Hello!</Text>
-        <Link href="/buttonPage">ButtonPage</Link>
-        <Button icon="camera">Custom Style Button</Button>
-      </View>
-    </PaperProvider>
+    <>
+      <Text>This is the index page</Text>
+      <Link href="/another">Go to another page</Link>
+    </>
   );
 };
+

@@ -5,8 +5,8 @@ import { Button } from "react-native-paper";
 // import { name as appName } from "./app.json";
 // import App from "./src/App";
 
-const ButtonPage = () => {
-  return (<Button icon="camera">Original Style Button</Button>);
+const Another = () => {
+  return (<Button icon="camera">This is a button</Button>);
 };
 
-export default ButtonPage;
+export default Another;

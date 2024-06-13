@@ -25,12 +25,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import { ScrollView } from "react-native";
 
+import useKeyboardVisible from "../hooks/keyboard/isKeyboardVisible"
+
 export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");
   const [menuVisible, setMenuVisible] = React.useState(false);
   const navigation = useNavigation();
-  const searchInputRef = useRef(null);
+  const isKeyboardVisible = useKeyboardVisible();
 
   const paperTheme =
     colorScheme === "dark"
@@ -98,35 +100,57 @@ export default function Layout() {
   });
 
   function renderHeaderLeft() {
-    if (!navigation.canGoBack()) {
-      return (
-        <View style={[styles.headerLeftContainer]}>
-          <IconButton
-            // size={24}
-            style={styles.iconButtonContent}
-            icon="menu"
-            onPress={() => {
-              Keyboard.dismiss();
-              // TODO: define navigation.openDrawer() or method to open hamburger menu
-              setMenuVisible(true);
-            }}
-          />
-        </View>
-      );
-    }
-    return (
-      <View style={[styles.headerLeftContainer]}>
+    return  (<View style={[styles.headerLeftContainer]}>
         <IconButton
           // size={24}
           style={styles.iconButtonContent}
-          icon="arrow-left"
+          icon={
+            (!isKeyboardVisible && !navigation.canGoBack())
+            ? "menu"
+            : "arrow-left"
+          }
           onPress={() => {
-            Keyboard.dismiss();
-            navigation.goBack();
+            if (isKeyboardVisible) {
+                Keyboard.dismiss();
+            } else if (navigation.canGoBack()) {
+                navigation.goBack();
+            } else {
+                setMenuVisible(true);  // open hamburger menu
+            }
           }}
         />
-      </View>
-    );
+      </View>);
+    
+    // isKeyboardVisible
+
+    // if (!navigation.canGoBack()) {
+    //   return (
+    //     <View style={[styles.headerLeftContainer]}>
+    //       <IconButton
+    //         // size={24}
+    //         style={styles.iconButtonContent}
+    //         icon="menu"
+    //         onPress={() => {
+    //             Keyboard.dismiss();
+    //             setMenuVisible(true);  // open hamburger menu
+    //         }}
+    //       />
+    //     </View>
+    //   );
+    // }
+    // return (
+    //   <View style={[styles.headerLeftContainer]}>
+    //     <IconButton
+    //       // size={24}
+    //       style={styles.iconButtonContent}
+    //       icon="arrow-left"
+    //       onPress={() => {
+    //         Keyboard.dismiss();
+    //         navigation.goBack();
+    //       }}
+    //     />
+    //   </View>
+    // );
   }
 
   function renderHeaderRight() {
@@ -134,7 +158,6 @@ export default function Layout() {
       <View style={[styles.headerRightContainer]}>
         <Searchbar
           placeholder=""
-          ref={searchInputRef}
           onChangeText={(text) => setSearchText(text)}
           style={styles.searchBar}
           value={searchText}

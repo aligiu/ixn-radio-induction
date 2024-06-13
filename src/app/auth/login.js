@@ -15,18 +15,25 @@ export default function Another() {
   };
 
   return (
-    <ScrollView keyboardDismissMode="on-drag" style={contentContainerStyles.container}>
+    <ScrollView
+      keyboardDismissMode="on-drag"
+      style={contentContainerStyles.container}
+    >
       <Link href="">Continue as Guest</Link>
       {/* <Image
         source={{ uri: "../../../assets/images/nhs-logo-hd.png" }}
         style={styles.nhsLogo}
       /> */}
+      <Image source={require("./nhs-logo.svg")} style={styles.nhsLogo} />
+      <Image source={require("./clips.webp")} style={styles.nhsLogo} />
       <Image
-        source={require("./nhs-logo-hd.png")}
+        source={{
+          uri: "https://images.freeimages.com/images/large-previews/d4f/www-1242368.jpg?fmt=webp&h=350",
+        }}
         style={styles.nhsLogo}
       />
-      <View 
-      >
+
+      <View>
         <TextInput
           label="email"
           value={text}

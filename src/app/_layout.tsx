@@ -8,31 +8,38 @@ import {
   StyleSheet,
   Text,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
-import { MD3LightTheme, MD3DarkTheme, PaperProvider } from "react-native-paper";
+import {
+  MD3LightTheme,
+  MD3DarkTheme,
+  PaperProvider,
+  Modal,
+  Portal,
+} from "react-native-paper";
 
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Searchbar, IconButton } from "react-native-paper";
-import { ScrollView } from "react-native"; 
+import { ScrollView } from "react-native";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");
+  const [menuVisible, setMenuVisible] = React.useState(false);
   const navigation = useNavigation();
   const searchInputRef = useRef(null);
 
   const paperTheme =
     colorScheme === "dark"
-        ? { ...MD3DarkTheme }
-        : { ...MD3LightTheme };
-    //   ? { ...MD3DarkTheme, colors: customDarkColors.colors }
-    //   : { ...MD3LightTheme, colors: customLightColors.colors };
+      ? // ? { ...MD3DarkTheme }
+        // : { ...MD3LightTheme };
+        { ...MD3DarkTheme, colors: customDarkColors.colors }
+      : { ...MD3LightTheme, colors: customLightColors.colors };
 
-
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
     safeArea: {
       flex: 1,
     },
@@ -65,28 +72,25 @@ const styles = StyleSheet.create({
       width: "100%",
       backgroundColor: paperTheme.colors.background,
       height: 40,
-      overflow: "hidden"
+      overflow: "hidden",
     },
     searchBarInput: {
-        minHeight: 0,  // important
-        flex: 1,
-        height: '100%',
-        fontSize: 16,
-        paddingVertical: 1,
-        margin: 0,
-        borderWidth: 0,
-      },
+      minHeight: 0, // important
+      flex: 1,
+      height: "100%",
+      fontSize: 16,
+      paddingVertical: 1,
+      margin: 0,
+      borderWidth: 0,
+    },
     iconButtonContent: {
       padding: 0,
       margin: 0,
     },
   });
 
-
-
   function renderHeaderLeft() {
     if (!navigation.canGoBack()) {
-      
       return (
         <View style={[styles.headerLeftContainer]}>
           <IconButton
@@ -94,8 +98,9 @@ const styles = StyleSheet.create({
             style={styles.iconButtonContent}
             icon="menu"
             onPress={() => {
-                Keyboard.dismiss()
-                // TODO: define navigation.openDrawer() or method to open hamburger menu
+              Keyboard.dismiss();
+              // TODO: define navigation.openDrawer() or method to open hamburger menu
+              setMenuVisible(true);
             }}
           />
         </View>
@@ -107,10 +112,10 @@ const styles = StyleSheet.create({
           // size={24}
           style={styles.iconButtonContent}
           icon="arrow-left"
-          onPress={() => 
-            {Keyboard.dismiss()
-            navigation.goBack()}
-        }
+          onPress={() => {
+            Keyboard.dismiss();
+            navigation.goBack();
+          }}
         />
       </View>
     );
@@ -118,19 +123,19 @@ const styles = StyleSheet.create({
 
   function renderHeaderRight() {
     return (
-        <View style={[styles.headerRightContainer]}>
-          <Searchbar
-            placeholder=""
-            ref={searchInputRef}
-            onChangeText={(text) => setSearchText(text)}
-            style={styles.searchBar}
-            value={searchText}
-            inputStyle={ styles.searchBarInput }
-            onBlur={() => {
-                Keyboard.dismiss()
-            }}
-          />
-        </View>
+      <View style={[styles.headerRightContainer]}>
+        <Searchbar
+          placeholder=""
+          ref={searchInputRef}
+          onChangeText={(text) => setSearchText(text)}
+          style={styles.searchBar}
+          value={searchText}
+          inputStyle={styles.searchBarInput}
+          onBlur={() => {
+            Keyboard.dismiss();
+          }}
+        />
+      </View>
     );
   }
 
@@ -163,8 +168,18 @@ const styles = StyleSheet.create({
             }}
           />
         </View>
+        <Portal>
+          <Modal
+            visible={menuVisible}
+            onDismiss={() => {
+              setMenuVisible(false);
+            }}
+            contentContainerStyle={{ backgroundColor: "white", padding: 20 }}
+          >
+            <Text>Example Modal. Click outside this area to dismiss.</Text>
+          </Modal>
+        </Portal>
       </SafeAreaView>
     </PaperProvider>
   );
 }
-

@@ -182,6 +182,7 @@ export default function Layout() {
             onDismiss={() => {
               setMenuVisible(false);
             }}
+            // This contentContainerStyle is a parameter of Modal from react-native-paper
             contentContainerStyle={{
               backgroundColor: paperTheme.colors.background,
               padding: 20,

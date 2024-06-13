@@ -1,23 +1,15 @@
 import * as React from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
-import { useTheme, Button, Searchbar, ProgressBar } from "react-native-paper";
+import { useTheme } from "react-native-paper";
+import { contentContainerStyles } from "/src/styles/contentContainer";
 
 export default function Another() {
-
-  const theme = useTheme();
-  
-  const [searchQuery, setSearchQuery] = React.useState('');
-
   return (
-    <ScrollView keyboardDismissMode='on-drag' style={styles.container}>
+    <ScrollView
+      keyboardDismissMode="on-drag"
+      style={contentContainerStyles.container}
+    >
       <Text>Hi</Text>
-      {/* <Searchbar
-        theme={theme}
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-      /> */}
-      {/* <ProgressBar progress={0.8} theme={theme} /> */}
     </ScrollView>
   );
 }

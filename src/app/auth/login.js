@@ -4,6 +4,8 @@ import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
 import { useTheme, Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 
+import { contentContainerStyles } from "src/styles/contentContainer";
+
 export default function Another() {
   const [text, setText] = useState("");
 
@@ -13,7 +15,7 @@ export default function Another() {
   };
 
   return (
-    <ScrollView keyboardDismissMode="on-drag" style={styles.container}>
+    <ScrollView keyboardDismissMode="on-drag" style={contentContainerStyles.container}>
       <Link href="">Continue as Guest</Link>
       {/* <Image
         source={{ uri: "../../../assets/images/nhs-logo-hd.png" }}
@@ -24,7 +26,6 @@ export default function Another() {
         style={styles.nhsLogo}
       />
       <View 
-    //   style={styles.container}
       >
         <TextInput
           label="email"
@@ -50,12 +51,6 @@ export default function Another() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 10,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
   nhsLogo: {
     width: 200,
     height: 100,

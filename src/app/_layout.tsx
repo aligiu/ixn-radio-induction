@@ -1,5 +1,5 @@
-import { Stack, useNavigation } from "expo-router";
-import React, { useState, useRef } from "react";
+import { Stack, useNavigation, usePathname } from "expo-router";
+import React, { useState } from "react";
 
 import {
   useColorScheme,
@@ -25,6 +25,7 @@ import { Searchbar, IconButton } from "react-native-paper";
 import { ScrollView } from "react-native";
 
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
+import { NO_HEADER_PATHS } from "../config/paths";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
@@ -32,6 +33,7 @@ export default function Layout() {
   const [menuVisible, setMenuVisible] = React.useState(false);
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
+  const currentPathName = usePathname();
 
   const paperTheme =
     colorScheme === "dark"
@@ -44,7 +46,7 @@ export default function Layout() {
     safeArea: {
       flex: 1,
     },
-    headerContainer: {
+    headerPaddedContainer: {
       flexDirection: "row",
       alignItems: "center",
       padding: 10,
@@ -159,12 +161,17 @@ export default function Layout() {
           <Stack
             screenOptions={{
               header: () => (
-                <View style={styles.headerContainer}>
-                  {renderHeaderLeft()}
-                  {renderHeaderRight()}
+                <View>
+                  {/* Hide header for paths like login and register */}
+                  {!NO_HEADER_PATHS.includes(currentPathName) && (
+                    <View style={styles.headerPaddedContainer}>
+                      {renderHeaderLeft()}
+                      {renderHeaderRight()}
+                    </View>
+                  )}
                 </View>
               ),
-              headerTitle: "", // Remove header title
+              headerTitle: "", // Remove header title for clean layout
             }}
           />
         </View>

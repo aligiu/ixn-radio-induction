@@ -25,7 +25,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import { ScrollView } from "react-native";
 
-import useKeyboardVisible from "../hooks/keyboard/isKeyboardVisible"
+import useKeyboardVisible from "../hooks/keyboard/isVisible"
 
 export default function Layout() {
   const colorScheme = useColorScheme();
@@ -120,7 +120,7 @@ export default function Layout() {
           }}
         />
       </View>);
-    
+
     // isKeyboardVisible
 
     // if (!navigation.canGoBack()) {

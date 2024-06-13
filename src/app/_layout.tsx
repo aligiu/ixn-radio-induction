@@ -87,6 +87,14 @@ export default function Layout() {
       padding: 0,
       margin: 0,
     },
+    menuItem: {
+      padding: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: "grey",
+    },
+    menuItemText: {
+      color: paperTheme.colors.inverseSurface,
+    },
   });
 
   function renderHeaderLeft() {
@@ -170,13 +178,40 @@ export default function Layout() {
         </View>
         <Portal>
           <Modal
+            style={{ height: "100%", maxWidth: "80%" }}
             visible={menuVisible}
             onDismiss={() => {
               setMenuVisible(false);
             }}
-            contentContainerStyle={{ backgroundColor: "white", padding: 20 }}
+            contentContainerStyle={{
+              backgroundColor: paperTheme.colors.background,
+              padding: 20,
+            }}
           >
-            <Text>Example Modal. Click outside this area to dismiss.</Text>
+            <ScrollView style={{ height: "100%", maxWidth: "100%" }}>
+              <View
+              style={{marginBottom: 20}}
+              >
+                <Text style={{ color: paperTheme.colors.inverseSurface }}>
+                  Example Modal. Click outside this area to dismiss.
+                </Text>
+              </View>
+              <View
+              style={{
+                gap: 10
+              }}
+              >
+              <TouchableOpacity style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Menu Item 1</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Menu Item 2</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                <Text style={styles.menuItemText}>Menu Item 3</Text>
+              </TouchableOpacity>
+              </View>
+            </ScrollView>
           </Modal>
         </Portal>
       </SafeAreaView>

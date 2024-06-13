@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useTheme, Button, Searchbar, ProgressBar } from "react-native-paper";
 import { Link } from "expo-router";

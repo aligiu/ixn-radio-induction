@@ -11,6 +11,8 @@ export default function Home() {
       <Link href="/another">
         Go to another page
       </Link>
+      <Link href="/auth/login">Go to Login</Link>
+      <Link href="/auth/register">Go to Register</Link>
       <Text>More words</Text>
       <Text>More words</Text>
       <Text>More words</Text>

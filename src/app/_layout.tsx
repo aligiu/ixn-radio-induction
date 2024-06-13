@@ -1,5 +1,4 @@
-import { Stack } from "expo-router";
-import { useNavigation } from "expo-router";
+import { Stack, useNavigation } from "expo-router";
 import React, { useState, useRef } from "react";
 
 import {
@@ -25,7 +24,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import { ScrollView } from "react-native";
 
-import useKeyboardVisible from "../hooks/keyboard/isVisible"
+import useKeyboardVisible from "../hooks/keyboard/isVisible";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
@@ -100,57 +99,27 @@ export default function Layout() {
   });
 
   function renderHeaderLeft() {
-    return  (<View style={[styles.headerLeftContainer]}>
+    return (
+      <View style={[styles.headerLeftContainer]}>
         <IconButton
-          // size={24}
           style={styles.iconButtonContent}
           icon={
-            (!isKeyboardVisible && !navigation.canGoBack())
-            ? "menu"
-            : "arrow-left"
+            !isKeyboardVisible && !navigation.canGoBack()
+              ? "menu"
+              : "arrow-left"
           }
           onPress={() => {
             if (isKeyboardVisible) {
-                Keyboard.dismiss();
+              Keyboard.dismiss();
             } else if (navigation.canGoBack()) {
-                navigation.goBack();
+              navigation.goBack();
             } else {
-                setMenuVisible(true);  // open hamburger menu
+              setMenuVisible(true); // open hamburger menu
             }
           }}
         />
-      </View>);
-
-    // isKeyboardVisible
-
-    // if (!navigation.canGoBack()) {
-    //   return (
-    //     <View style={[styles.headerLeftContainer]}>
-    //       <IconButton
-    //         // size={24}
-    //         style={styles.iconButtonContent}
-    //         icon="menu"
-    //         onPress={() => {
-    //             Keyboard.dismiss();
-    //             setMenuVisible(true);  // open hamburger menu
-    //         }}
-    //       />
-    //     </View>
-    //   );
-    // }
-    // return (
-    //   <View style={[styles.headerLeftContainer]}>
-    //     <IconButton
-    //       // size={24}
-    //       style={styles.iconButtonContent}
-    //       icon="arrow-left"
-    //       onPress={() => {
-    //         Keyboard.dismiss();
-    //         navigation.goBack();
-    //       }}
-    //     />
-    //   </View>
-    // );
+      </View>
+    );
   }
 
   function renderHeaderRight() {
@@ -212,27 +181,25 @@ export default function Layout() {
             }}
           >
             <ScrollView style={{ height: "100%", maxWidth: "100%" }}>
-              <View
-              style={{marginBottom: 20}}
-              >
+              <View style={{ marginBottom: 20 }}>
                 <Text style={{ color: paperTheme.colors.inverseSurface }}>
                   Example Modal. Click outside this area to dismiss.
                 </Text>
               </View>
               <View
-              style={{
-                gap: 10
-              }}
+                style={{
+                  gap: 10,
+                }}
               >
-              <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 3</Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <Text style={styles.menuItemText}>Menu Item 1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <Text style={styles.menuItemText}>Menu Item 2</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                  <Text style={styles.menuItemText}>Menu Item 3</Text>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </Modal>

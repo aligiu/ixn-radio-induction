@@ -20,6 +20,7 @@
     "expo-system-ui": "~3.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.51.5",
     "react-native": "0.74.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.16.1",

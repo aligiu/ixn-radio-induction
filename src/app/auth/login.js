@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
-import { useTheme, Button, TextInput } from "react-native-paper";
+import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
+import { fontSize } from "src/styles/font";
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
@@ -14,51 +15,86 @@ export default function Another() {
     console.log("Form submitted:", text);
   };
 
-
   return (
     <ScrollView
       keyboardDismissMode="on-drag"
       style={contentContainerStyles.container}
     >
-      <Link href="">Continue as Guest</Link>
+      <Link href="">
+        <Text
+          variant="bodyMedium"
+          style={{
+            textDecorationLine: "underline",
+            fontSize: fontSize.MEDIUM,
+          }}
+        >
+          Continue as Guest
+        </Text>
+      </Link>
+      <View style={styles.nhsLogoContainer}>
+        <Image
+          resizeMethod="contain"
+          source={require("assets/images/nhs-logo-hd.png")}
+          style={styles.nhsLogo}
+        />
+      </View>
 
-      <Image 
-      resizeMethod="resize"
-      source={require("assets/images/nhs-logo-hd.png")} 
-      style={styles.nhsLogo} 
-      />
+      <Text
+        variant="headlineSmall"
+        style={{
+          fontSize: fontSize.XLARGE,
+        }}
+      >
+        Radiologist Induction Companion
+      </Text>
 
       <View>
         <TextInput
           label="email"
           value={text}
           onChangeText={(text) => setText(text)}
-          style={styles.input}
+          // style={styles.input}
         />
         <TextInput
           label="password"
           value={text}
           onChangeText={(text) => setText(text)}
-          style={styles.input}
+          // style={styles.input}
         />
-        <Button mode="contained" onPress={handleSubmit} style={styles.button}>
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          // style={styles.button}
+        >
           Log In
         </Button>
       </View>
-      <Text>
-        New User? <Link href="auth/register">Register</Link>
+      <Text
+        style={{
+          fontSize: fontSize.MEDIUM,
+        }}
+      >
+        New User?{" "}
+        <Link href="auth/register">
+          <Text
+            style={{
+              textDecorationLine: "underline",
+            }}
+          >
+            Register
+          </Text>
+        </Link>
       </Text>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  nhsLogoContainer: {
+    alignItems: "center",
+  },
   nhsLogo: {
-    width: 370.61,
-    height: 150,
-    alignSelf: "center",
-    marginBottom: 16,
-    borderColor: "grey",
-    borderWidth: 1,
+    height: 80,
+    aspectRatio: 370.61 / 150,
   },
 });

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
-import { fontSize } from "src/styles/font";
+import { fontSize } from "src/styles/fontConfig";
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
@@ -20,17 +20,19 @@ export default function Another() {
       keyboardDismissMode="on-drag"
       style={contentContainerStyles.container}
     >
-      <Link href="">
-        <Text
-          variant="bodyMedium"
-          style={{
-            textDecorationLine: "underline",
-            fontSize: fontSize.MEDIUM,
-          }}
-        >
-          Continue as Guest
-        </Text>
-      </Link>
+      <View style={{ alignItems: "flex-end" }}>
+        <Link href="">
+          <Text
+            style={{
+              textDecorationLine: "underline",
+              fontSize: fontSize.MEDIUM,
+              fontFamily: "InterSemiBold",
+            }}
+          >
+            Continue as Guest
+          </Text>
+        </Link>
+      </View>
       <View style={styles.nhsLogoContainer}>
         <Image
           resizeMethod="contain"
@@ -92,6 +94,7 @@ export default function Another() {
 const styles = StyleSheet.create({
   nhsLogoContainer: {
     alignItems: "center",
+    padding: 20,
   },
   nhsLogo: {
     height: 80,

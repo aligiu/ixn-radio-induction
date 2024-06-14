@@ -5,3 +5,6 @@ export const fontSize = {
     LARGE: 20,
     XLARGE: 24,
 }
+
+
+

@@ -1,5 +1,8 @@
 import { Stack, useNavigation, usePathname } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 import {
   useColorScheme,
@@ -34,6 +37,28 @@ export default function Layout() {
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
+
+  const [fontsLoaded, fontError] = useFonts({
+    InterThin: require("assets/fonts/Inter-Thin.ttf"),
+    InterExtraLight: require("assets/fonts/Inter-ExtraLight.ttf"),
+    InterLight: require("assets/fonts/Inter-Light.ttf"),
+    InterRegular: require("assets/fonts/Inter-Regular.ttf"),
+    InterMedium: require("assets/fonts/Inter-Medium.ttf"),
+    InterSemiBold: require("assets/fonts/Inter-SemiBold.ttf"),
+    InterBold: require("assets/fonts/Inter-Bold.ttf"),
+    InterExtraBold: require("assets/fonts/Inter-ExtraBold.ttf"),
+    InterBlack: require("assets/fonts/Inter-Black.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   const paperTheme =
     colorScheme === "dark"
@@ -157,6 +182,7 @@ export default function Layout() {
             flexDirection: "row",
             backgroundColor: paperTheme.colors.background,
           }}
+          onLayout={onLayoutRootView}
         >
           <Stack
             screenOptions={{

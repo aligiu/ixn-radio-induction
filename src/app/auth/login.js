@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
 import { useTheme, Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
-import { Image } from 'expo-image';
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
@@ -15,7 +14,6 @@ export default function Another() {
     console.log("Form submitted:", text);
   };
 
-  console.log(require("./nhs-logo.svg"))
 
   return (
     <ScrollView
@@ -23,32 +21,11 @@ export default function Another() {
       style={contentContainerStyles.container}
     >
       <Link href="">Continue as Guest</Link>
-      {/* <Image
-        source={{ uri: "../../../assets/images/nhs-logo-hd.png" }}
-        style={styles.nhsLogo}
-      /> */}
-      <Image 
-      resizeMethod="resize"
-      source={require("./nhs-logo.svg").default} 
-      style={styles.nhsLogo} 
-      />
+
       <Image 
       resizeMethod="resize"
       source={require("assets/images/nhs-logo-hd.png")} 
       style={styles.nhsLogo} 
-      />
-      <Image 
-      resizeMethod="resize"
-      source={require("../../../assets/images/nhs-logo-hd.png")} 
-      style={styles.nhsLogo} 
-      />
-
-      <Image source={require("./clips.webp")} style={styles.nhsLogo} />
-      <Image
-        source={{
-          uri: "https://images.freeimages.com/images/large-previews/d4f/www-1242368.jpg?fmt=webp&h=350",
-        }}
-        style={styles.nhsLogo}
       />
 
       <View>
@@ -77,8 +54,8 @@ export default function Another() {
 
 const styles = StyleSheet.create({
   nhsLogo: {
-    width: 200,
-    height: 100,
+    width: 370.61,
+    height: 150,
     alignSelf: "center",
     marginBottom: 16,
     borderColor: "grey",

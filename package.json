@@ -9,7 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "^51.0.0",
+    "expo": "~51.0.14",
     "expo-constants": "~16.0.1",
     "expo-font": "^12.0.7",
     "expo-linking": "~6.3.1",
@@ -18,7 +18,7 @@
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.74.1",
+    "react-native": "0.74.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-paper": "^5.12.3",
@@ -27,7 +27,8 @@
     "react-native-web": "~0.19.6",
     "typescript": "~5.3.3",
     "@types/react": "~18.2.79",
-    "expo-system-ui": "~3.0.6"
+    "expo-system-ui": "~3.0.6",
+    "expo-image": "~1.12.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

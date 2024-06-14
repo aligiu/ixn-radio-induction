@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useTheme, Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
+import { Image } from 'expo-image';
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
@@ -14,6 +15,8 @@ export default function Another() {
     console.log("Form submitted:", text);
   };
 
+  console.log(require("./nhs-logo.svg"))
+
   return (
     <ScrollView
       keyboardDismissMode="on-drag"
@@ -24,7 +27,22 @@ export default function Another() {
         source={{ uri: "../../../assets/images/nhs-logo-hd.png" }}
         style={styles.nhsLogo}
       /> */}
-      <Image source={require("./nhs-logo.svg")} style={styles.nhsLogo} />
+      <Image 
+      resizeMethod="resize"
+      source={require("./nhs-logo.svg").default} 
+      style={styles.nhsLogo} 
+      />
+      <Image 
+      resizeMethod="resize"
+      source={require("assets/images/nhs-logo-hd.png")} 
+      style={styles.nhsLogo} 
+      />
+      <Image 
+      resizeMethod="resize"
+      source={require("../../../assets/images/nhs-logo-hd.png")} 
+      style={styles.nhsLogo} 
+      />
+
       <Image source={require("./clips.webp")} style={styles.nhsLogo} />
       <Image
         source={{

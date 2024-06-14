@@ -1,6 +1,6 @@
 {
   "expo": {
-    "userInterfaceStyle" : "automatic",
+    "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
     "scheme": "acme",
@@ -11,6 +11,20 @@
       "expo-router"
     ],
     "name": "ixn",
-    "slug": "ixn"
+    "slug": "ixn",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2e2ce653-4011-4cd2-b816-22d12a2e023c"
+      }
+    },
+    "android": {
+      "package": "com.nghugo.ixn"
+    },
+    "ios": {
+      "bundleIdentifier": "com.nghugo.ixn"
+    }
   }
 }

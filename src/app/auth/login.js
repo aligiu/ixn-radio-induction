@@ -18,75 +18,136 @@ export default function Another() {
   return (
     <ScrollView
       keyboardDismissMode="on-drag"
+      contentContainerStyle={{ flexGrow: 1 }}
       style={contentContainerStyles.container}
     >
-      <View style={{ alignItems: "flex-end" }}>
-        <Link href="">
-          <Text
-            style={{
-              textDecorationLine: "underline",
-              fontSize: fontSize.MEDIUM,
-              fontFamily: "InterSemiBold",
-            }}
-          >
-            Continue as Guest
-          </Text>
-        </Link>
-      </View>
-      <View style={styles.nhsLogoContainer}>
-        <Image
-          resizeMethod="contain"
-          source={require("assets/images/nhs-logo-hd.png")}
-          style={styles.nhsLogo}
-        />
-      </View>
-
-      <Text
-        variant="headlineSmall"
+      <View
         style={{
-          fontSize: fontSize.XLARGE,
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          flexGrow: 1,
+          borderColor: "red",
+          borderWidth: 1,
         }}
       >
-        Radiologist Induction Companion
-      </Text>
-
-      <View>
-        <TextInput
-          label="email"
-          value={text}
-          onChangeText={(text) => setText(text)}
-          // style={styles.input}
-        />
-        <TextInput
-          label="password"
-          value={text}
-          onChangeText={(text) => setText(text)}
-          // style={styles.input}
-        />
-        <Button
-          mode="contained"
-          onPress={handleSubmit}
-          // style={styles.button}
+        <View
+          style={{
+            justifyContent: "space-between",
+            borderColor: "green",
+            borderWidth: 1,
+            height: "60%",
+          }}
         >
-          Log In
-        </Button>
-      </View>
-      <Text
-        style={{
-          fontSize: fontSize.MEDIUM,
-        }}
-      >
-        New User?{" "}
-        <Link href="auth/register">
-          <Text
+          <View>
+            <View style={{ alignItems: "flex-end" }}>
+              <Link href="">
+                <Text
+                  style={{
+                    textDecorationLine: "underline",
+                    fontSize: fontSize.MEDIUM,
+                    fontWeight: "500",
+                  }}
+                >
+                  Continue as Guest
+                </Text>
+              </Link>
+            </View>
+            <View style={styles.nhsLogoContainer}>
+              <Image
+                resizeMethod="contain"
+                source={require("assets/images/nhs-logo-hd.png")}
+                style={styles.nhsLogo}
+              />
+            </View>
+            <Text
+              variant="headlineSmall"
+              style={{
+                fontSize: fontSize.LARGE,
+                fontFamily: "InterSemiBold",
+                textAlign: "center",
+              }}
+            >
+              Radiologist Induction Companion
+            </Text>
+          </View>
+
+          <View
             style={{
-              textDecorationLine: "underline",
+              height: "50%",
+              justifyContent: "flex-end",
+              gap: 6,
+              borderColor: "blue",
+              borderWidth: 1,
             }}
           >
-            Register
+            <TextInput
+              label="Email"
+              // value={text}
+              mode="outlined"
+              onChangeText={(text) => setText(text)}
+            />
+            <TextInput
+              label="Email"
+              // value={text2}
+              mode="outlined"
+              onChangeText={(text) => setText(text)}
+            />
+            <TextInput
+              label="Password"
+              // value={text3}
+              mode="outlined"
+              onChangeText={(text) => setText(text)}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            borderColor: "grey",
+            borderWidth: 1,
+            // height: 100,
+            gap: 10,
+            marginBottom: 60,
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            mode="contained"
+            onPress={handleSubmit}
+            style={{ height: 50, borderRadius: 25, justifyContent: "center" }}
+          >
+            <Text
+            style={{
+              fontWeight: "600",
+              fontSize: fontSize.LARGE}}
+            >Log In</Text>
+          </Button>
+
+          {/* <TouchableOpacity onPress={handleSubmit} style={styles.touchable}>
+            <Button mode="contained" style={styles.button}>
+              <Text style={styles.buttonText}>Log In</Text>
+            </Button>
+          </TouchableOpacity> */}
+          
+          <Text
+            style={{
+              fontSize: fontSize.MEDIUM,
+              textAlign: "center",
+            }}
+          >
+            New User?{" "}
+            <Link href="auth/register">
+              <Text
+                style={{
+                  textDecorationLine: "underline",
+                }}
+              >
+                Register
+              </Text>
+            </Link>
           </Text>
-        </Link>
-      </Text>
+        </View>
+      </View>
     </ScrollView>
   );
 }
@@ -94,10 +155,10 @@ export default function Another() {
 const styles = StyleSheet.create({
   nhsLogoContainer: {
     alignItems: "center",
-    padding: 20,
+    padding: 16,
   },
   nhsLogo: {
-    height: 80,
+    height: 70,
     aspectRatio: 370.61 / 150,
   },
 });

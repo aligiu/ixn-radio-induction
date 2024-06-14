@@ -21,7 +21,8 @@
       }
     },
     "android": {
-      "package": "com.nghugo.ixn"
+      "package": "com.nghugo.ixn",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "ios": {
       "bundleIdentifier": "com.nghugo.ixn"

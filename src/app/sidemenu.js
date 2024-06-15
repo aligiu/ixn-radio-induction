@@ -7,7 +7,13 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function SideMenu({ sidemenuVisible, setSidemenuVisible, backgroundColor, textColor }) {
+import { useTheme } from 'react-native-paper';
+
+export default function SideMenu({ sidemenuVisible, setSidemenuVisible }) {
+
+  const theme = useTheme();
+  const backgroundColor = theme.colors.background
+  const textColor = theme.colors.inverseSurface
 
   const styles = StyleSheet.create({
     menuItem: {

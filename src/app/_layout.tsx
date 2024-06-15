@@ -215,8 +215,8 @@ export default function Layout() {
           <SideMenu
             sidemenuVisible={sidemenuVisible}
             setSidemenuVisible={setSidemenuVisible}
-            backgroundColor={paperTheme.colors.background}
-            textColor={paperTheme.colors.inverseSurface}
+            // backgroundColor={paperTheme.colors.background}
+            // textColor={paperTheme.colors.inverseSurface}
           />
         </Portal>
       </SafeAreaView>

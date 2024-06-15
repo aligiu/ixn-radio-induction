@@ -3,19 +3,30 @@ import { Stack, useNavigation, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme, View, StyleSheet, Text, Keyboard } from "react-native";
-import { MD3LightTheme, MD3DarkTheme, PaperProvider, Portal } from "react-native-paper";
+import {
+  MD3LightTheme,
+  MD3DarkTheme,
+  PaperProvider,
+  Portal,
+} from "react-native-paper";
+import { customLightColors } from "../theme/colors";
+import { customDarkColors } from "../theme/colors";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import { NO_HEADER_PATHS } from "../config/paths";
-import SideMenu from "./sidemenu";
+import SideMenu from "../components/sidemenu";
 import { SidemenuProvider } from "../context/SidemenuContext"; // Import the provider
 import SidemenuContext from "../context/SidemenuContext";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
-  const paperTheme = colorScheme === "dark" ? { ...MD3DarkTheme } : { ...MD3LightTheme };
+  const paperTheme =
+    colorScheme === "dark"
+      ? { ...MD3DarkTheme, colors: customDarkColors.colors }
+      : { ...MD3LightTheme, colors: customLightColors.colors };
   return (
     <Text style={[style, { color: paperTheme.colors.onBackground }]} {...props}>
       {children}
@@ -52,7 +63,10 @@ export default function Layout() {
     return null;
   }
 
-  const paperTheme = colorScheme === "dark" ? { ...MD3DarkTheme } : { ...MD3LightTheme };
+  const paperTheme =
+    colorScheme === "dark"
+      ? { ...MD3DarkTheme, colors: customDarkColors.colors }
+      : { ...MD3LightTheme, colors: customLightColors.colors };
 
   const styles = StyleSheet.create({
     safeArea: {
@@ -110,7 +124,11 @@ export default function Layout() {
       <View style={[styles.headerLeftContainer]}>
         <IconButton
           style={styles.iconButtonContent}
-          icon={!isKeyboardVisible && !navigation.canGoBack() ? "menu" : "arrow-left"}
+          icon={
+            !isKeyboardVisible && !navigation.canGoBack()
+              ? "menu"
+              : "arrow-left"
+          }
           onPress={() => {
             if (isKeyboardVisible) {
               Keyboard.dismiss();

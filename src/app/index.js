@@ -6,6 +6,7 @@ import { contentContainerStyles } from "/src/styles/contentContainer";
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 
 export default function Home() {
   return (
@@ -18,24 +19,27 @@ export default function Home() {
 
         <TText style={styles.pageTitle}>Home</TText>
 
-        <View style={{gap: 10}}>
-
+        <View style={{ gap: 10 }}>
           <NavBlock
             imageSource={require("assets/images/nhs-logo-square.png")}
-            title={"Ashford and St Peter's"}
+            title="Ashford and St Peter's"
             description={
               "Parking, Induction, Study Leave, PCAS and Logins, ..."
-            }
+            } // find way to abridge long text
+            route="/hospitals/1"
           />
 
           <NavBlock
             imageSource={require("assets/images/nhs-logo-square.png")}
-            title={"Ashford and St Peter's"}
+            title="Ashford and St Peter's"
             description={
               "Parking, Induction, Study Leave, PCAS and Logins, ..."
-            }
+            } // find way to abridge long text
+            route="/hospitals/2"
           />
         </View>
+
+        <Link href="another">go to another</Link>
 
       </ScrollView>
     </>
@@ -60,11 +64,15 @@ const styles = StyleSheet.create({
 // "Ashford and St Peter's"
 // "Parking, Induction, Study Leave, PCAS and Logins, ..."
 
-// find way to abridge long text
+function NavBlock({ title, description, imageSource, route }) {
+  const router = useRouter();
 
-function NavBlock({ title, description, imageSource }) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => {
+        router.push({ route });
+      }}
+    >
       <View
         style={{
           flexDirection: "row",

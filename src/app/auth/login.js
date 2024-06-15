@@ -22,10 +22,6 @@ export default function Another() {
     passwordRef.current?.focus();
   };
 
-  const handlePasswordSubmit = () => {
-    confirmPasswordRef.current?.focus();
-  };
-
   return (
     <ScrollView
       keyboardDismissMode="on-drag"

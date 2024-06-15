@@ -205,6 +205,7 @@ export default function Layout() {
               ? "menu"
               : "arrow-left"
           }
+          size={24}
           onPress={() => {
             if (isKeyboardVisible) {
               Keyboard.dismiss();

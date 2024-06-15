@@ -24,9 +24,12 @@ const SideMenu = () => {
 
   return (
     <Portal>
-      <Modal visible={sidemenuVisible} onDismiss={closeModal}>
+      <Modal visible={sidemenuVisible} 
+      onDismiss={closeModal} // not used, closeModal is handled by the <View> with flex: 1
+      >
         <View style={{flexDirection: "row", height: "100%"}}>
           <ScrollView
+            // This scrollview only occupies 80% of the screen width
             style={{
               flex: 0,
               backgroundColor: "white",
@@ -62,16 +65,9 @@ const SideMenu = () => {
           </ScrollView>
             <TouchableWithoutFeedback style={{flex: 1}} onPress={closeModal}>
           <View style={{borderColor: "blue", borderWidth: 3, flex: 1}}>
-              <Text>outside</Text>
+            {/* this view is responsible for clsoing the modal */}
           </View>
-            </TouchableWithoutFeedback>
-
-          {/* <View style={{borderColor: "green", borderWidth: 2, height: "100%", width: "20%"}} onPress={closeModal}>
-            <TouchableWithoutFeedback style={{flex: 1}} onPress={closeModal}>
-              <></>
-            </TouchableWithoutFeedback>
-          </View> */}
-          
+            </TouchableWithoutFeedback>          
         </View>
       </Modal>
     </Portal>

@@ -48,7 +48,7 @@ export const TText = ({ children, style, ...props }) => {
 export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");
-  const [menuVisible, setMenuVisible] = React.useState(false);
+  const [sidemenuVisible, setSidesidemenuVisible] = React.useState(false);
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
@@ -148,7 +148,7 @@ export default function Layout() {
             } else if (navigation.canGoBack()) {
               navigation.goBack();
             } else {
-              setMenuVisible(true); // open hamburger menu
+              setSidesidemenuVisible(true); // open hamburger menu
             }
           }}
         />
@@ -213,8 +213,8 @@ export default function Layout() {
         </View>
         <Portal>
           <SideMenu
-            menuVisible={menuVisible}
-            setMenuVisible={setMenuVisible}
+            sidemenuVisible={sidemenuVisible}
+            setSidesidemenuVisible={setSidesidemenuVisible}
             backgroundColor={paperTheme.colors.background}
             textColor={paperTheme.colors.inverseSurface}
           />

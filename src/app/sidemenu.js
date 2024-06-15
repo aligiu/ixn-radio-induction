@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-export default function SideMenu({ menuVisible, setMenuVisible, backgroundColor, textColor }) {
+export default function SideMenu({ sidemenuVisible, setSidesidemenuVisible, backgroundColor, textColor }) {
 
   const styles = StyleSheet.create({
     menuItem: {
@@ -23,9 +23,9 @@ export default function SideMenu({ menuVisible, setMenuVisible, backgroundColor,
   return (
     <Modal
       style={{ height: "100%", maxWidth: "80%" }}
-      visible={menuVisible}
+      visible={sidemenuVisible}
       onDismiss={() => {
-        setMenuVisible(false);
+        setSidesidemenuVisible(false);
       }}
       // This contentContainerStyle is a parameter of Modal from react-native-paper
       contentContainerStyle={{

@@ -16,7 +16,6 @@ import {
   MD3LightTheme,
   MD3DarkTheme,
   PaperProvider,
-  Modal,
   Portal,
 } from "react-native-paper";
 
@@ -25,10 +24,10 @@ import { customDarkColors } from "../theme/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Searchbar, IconButton } from "react-native-paper";
-import { ScrollView } from "react-native";
 
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import { NO_HEADER_PATHS } from "../config/paths";
+import SideMenu from "./sidemenu";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -131,14 +130,6 @@ export default function Layout() {
       padding: 0,
       margin: 0,
     },
-    menuItem: {
-      padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: "grey",
-    },
-    menuItemText: {
-      color: paperTheme.colors.inverseSurface,
-    },
   });
 
   function renderHeaderLeft() {
@@ -221,41 +212,12 @@ export default function Layout() {
           />
         </View>
         <Portal>
-          <Modal
-            style={{ height: "100%", maxWidth: "80%" }}
-            visible={menuVisible}
-            onDismiss={() => {
-              setMenuVisible(false);
-            }}
-            // This contentContainerStyle is a parameter of Modal from react-native-paper
-            contentContainerStyle={{
-              backgroundColor: paperTheme.colors.background,
-              padding: 20,
-            }}
-          >
-            <ScrollView style={{ height: "100%", maxWidth: "100%" }}>
-              <View style={{ marginBottom: 20 }}>
-                <Text style={{ color: paperTheme.colors.inverseSurface }}>
-                  Example Modal. Click outside this area to dismiss.
-                </Text>
-              </View>
-              <View
-                style={{
-                  gap: 10,
-                }}
-              >
-                <TouchableOpacity style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Menu Item 1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Menu Item 2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                  <Text style={styles.menuItemText}>Menu Item 3</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </Modal>
+          <SideMenu
+            menuVisible={menuVisible}
+            setMenuVisible={setMenuVisible}
+            backgroundColor={paperTheme.colors.background}
+            textColor={paperTheme.colors.inverseSurface}
+          />
         </Portal>
       </SafeAreaView>
     </PaperProvider>

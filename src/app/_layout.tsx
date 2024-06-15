@@ -22,7 +22,7 @@ import { customDarkColors } from "../theme/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
-import { NO_HEADER_PATHS, NO_LEFTSWIPE_PATHS } from "../config/paths";
+import { NO_HEADER_PATHS, NO_LEFTSWIPE_PATHS, NO_SEARCHBAR_PATHS } from "../config/paths";
 
 import { SidemenuProvider } from "../context/SidemenuContext";
 import SidemenuContext from "../context/SidemenuContext";
@@ -265,7 +265,7 @@ export default function Layout() {
                       {!NO_HEADER_PATHS.includes(currentPathName) && (
                         <View style={styles.headerPaddedContainer}>
                           {renderHeaderLeft()}
-                          {renderHeaderRight()}
+                          {!NO_SEARCHBAR_PATHS.includes(currentPathName) && renderHeaderRight()}
                         </View>
                       )}
                     </View>

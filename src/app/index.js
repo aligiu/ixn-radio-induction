@@ -22,6 +22,9 @@ export default function Home() {
         <Link href="/auth/register">
           <TText>Go to Register</TText>
         </Link>
+        <Link href="/help/userManual">
+          <TText>Go to Help</TText>
+        </Link>
         <TText>More words</TText>
         <TText>More words</TText>
         <TText>More words</TText>

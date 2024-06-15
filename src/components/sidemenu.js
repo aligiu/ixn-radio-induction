@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Linking } from 'react-native'
 import {
   View,
   Text,
@@ -86,7 +87,7 @@ export default function SideMenu() {
             >
               <SideMenuButton onPress={() => {}} text={"Log In"} />
               <SideMenuButton onPress={() => {}} text={"User Manual"} />
-              <SideMenuButton onPress={() => {}} text={"Email Us"} />
+              <SideMenuButton onPress={() => Linking.openURL('mailto:support@example.com')} text={"Email Us"} />
             
             </View>
           </View>

@@ -8,7 +8,7 @@ import { fontSize } from "src/styles/fontConfig";
 import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 
-export default function Another() {
+export default function Login() {
   const { control, handleSubmit, focus, setValue } = useForm();
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);

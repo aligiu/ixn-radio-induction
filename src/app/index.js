@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ScrollView, Text, View, Image, StyleSheet } from "react-native";
+import { Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
 
@@ -9,6 +10,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
       <ScrollView
@@ -33,14 +36,18 @@ export default function Home() {
             imageSource={require("assets/images/nhs-logo-square.png")}
             title="Ashford and St Peter's"
             description={
-              "Parking, Induction, Study Leave, PCAS and Logins, ..."
+              "Parking, Induction, Study Leave, PCAS and Logins, some more very long text, verbose description, more stuff, etc etc"
             } // find way to abridge long text
             route="/hospitals/2"
           />
         </View>
-
-        <Link href="another">go to another</Link>
-
+        
+        <TouchableOpacity onPress={() => router.push("/dummy")}>
+          <Button mode="elevated" style={{marginTop: 15}}>
+            <TText>go to dummy</TText>
+          </Button>
+        </TouchableOpacity>
+        
       </ScrollView>
     </>
   );
@@ -83,7 +90,12 @@ function NavBlock({ title, description, imageSource, route }) {
           padding: 10,
         }}
       >
-        <View>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
           <Image
             resizeMethod="contain"
             source={imageSource}

@@ -1,43 +1,21 @@
+import React, { useCallback, useContext } from "react";
 import { Stack, useNavigation, usePathname } from "expo-router";
-import React, { useState, useCallback } from "react";
-
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-
-import {
-  useColorScheme,
-  View,
-  StyleSheet,
-  Text,
-  Keyboard,
-  TouchableOpacity,
-} from "react-native";
-import {
-  MD3LightTheme,
-  MD3DarkTheme,
-  PaperProvider,
-  Portal,
-} from "react-native-paper";
-
-import { customLightColors } from "../theme/colors";
-import { customDarkColors } from "../theme/colors";
+import { useColorScheme, View, StyleSheet, Text, Keyboard } from "react-native";
+import { MD3LightTheme, MD3DarkTheme, PaperProvider, Portal } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { Searchbar, IconButton } from "react-native-paper";
-
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import { NO_HEADER_PATHS } from "../config/paths";
 import SideMenu from "./sidemenu";
+import { SidemenuProvider } from "../context/SidemenuContext"; // Import the provider
+import SidemenuContext from "../context/SidemenuContext";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
-  const paperTheme =
-    colorScheme === "dark"
-      ? // ? { ...MD3DarkTheme }
-        // : { ...MD3LightTheme };
-        { ...MD3DarkTheme, colors: customDarkColors.colors }
-      : { ...MD3LightTheme, colors: customLightColors.colors };
+  const paperTheme = colorScheme === "dark" ? { ...MD3DarkTheme } : { ...MD3LightTheme };
   return (
     <Text style={[style, { color: paperTheme.colors.onBackground }]} {...props}>
       {children}
@@ -47,8 +25,7 @@ export const TText = ({ children, style, ...props }) => {
 
 export default function Layout() {
   const colorScheme = useColorScheme();
-  const [searchText, setSearchText] = useState("");
-  const [sidemenuVisible, setSidemenuVisible] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
@@ -75,12 +52,7 @@ export default function Layout() {
     return null;
   }
 
-  const paperTheme =
-    colorScheme === "dark"
-      ? // ? { ...MD3DarkTheme }
-        // : { ...MD3LightTheme };
-        { ...MD3DarkTheme, colors: customDarkColors.colors }
-      : { ...MD3LightTheme, colors: customLightColors.colors };
+  const paperTheme = colorScheme === "dark" ? { ...MD3DarkTheme } : { ...MD3LightTheme };
 
   const styles = StyleSheet.create({
     safeArea: {
@@ -133,15 +105,12 @@ export default function Layout() {
   });
 
   function renderHeaderLeft() {
+    const { setSidemenuVisible } = React.useContext(SidemenuContext);
     return (
       <View style={[styles.headerLeftContainer]}>
         <IconButton
           style={styles.iconButtonContent}
-          icon={
-            !isKeyboardVisible && !navigation.canGoBack()
-              ? "menu"
-              : "arrow-left"
-          }
+          icon={!isKeyboardVisible && !navigation.canGoBack() ? "menu" : "arrow-left"}
           onPress={() => {
             if (isKeyboardVisible) {
               Keyboard.dismiss();
@@ -174,52 +143,48 @@ export default function Layout() {
   }
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <SafeAreaView
-        style={[
-          styles.safeArea,
-          {
-            backgroundColor: paperTheme.colors.background,
-          },
-        ]}
-      >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            backgroundColor: paperTheme.colors.background,
-          }}
-          onLayout={onLayoutRootView}
+    <SidemenuProvider>
+      <PaperProvider theme={paperTheme}>
+        <SafeAreaView
+          style={[
+            styles.safeArea,
+            {
+              backgroundColor: paperTheme.colors.background,
+            },
+          ]}
         >
-          <Stack
-            screenOptions={{
-              header: () => (
-                <View>
-                  {/* Hide header for paths like login and register */}
-                  {!NO_HEADER_PATHS.includes(currentPathName) && (
-                    <View style={styles.headerPaddedContainer}>
-                      {renderHeaderLeft()}
-                      {renderHeaderRight()}
-                    </View>
-                  )}
-                </View>
-              ),
-              headerTitle: "", // Remove header title for clean layout
-              contentStyle: {
-                backgroundColor: paperTheme.colors.background,
-              },
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              backgroundColor: paperTheme.colors.background,
             }}
-          />
-        </View>
-        <Portal>
-          <SideMenu
-            sidemenuVisible={sidemenuVisible}
-            setSidemenuVisible={setSidemenuVisible}
-            // backgroundColor={paperTheme.colors.background}
-            // textColor={paperTheme.colors.inverseSurface}
-          />
-        </Portal>
-      </SafeAreaView>
-    </PaperProvider>
+            onLayout={onLayoutRootView}
+          >
+            <Stack
+              screenOptions={{
+                header: () => (
+                  <View>
+                    {!NO_HEADER_PATHS.includes(currentPathName) && (
+                      <View style={styles.headerPaddedContainer}>
+                        {renderHeaderLeft()}
+                        {renderHeaderRight()}
+                      </View>
+                    )}
+                  </View>
+                ),
+                headerTitle: "", // Remove header title for clean layout
+                contentStyle: {
+                  backgroundColor: paperTheme.colors.background,
+                },
+              }}
+            />
+          </View>
+          <Portal>
+            <SideMenu />
+          </Portal>
+        </SafeAreaView>
+      </PaperProvider>
+    </SidemenuProvider>
   );
 }

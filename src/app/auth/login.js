@@ -14,7 +14,7 @@ export default function Another() {
   const confirmPasswordRef = useRef(null);
 
   const onSubmit = (data) => {
-    console.log("Form submitted:", data);
+    console.log("Login form submitted:", data);
     // TODO: add handle form submission logic
   };
 
@@ -85,31 +85,16 @@ export default function Another() {
                     onChange(value);
                     // Handle onChange logic if needed
                   }}
-                  onSubmitEditing={handlePasswordSubmit}
+                  onSubmitEditing={handleSubmit(onSubmit)}
+                  secureTextEntry
                 />
               )}
               name="password"
               defaultValue=""
             />
 
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  ref={confirmPasswordRef}
-                  label="Confirm Password"
-                  mode="outlined"
-                  onBlur={onBlur}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    // Handle onChange logic if needed
-                  }}
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                />
-              )}
-              name="confirmPassword"
-              defaultValue=""
-            />
+
+
           </View>
         </View>
         <View style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}>

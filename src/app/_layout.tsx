@@ -2,7 +2,7 @@ import { useState, useCallback, useContext } from "react";
 import { Stack, useNavigation, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useColorScheme, View, StyleSheet, Text, Keyboard } from "react-native";
+import { useColorScheme, View, StyleSheet, Text, Keyboard, Dimensions } from "react-native";
 import {
   MD3LightTheme,
   MD3DarkTheme,
@@ -40,14 +40,31 @@ export const TText = ({ children, style, ...props }) => {
   );
 };
 
+
 // handle gestures
 const PanGestureHandler = ({ children }) => {
   const { setSidemenuVisible } = useContext(SidemenuContext);
+  const screenWidth = Dimensions.get('window').width;
 
-  const pan = Gesture.Pan().onStart(() => {
-    setSidemenuVisible(true);
-    console.log("pan detected");
-  });
+  const pan = Gesture.Pan()
+  .onStart((event) => {
+    console.log(event.x, screenWidth)
+    if (event.x < screenWidth / 3) {
+      console.log("pan started within the first 1/5th of the screen width");
+    } else {
+      console.log("pan started outside the first 1/5th of the screen width");
+    }
+  })
+  .onUpdate((event) => {
+    if (event.x < screenWidth / 3) {
+      console.log("swiping started within the first 1/5th of the screen width");
+      if (event.translationX > 50) {
+        setSidemenuVisible(true);
+        console.log("pan detected: left to right swipe");
+      }
+    }
+  })
+  .simultaneousWithExternalGesture(Gesture.Native());
 
   return (
     <GestureHandlerRootView>

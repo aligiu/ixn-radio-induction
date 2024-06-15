@@ -19,7 +19,7 @@ import {
 import SidemenuContext from "../context/SidemenuContext";
 import { fontSize } from "src/styles/fontConfig";
 
-const SideMenu = () => {
+export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
 
   const theme = useTheme();
@@ -37,17 +37,18 @@ const SideMenu = () => {
         onDismiss={closeModal} // not used, closeModal is handled by the <View> with flex: 1
       >
         <View style={{ flexDirection: "row", height: "100%" }}>
-          <ScrollView
-            // This scrollview only occupies 80% of the screen width
+          <View
+            // This <View> only occupies 80% of the screen width, leaving room for quick exit
             style={{
               flex: 0,
+              justifyContent: "space-between",
               backgroundColor: backgroundColor,
               padding: 10,
               height: "100%",
-              maxWidth: "80%",
+              width: "80%",
             }}
           >
-            <View style={{ borderWidth: 1, borderColor: "red" }}>
+            <View>
               <View style={{ marginBottom: 20 }}>
                 <View style={styles.iconContainer}>
                   <IconButton
@@ -80,22 +81,15 @@ const SideMenu = () => {
             <View
               style={{
                 gap: 10,
-                borderWidth: 1,
-                borderColor: "blue",
                 alignItems: "center",
               }}
             >
-              <TouchableOpacity style={styles.menuItem}>
-                <TText>Menu Item 1111</TText>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <TText>Menu Item 222</TText>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem}>
-                <TText>Menu Item 333</TText>
-              </TouchableOpacity>
+              <SideMenuButton onPress={() => {}} text={"Log In"} />
+              <SideMenuButton onPress={() => {}} text={"User Manual"} />
+              <SideMenuButton onPress={() => {}} text={"Email Us"} />
+            
             </View>
-          </ScrollView>
+          </View>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={closeModal}>
             <View
               style={{
@@ -110,7 +104,28 @@ const SideMenu = () => {
       </Modal>
     </Portal>
   );
-};
+}
+
+function SideMenuButton({ onPress, text }) {
+  return (
+    <TouchableOpacity onPress={onPress} style={{ width: "100%" }}>
+      <Button
+        mode="contained"
+        style={{
+          height: 50,
+          borderRadius: 25,
+          justifyContent: "center",
+          borderColor: "green",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE }}>
+          {text}
+        </Text>
+      </Button>
+    </TouchableOpacity>
+  );
+}
 
 const styles = StyleSheet.create({
   overlay: {
@@ -135,5 +150,3 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
-
-export default SideMenu;

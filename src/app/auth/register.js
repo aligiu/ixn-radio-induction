@@ -1,9 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { useTheme, Button, Searchbar, ProgressBar } from "react-native-paper";
 import { Link } from "expo-router";
 import { contentContainerStyles } from "../../styles/contentContainer";
+import { TText } from "../_layout";
+
 
 export default function Another() {
   const theme = useTheme();
@@ -15,8 +17,8 @@ export default function Another() {
       keyboardDismissMode="on-drag"
       style={contentContainerStyles.container}
     >
-      <Text>Registration Page</Text>
-      <Link href="">Continue as Guest</Link>
+      <TText>Registration Page</TText>
+      <Link href=""><TText>Continue as Guest</TText></Link>
     </ScrollView>
   );
 }

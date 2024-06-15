@@ -30,6 +30,22 @@ import { ScrollView } from "react-native";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import { NO_HEADER_PATHS } from "../config/paths";
 
+// themed text using custom color
+export const TText = ({ children, style, ...props }) => {
+  const colorScheme = useColorScheme();
+  const paperTheme =
+    colorScheme === "dark"
+      ? // ? { ...MD3DarkTheme }
+        // : { ...MD3LightTheme };
+        { ...MD3DarkTheme, colors: customDarkColors.colors }
+      : { ...MD3LightTheme, colors: customLightColors.colors };
+  return (
+    <Text style={[style, { color: paperTheme.colors.onBackground }]} {...props}>
+      {children}
+    </Text>
+  );
+};
+
 export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");

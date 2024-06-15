@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { TText } from "./_layout";
 import { useTheme } from "react-native-paper";
 import { contentContainerStyles } from "/src/styles/contentContainer";
 
@@ -9,7 +10,7 @@ export default function Another() {
       keyboardDismissMode="on-drag"
       style={contentContainerStyles.container}
     >
-      <Text>Hi</Text>
+      <TText>Hi</TText>
     </ScrollView>
   );
 }

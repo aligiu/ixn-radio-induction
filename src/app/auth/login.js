@@ -6,6 +6,7 @@ import { Link } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { fontSize } from "src/styles/fontConfig";
 import { contentContainerStyles } from "src/styles/contentContainer";
+import { TText } from "../_layout";
 
 export default function Another() {
   const { control, handleSubmit, focus, setValue } = useForm();
@@ -36,9 +37,9 @@ export default function Another() {
           <View>
             <View style={{ alignItems: "flex-end" }}>
               <Link href="">
-                <Text style={{ textDecorationLine: "underline", fontSize: fontSize.MEDIUM, fontWeight: "500" }}>
+                <TText style={{ textDecorationLine: "underline", fontSize: fontSize.MEDIUM, fontWeight: "500" }}>
                   Continue as Guest
-                </Text>
+                </TText>
               </Link>
             </View>
             <View style={styles.nhsLogoContainer}>
@@ -48,9 +49,9 @@ export default function Another() {
                 style={styles.nhsLogo}
               />
             </View>
-            <Text variant="headlineSmall" style={{ fontSize: fontSize.LARGE, fontFamily: "InterSemiBold", textAlign: "center" }}>
+            <TText variant="headlineSmall" style={{ fontSize: fontSize.LARGE, fontFamily: "InterSemiBold", textAlign: "center" }}>
               Radiologist Induction Companion
-            </Text>
+            </TText>
           </View>
 
           <View style={{ height: "50%", justifyContent: "flex-end", gap: 6 }}>
@@ -118,12 +119,12 @@ export default function Another() {
             </Button>
           </TouchableOpacity>
 
-          <Text style={{ fontSize: fontSize.MEDIUM, textAlign: "center" }}>
+          <TText style={{ fontSize: fontSize.MEDIUM, textAlign: "center" }}>
             New User?{" "}
             <Link href="auth/register">
-              <Text style={{ textDecorationLine: "underline" }}>Register</Text>
+              <TText style={{ textDecorationLine: "underline" }}>Register</TText>
             </Link>
-          </Text>
+          </TText>
         </View>
       </View>
     </ScrollView>

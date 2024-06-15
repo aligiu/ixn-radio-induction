@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import { useState, useCallback, useContext } from "react";
 import { Stack, useNavigation, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -20,6 +20,12 @@ import { NO_HEADER_PATHS } from "../config/paths";
 import { SidemenuProvider } from "../context/SidemenuContext";
 import SidemenuContext from "../context/SidemenuContext";
 
+import {
+  GestureHandlerRootView,
+  GestureDetector,
+  Gesture,
+} from "react-native-gesture-handler";
+
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
@@ -34,12 +40,28 @@ export const TText = ({ children, style, ...props }) => {
   );
 };
 
+// handle gestures
+const PanGestureHandler = ({ children }) => {
+  const { setSidemenuVisible } = useContext(SidemenuContext);
+
+  const pan = Gesture.Pan().onStart(() => {
+    setSidemenuVisible(true);
+    console.log("pan detected");
+  });
+
+  return (
+    <GestureHandlerRootView>
+      <GestureDetector gesture={pan}>{children}</GestureDetector>
+    </GestureHandlerRootView>
+  );
+};
+
 export default function Layout() {
   // SideMenu: use require instead of import to avoid circular dependency
   const SideMenu = require("../components/sidemenu").default;
 
   const colorScheme = useColorScheme();
-  const [searchText, setSearchText] = React.useState("");
+  const [searchText, setSearchText] = useState("");
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
@@ -121,8 +143,14 @@ export default function Layout() {
     },
   });
 
+  const pan = Gesture.Pan().onStart(() => {
+    const { setSidemenuVisible } = useContext(SidemenuContext);
+    setSidemenuVisible(true);
+    console.log("pan detected");
+  });
+
   function renderHeaderLeft() {
-    const { setSidemenuVisible } = React.useContext(SidemenuContext);
+    const { setSidemenuVisible } = useContext(SidemenuContext);
     return (
       <View style={[styles.headerLeftContainer]}>
         <IconButton
@@ -166,45 +194,47 @@ export default function Layout() {
   return (
     <SidemenuProvider>
       <PaperProvider theme={paperTheme}>
-        <SafeAreaView
-          style={[
-            styles.safeArea,
-            {
-              backgroundColor: paperTheme.colors.background,
-            },
-          ]}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              backgroundColor: paperTheme.colors.background,
-            }}
-            onLayout={onLayoutRootView}
+        <PanGestureHandler>
+          <SafeAreaView
+            style={[
+              styles.safeArea,
+              {
+                backgroundColor: paperTheme.colors.background,
+              },
+            ]}
           >
-            <Stack
-              screenOptions={{
-                header: () => (
-                  <View>
-                    {!NO_HEADER_PATHS.includes(currentPathName) && (
-                      <View style={styles.headerPaddedContainer}>
-                        {renderHeaderLeft()}
-                        {renderHeaderRight()}
-                      </View>
-                    )}
-                  </View>
-                ),
-                headerTitle: "", // Remove header title for clean layout
-                contentStyle: {
-                  backgroundColor: paperTheme.colors.background,
-                },
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                backgroundColor: paperTheme.colors.background,
               }}
-            />
-          </View>
-          <Portal>
-            <SideMenu />
-          </Portal>
-        </SafeAreaView>
+              onLayout={onLayoutRootView}
+            >
+              <Stack
+                screenOptions={{
+                  header: () => (
+                    <View>
+                      {!NO_HEADER_PATHS.includes(currentPathName) && (
+                        <View style={styles.headerPaddedContainer}>
+                          {renderHeaderLeft()}
+                          {renderHeaderRight()}
+                        </View>
+                      )}
+                    </View>
+                  ),
+                  headerTitle: "", // Remove header title for clean layout
+                  contentStyle: {
+                    backgroundColor: paperTheme.colors.background,
+                  },
+                }}
+              />
+            </View>
+            <Portal>
+              <SideMenu />
+            </Portal>
+          </SafeAreaView>
+        </PanGestureHandler>
       </PaperProvider>
     </SidemenuProvider>
   );

@@ -103,7 +103,7 @@ const PanGestureHandler = ({ children }) => {
 
 export default function Layout() {
   // SideMenu: use require instead of import to avoid circular dependency
-  const SideMenu = require("../components/sidemenu").default;
+  const SideMenu = require("../components/Sidemenu").default;
 
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");

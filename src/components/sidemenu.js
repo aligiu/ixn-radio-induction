@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Linking } from 'react-native'
+import { Linking } from "react-native";
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import {
 } from "react-native-paper";
 import SidemenuContext from "../context/SidemenuContext";
 import { fontSize } from "src/styles/fontConfig";
+import { useRouter } from "expo-router";
 
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
@@ -26,6 +27,8 @@ export default function SideMenu() {
   const theme = useTheme();
   const backgroundColor = theme.colors.background;
   const textColor = theme.colors.inverseSurface;
+
+  const router = useRouter();
 
   const closeModal = () => {
     setSidemenuVisible(false);
@@ -54,7 +57,7 @@ export default function SideMenu() {
                 <View style={styles.iconContainer}>
                   <IconButton
                     icon="close"
-                    size={24}
+                    size={26}
                     onPress={closeModal}
                     style={styles.iconButtonContent}
                   />
@@ -85,10 +88,24 @@ export default function SideMenu() {
                 alignItems: "center",
               }}
             >
-              <SideMenuButton onPress={() => {}} text={"Log In"} />
-              <SideMenuButton onPress={() => {}} text={"User Manual"} />
-              <SideMenuButton onPress={() => Linking.openURL('mailto:support@example.com')} text={"Email Us"} />
-            
+              <SideMenuButton
+                onPress={() => {
+                  router.push("/auth/login");
+                  closeModal();
+                }}
+                text={"Log In"}
+              />
+              <SideMenuButton
+                onPress={() => {
+                  router.push("/help/userManual");
+                  closeModal();
+                }}
+                text={"User Manual"}
+              />
+              <SideMenuButton
+                onPress={() => Linking.openURL("mailto:support@example.com")}
+                text={"Email Us"}
+              />
             </View>
           </View>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={closeModal}>

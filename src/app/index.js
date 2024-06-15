@@ -12,10 +12,12 @@ export default function Home() {
         style={contentContainerStyles.container}
       >
         {/* Scroll view needed to dismiss search bar */}
-        <TText>This is the index page!!!!!</TText>
+        
         <Link href="/another">
-          <TText>Go to another page</TText>
+          <TText>Go to another page{"\n"}</TText>
         </Link>
+
+        {/* 
         <Link href="/auth/login">
           <TText>Go to Login</TText>
         </Link>
@@ -24,7 +26,7 @@ export default function Home() {
         </Link>
         <Link href="/help/userManual">
           <TText>Go to Help</TText>
-        </Link>
+        </Link> */}
         <TText>More words</TText>
         <TText>More words</TText>
         <TText>More words</TText>

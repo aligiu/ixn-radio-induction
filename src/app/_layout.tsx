@@ -57,28 +57,42 @@ const PanGestureHandler = ({ children }) => {
 
   const pan = Gesture.Pan()
     .onStart((event) => {
-      if (DEBUG_MODE) {console.log(event.x, screenWidth)}
+      if (DEBUG_MODE) {
+        console.log(event.x, screenWidth);
+      }
       if (NO_LEFTSWIPE_PATHS.includes(currentPathName)) {
-        if (DEBUG_MODE) {console.log("swipe ignored");}
+        if (DEBUG_MODE) {
+          console.log("swipe ignored");
+        }
       } else if (event.x < screenWidth / 8) {
-        if (DEBUG_MODE) {console.log("pan started within the first 1/8th of the screen width");}
+        if (DEBUG_MODE) {
+          console.log("pan started within the first 1/8th of the screen width");
+        }
       } else {
-        if (DEBUG_MODE) {console.log("pan started outside the first 1/8th of the screen width");}
+        if (DEBUG_MODE) {
+          console.log(
+            "pan started outside the first 1/8th of the screen width"
+          );
+        }
       }
     })
     .onUpdate((event) => {
       if (NO_LEFTSWIPE_PATHS.includes(currentPathName)) {
       } else if (event.x < screenWidth / 8) {
-        if (DEBUG_MODE) {console.log(
-          "swiping started within the first 1/8th of the screen width"
-        );}
+        if (DEBUG_MODE) {
+          console.log(
+            "swiping started within the first 1/8th of the screen width"
+          );
+        }
         if (event.translationX > 10) {
           setSidemenuVisible(true);
-          if (DEBUG_MODE) {console.log("pan detected: left to right swipe");}
+          if (DEBUG_MODE) {
+            console.log("pan detected: left to right swipe");
+          }
         }
       }
-    })
-    .simultaneousWithExternalGesture(Gesture.Native());
+    });
+  // .simultaneousWithExternalGesture(Gesture.Native());
 
   return (
     <GestureHandlerRootView>
@@ -225,23 +239,24 @@ export default function Layout() {
   return (
     <SidemenuProvider>
       <PaperProvider theme={paperTheme}>
-        <PanGestureHandler>
-          <SafeAreaView
-            style={[
-              styles.safeArea,
-              {
-                backgroundColor: paperTheme.colors.background,
-              },
-            ]}
+        <SafeAreaView
+          style={[
+            styles.safeArea,
+            {
+              backgroundColor: paperTheme.colors.background,
+            },
+          ]}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              backgroundColor: paperTheme.colors.background,
+            }}
+            onLayout={onLayoutRootView}
           >
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                backgroundColor: paperTheme.colors.background,
-              }}
-              onLayout={onLayoutRootView}
-            >
+            {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
+            <PanGestureHandler>
               <Stack
                 screenOptions={{
                   header: () => (
@@ -260,12 +275,12 @@ export default function Layout() {
                   },
                 }}
               />
-            </View>
-            <Portal>
-              <SideMenu />
-            </Portal>
-          </SafeAreaView>
-        </PanGestureHandler>
+            </PanGestureHandler>
+          </View>
+          <Portal>
+            <SideMenu />
+          </Portal>
+        </SafeAreaView>
       </PaperProvider>
     </SidemenuProvider>
   );

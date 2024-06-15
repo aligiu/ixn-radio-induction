@@ -198,6 +198,9 @@ export default function Layout() {
                 </View>
               ),
               headerTitle: "", // Remove header title for clean layout
+              contentStyle: {
+                backgroundColor: paperTheme.colors.background,
+              },
             }}
           />
         </View>

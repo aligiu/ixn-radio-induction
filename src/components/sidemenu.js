@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
+import { TText } from "../app/_layout";
 import { Button, Portal, Modal } from "react-native-paper";
 import SidemenuContext from "../context/SidemenuContext";
 import { useTheme } from "react-native-paper";
@@ -32,12 +33,12 @@ const SideMenu = () => {
             // This scrollview only occupies 80% of the screen width
             style={{
               flex: 0,
-              backgroundColor: "white",
+              backgroundColor: backgroundColor,
               padding: 20,
               height: "100%",
               maxWidth: "80%",
-              borderColor: "red",
-              borderWidth: 2,
+              // borderColor: "red",
+              // borderWidth: 2,
             }}
           >
             <View style={{ marginBottom: 20 }}>
@@ -52,19 +53,21 @@ const SideMenu = () => {
               }}
             >
               <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 1111</Text>
+                <TText>Menu Item 1111</TText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 222</Text>
+                <TText>Menu Item 222</TText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuItemText}>Menu Item 333</Text>
+                <TText>Menu Item 333</TText>
               </TouchableOpacity>
               <Button onPress={closeModal}>Close</Button>
             </View>
           </ScrollView>
             <TouchableWithoutFeedback style={{flex: 1}} onPress={closeModal}>
-          <View style={{borderColor: "blue", borderWidth: 3, flex: 1}}>
+          <View style={{
+            // borderColor: "blue", borderWidth: 3, 
+            flex: 1}}>
             {/* this view is responsible for clsoing the modal */}
           </View>
             </TouchableWithoutFeedback>          
@@ -75,10 +78,6 @@ const SideMenu = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    padding: 20,
-  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",

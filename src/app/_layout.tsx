@@ -16,8 +16,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import { NO_HEADER_PATHS } from "../config/paths";
-import SideMenu from "../components/sidemenu";
-import { SidemenuProvider } from "../context/SidemenuContext"; // Import the provider
+
+import { SidemenuProvider } from "../context/SidemenuContext";
 import SidemenuContext from "../context/SidemenuContext";
 
 // themed text using custom color
@@ -35,6 +35,9 @@ export const TText = ({ children, style, ...props }) => {
 };
 
 export default function Layout() {
+  // SideMenu: use require instead of import to avoid circular dependency
+  const SideMenu = require("../components/sidemenu").default;
+
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = React.useState("");
   const navigation = useNavigation();

@@ -2,7 +2,14 @@ import { useState, useCallback, useContext } from "react";
 import { Stack, useNavigation, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useColorScheme, View, StyleSheet, Text, Keyboard } from "react-native";
+import {
+  useColorScheme,
+  View,
+  StyleSheet,
+  Text,
+  Keyboard,
+  Dimensions,
+} from "react-native";
 import {
   MD3LightTheme,
   MD3DarkTheme,
@@ -15,7 +22,7 @@ import { customDarkColors } from "../theme/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
-import { NO_HEADER_PATHS } from "../config/paths";
+import { NO_HEADER_PATHS, NO_LEFTSWIPE_PATHS } from "../config/paths";
 
 import { SidemenuProvider } from "../context/SidemenuContext";
 import SidemenuContext from "../context/SidemenuContext";
@@ -43,11 +50,49 @@ export const TText = ({ children, style, ...props }) => {
 // handle gestures
 const PanGestureHandler = ({ children }) => {
   const { setSidemenuVisible } = useContext(SidemenuContext);
+  const screenWidth = Dimensions.get("window").width;
+  const currentPathName = usePathname();
 
-  const pan = Gesture.Pan().onStart(() => {
-    setSidemenuVisible(true);
-    console.log("pan detected");
-  });
+  const DEBUG_MODE = false;
+
+  const pan = Gesture.Pan()
+    .onStart((event) => {
+      if (DEBUG_MODE) {
+        console.log(event.x, screenWidth);
+      }
+      if (NO_LEFTSWIPE_PATHS.includes(currentPathName)) {
+        if (DEBUG_MODE) {
+          console.log("swipe ignored");
+        }
+      } else if (event.x < screenWidth / 8) {
+        if (DEBUG_MODE) {
+          console.log("pan started within the first 1/8th of the screen width");
+        }
+      } else {
+        if (DEBUG_MODE) {
+          console.log(
+            "pan started outside the first 1/8th of the screen width"
+          );
+        }
+      }
+    })
+    .onUpdate((event) => {
+      if (NO_LEFTSWIPE_PATHS.includes(currentPathName)) {
+      } else if (event.x < screenWidth / 8) {
+        if (DEBUG_MODE) {
+          console.log(
+            "swiping started within the first 1/8th of the screen width"
+          );
+        }
+        if (event.translationX > 10) {
+          setSidemenuVisible(true);
+          if (DEBUG_MODE) {
+            console.log("pan detected: left to right swipe");
+          }
+        }
+      }
+    });
+  // .simultaneousWithExternalGesture(Gesture.Native());
 
   return (
     <GestureHandlerRootView>
@@ -194,23 +239,24 @@ export default function Layout() {
   return (
     <SidemenuProvider>
       <PaperProvider theme={paperTheme}>
-        <PanGestureHandler>
-          <SafeAreaView
-            style={[
-              styles.safeArea,
-              {
-                backgroundColor: paperTheme.colors.background,
-              },
-            ]}
+        <SafeAreaView
+          style={[
+            styles.safeArea,
+            {
+              backgroundColor: paperTheme.colors.background,
+            },
+          ]}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              backgroundColor: paperTheme.colors.background,
+            }}
+            onLayout={onLayoutRootView}
           >
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                backgroundColor: paperTheme.colors.background,
-              }}
-              onLayout={onLayoutRootView}
-            >
+            {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
+            <PanGestureHandler>
               <Stack
                 screenOptions={{
                   header: () => (
@@ -229,12 +275,12 @@ export default function Layout() {
                   },
                 }}
               />
-            </View>
-            <Portal>
-              <SideMenu />
-            </Portal>
-          </SafeAreaView>
-        </PanGestureHandler>
+            </PanGestureHandler>
+          </View>
+          <Portal>
+            <SideMenu />
+          </Portal>
+        </SafeAreaView>
       </PaperProvider>
     </SidemenuProvider>
   );

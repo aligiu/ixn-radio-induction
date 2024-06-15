@@ -11,14 +11,12 @@ import {
 import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
-import { fontSize } from "src/styles/fontConfig";
 import { contentContainerStyles } from "src/styles/contentContainer";
+
+import { fontSize } from "src/styles/fontConfig";
 import { TText } from "../_layout";
 
-export default function Another() {
-  const { control, handleSubmit, focus, setValue } = useForm();
-  const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
+export default function UserManual() {
 
   return (
     <ScrollView
@@ -34,7 +32,7 @@ export default function Another() {
           flexGrow: 1,
         }}
       >
-        <View style={{ paddingBottom: 20 }}>
+        <View style={{ flex: 0 }}>
           <View style={styles.nhsLogoContainer}>
             <Image
               resizeMethod="contain"
@@ -42,14 +40,7 @@ export default function Another() {
               style={styles.nhsLogo}
             />
           </View>
-          <TText
-            variant="headlineSmall"
-            style={{
-              fontSize: fontSize.LARGE,
-              fontFamily: "InterSemiBold",
-              textAlign: "center",
-            }}
-          >
+          <TText variant="headlineSmall" style={[styles.pageTitle, {textAlign: "center"}]}>
             Radiologist Induction Companion{"\n"}User Manual
           </TText>
         </View>
@@ -100,6 +91,11 @@ export default function Another() {
 }
 
 const styles = StyleSheet.create({
+  pageTitle: {
+    fontSize: fontSize.LARGE,
+    fontFamily: "InterSemiBold",
+    paddingBottom: 16,
+  },
   nhsLogoContainer: {
     alignItems: "center",
     paddingBottom: 16,

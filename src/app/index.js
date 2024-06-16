@@ -31,7 +31,7 @@ export default function Home() {
 
           <NavBlock
             imageSource={require("assets/images/nhs-logo-square.png")}
-            title="Ashford and St Peter's"
+            title="Frimley"
             description={
               "Parking, Induction, Study Leave, PCAS and Logins, some more very long text, verbose description, more stuff, etc etc"
             }

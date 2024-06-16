@@ -9,12 +9,16 @@ import {
   Text,
   Keyboard,
   Dimensions,
+  ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import {
   MD3LightTheme,
   MD3DarkTheme,
   PaperProvider,
   Portal,
+  Modal,
+  Icon,
 } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
@@ -22,7 +26,11 @@ import { customDarkColors } from "../theme/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
 import useKeyboardVisible from "../hooks/keyboard/isVisible";
-import { NO_HEADER_PATHS, NO_LEFTSWIPE_PATHS, NO_SEARCHBAR_PATHS } from "../config/paths";
+import {
+  NO_HEADER_PATHS,
+  NO_LEFTSWIPE_PATHS,
+  NO_SEARCHBAR_PATHS,
+} from "../config/paths";
 
 import { SidemenuProvider } from "../context/SidemenuContext";
 import SidemenuContext from "../context/SidemenuContext";
@@ -32,6 +40,9 @@ import {
   GestureDetector,
   Gesture,
 } from "react-native-gesture-handler";
+
+import { fontSize } from "../styles/fontConfig";
+import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -110,6 +121,9 @@ export default function Layout() {
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
+  const [searchbarInFocus, setSearchbarInFocus] = useState(false);
+
+  const screenHeight = Dimensions.get("window").height;
 
   const [fontsLoaded, fontError] = useFonts({
     InterThin: require("assets/fonts/Inter-Thin.ttf"),
@@ -229,8 +243,12 @@ export default function Layout() {
           style={styles.searchBar}
           value={searchText}
           inputStyle={styles.searchBarInput}
+          onFocus={() => {
+            setSearchbarInFocus(true);
+          }}
           onBlur={() => {
             Keyboard.dismiss();
+            setSearchbarInFocus(false);
           }}
         />
       </View>
@@ -265,7 +283,8 @@ export default function Layout() {
                       {!NO_HEADER_PATHS.includes(currentPathName) && (
                         <View style={styles.headerPaddedContainer}>
                           {renderHeaderLeft()}
-                          {!NO_SEARCHBAR_PATHS.includes(currentPathName) && renderHeaderRight()}
+                          {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
+                            renderHeaderRight()}
                         </View>
                       )}
                     </View>
@@ -278,10 +297,46 @@ export default function Layout() {
               />
             </PanGestureHandler>
           </View>
-          <Portal>
-            <SideMenu />
-          </Portal>
+          <SideMenu />
         </SafeAreaView>
+
+        {/* Searchbar autocomplete panel */}
+        {searchbarInFocus && (
+          <ScrollView
+            style={{
+              height: screenHeight - 145,
+
+              backgroundColor: paperTheme.colors.background,
+              paddingTop: 8,
+              paddingLeft: 16,
+              paddingRight: 16,
+            }}
+            keyboardShouldPersistTaps="always"
+          >
+            <View
+              style={{
+                flexDirection: "column",
+                gap: 10, // gap must be placed in <View> not <ScrollView>
+              }}
+            >
+              <SearchAutocompleteElement
+                autocompleteText={"Radiopaedia"}
+                topic={"Educational Resources"}
+                section={"Login"}
+                routerLink={"/dummy"}
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
+
+              <SearchAutocompleteElement
+                autocompleteText={"Radiopaedia"}
+                topic={"Conferences"}
+                section={"Link"}
+                routerLink={"/dummy"}
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
+            </View>
+          </ScrollView>
+        )}
       </PaperProvider>
     </SidemenuProvider>
   );

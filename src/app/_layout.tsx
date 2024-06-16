@@ -10,6 +10,7 @@ import {
   Keyboard,
   Dimensions,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import {
   MD3LightTheme,
@@ -17,6 +18,7 @@ import {
   PaperProvider,
   Portal,
   Modal,
+  Icon,
 } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
@@ -297,35 +299,69 @@ export default function Layout() {
           <SideMenu />
         </SafeAreaView>
 
-        
-                
-          {searchbarInFocus && 
-          
+        {/* Searchbar autocomplete panel */}
+        {searchbarInFocus && (
           <ScrollView
-            style={{height: (screenHeight-145)}}
+            style={{
+              height: screenHeight - 145,
+
+              backgroundColor: paperTheme.colors.background,
+              paddingTop: 8,
+              paddingLeft: 16,
+              paddingRight: 16,
+              flexDirection: "column",
+              gap: 10,
+            }}
             keyboardShouldPersistTaps="always"
           >
-            <View style={{    
-              marginTop: 8,
-              marginLeft: 16,
-              marginRight: 16,}}>
-            <TText 
-              style={{
-                  fontSize: fontSize.LARGE,
-                  fontFamily: "InterSemiBold",
-                  paddingBottom: 16,
+
+            
+            <TouchableOpacity>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "grey",
+                  borderRadius: 20,
+                  padding: 10,
+                  flexDirection: "row",
                 }}
-            >
-              SEARCHBAR TEMP
-            </TText>
-            </View>
+              >
+                <View
+                  style={{
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    padding: 10,
+                  }}
+                >
+                  <Icon
+                    source="magnify"
+                    color={paperTheme.colors.primary}
+                    size={26}
+                  />
+                </View>
+                <View>
+                  <TText
+                    style={{
+                      fontSize: fontSize.LARGE,
+                      fontFamily: "InterRegular",
+                    }}
+                  >
+                    Radiopaedia
+                  </TText>
+                  <TText
+                    style={{
+                      fontSize: fontSize.MEDIUM,
+                      fontFamily: "InterRegular",
+                    }}
+                  >
+                    {"Educational Resources"} - {"Login"}
+                  </TText>
+                </View>
+              </View>
+            </TouchableOpacity>
+
           </ScrollView>
-          }
-
-
-        
-
-
+        )}
       </PaperProvider>
     </SidemenuProvider>
   );

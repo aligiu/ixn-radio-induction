@@ -9,12 +9,14 @@ import {
   Text,
   Keyboard,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import {
   MD3LightTheme,
   MD3DarkTheme,
   PaperProvider,
   Portal,
+  Modal,
 } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
@@ -36,6 +38,8 @@ import {
   GestureDetector,
   Gesture,
 } from "react-native-gesture-handler";
+
+import { fontSize } from "../styles/fontConfig";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -114,6 +118,9 @@ export default function Layout() {
   const navigation = useNavigation();
   const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
+  const [searchbarInFocus, setSearchbarInFocus] = useState(false);
+
+  const screenHeight = Dimensions.get("window").height;
 
   const [fontsLoaded, fontError] = useFonts({
     InterThin: require("assets/fonts/Inter-Thin.ttf"),
@@ -233,8 +240,12 @@ export default function Layout() {
           style={styles.searchBar}
           value={searchText}
           inputStyle={styles.searchBarInput}
+          onFocus={() => {
+            setSearchbarInFocus(true);
+          }}
           onBlur={() => {
             Keyboard.dismiss();
+            setSearchbarInFocus(false);
           }}
         />
       </View>
@@ -285,6 +296,36 @@ export default function Layout() {
           </View>
           <SideMenu />
         </SafeAreaView>
+
+        
+                
+          {searchbarInFocus && 
+          
+          <ScrollView
+            style={{height: (screenHeight-145)}}
+            keyboardShouldPersistTaps="always"
+          >
+            <View style={{    
+              marginTop: 8,
+              marginLeft: 16,
+              marginRight: 16,}}>
+            <TText 
+              style={{
+                  fontSize: fontSize.LARGE,
+                  fontFamily: "InterSemiBold",
+                  paddingBottom: 16,
+                }}
+            >
+              SEARCHBAR TEMP
+            </TText>
+            </View>
+          </ScrollView>
+          }
+
+
+        
+
+
       </PaperProvider>
     </SidemenuProvider>
   );

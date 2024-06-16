@@ -1,12 +1,14 @@
-import { View, TouchableOpacity, Keyboard } from "react-native";
-import { Icon } from "react-native-paper";
+import { Text, View, TouchableOpacity, Keyboard, useColorScheme } from "react-native";
+import { Icon, MD3LightTheme, MD3DarkTheme } from "react-native-paper";
 
 import { fontSize } from "../styles/fontConfig";
 
 import React from "react";
-import { TText } from "../app/_layout";
 import { useTheme } from "react-native-paper";
 import { useRouter } from "expo-router";
+
+import { customLightColors } from "../theme/colors";
+import { customDarkColors } from "../theme/colors";
 
 export default function SearchAutocompleteElement({
   autocompleteText,
@@ -18,10 +20,26 @@ export default function SearchAutocompleteElement({
   const theme = useTheme();
   const router = useRouter();
 
+  const TText = ({ children, style, ...props }) => {
+    const colorScheme = useColorScheme();
+    const paperTheme =
+      colorScheme === "dark"
+        ? { ...MD3DarkTheme, colors: customDarkColors.colors }
+        : { ...MD3LightTheme, colors: customLightColors.colors };
+    return (
+      <Text
+        style={[style, { color: paperTheme.colors.onBackground }]}
+        {...props}
+      >
+        {children}
+      </Text>
+    );
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
-        Keyboard.dismiss()
+        Keyboard.dismiss();
         setSearchbarInFocus(false);
         router.push(routerLink);
       }}

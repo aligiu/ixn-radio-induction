@@ -47,7 +47,6 @@ export default function Home() {
           
         <TouchableOpacity onPress={() => {
           const route = "/hospitals/1"
-          console.log("(b)route is: " + route + typeof route)
           router.push(route)
           }}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
@@ -81,7 +80,6 @@ function NavBlock({ title, description, imageSource, route }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log("(o)route is: " + route + typeof route)
         router.push(route);
       }}
     >

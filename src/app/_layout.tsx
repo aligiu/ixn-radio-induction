@@ -42,6 +42,7 @@ import {
 } from "react-native-gesture-handler";
 
 import { fontSize } from "../styles/fontConfig";
+import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -309,57 +310,31 @@ export default function Layout() {
               paddingTop: 8,
               paddingLeft: 16,
               paddingRight: 16,
-              flexDirection: "column",
-              gap: 10,
             }}
             keyboardShouldPersistTaps="always"
           >
+            <View
+              style={{
+                flexDirection: "column",
+                gap: 10, // gap must be placed in <View> not <ScrollView>
+              }}
+            >
+              <SearchAutocompleteElement
+                autocompleteText={"Radiopaedia"}
+                topic={"Educational Resources"}
+                section={"Login"}
+                routerLink={"/dummy"}
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
 
-            
-            <TouchableOpacity>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "grey",
-                  borderRadius: 20,
-                  padding: 10,
-                  flexDirection: "row",
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    padding: 10,
-                  }}
-                >
-                  <Icon
-                    source="magnify"
-                    color={paperTheme.colors.primary}
-                    size={26}
-                  />
-                </View>
-                <View>
-                  <TText
-                    style={{
-                      fontSize: fontSize.LARGE,
-                      fontFamily: "InterRegular",
-                    }}
-                  >
-                    Radiopaedia
-                  </TText>
-                  <TText
-                    style={{
-                      fontSize: fontSize.MEDIUM,
-                      fontFamily: "InterRegular",
-                    }}
-                  >
-                    {"Educational Resources"} - {"Login"}
-                  </TText>
-                </View>
-              </View>
-            </TouchableOpacity>
-
+              <SearchAutocompleteElement
+                autocompleteText={"Radiopaedia"}
+                topic={"Conferences"}
+                section={"Link"}
+                routerLink={"/dummy"}
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
+            </View>
           </ScrollView>
         )}
       </PaperProvider>

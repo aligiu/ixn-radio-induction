@@ -8,12 +8,13 @@ import { TText } from "../_layout";
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import AutoScrollView from "../../components/AutoScrollView";
 
 export default function Hospital() {
     const { id } = useLocalSearchParams();
   return (
     <>
-      <ScrollView
+      <AutoScrollView
         keyboardDismissMode="on-drag"
         style={contentContainerStyles.container}
       >
@@ -27,7 +28,7 @@ export default function Hospital() {
         <TText style={styles.sectionContent}>More Section Content</TText>
         </View>
 
-      </ScrollView>
+      </AutoScrollView>
     </>
   );
 }

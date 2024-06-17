@@ -7,26 +7,24 @@ import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import AutoScrollView from "../components/AutoScrollView";
 
 export default function Dummy() {
   return (
-    <>
-      <ScrollView
-        keyboardDismissMode="on-drag"
-        style={contentContainerStyles.container}
-      >
-        {/* Scroll view needed to dismiss search bar */}
+    <AutoScrollView
+    keyboardDismissMode="on-drag"
+    style={contentContainerStyles.container}
+  >
+      {/* Scroll view needed to dismiss search bar */}
 
-        <TText style={styles.pageTitle}>Dummy</TText>
+      <TText style={styles.pageTitle}>Dummy</TText>
 
-        <View>
+      <View>
         <TText style={styles.sectionTitle}>Section Title</TText>
         <TText style={styles.sectionContent}>Section Content</TText>
         <TText style={styles.sectionContent}>More Section Content</TText>
-        </View>
-
-      </ScrollView>
-    </>
+      </View>
+    </AutoScrollView>
   );
 }
 

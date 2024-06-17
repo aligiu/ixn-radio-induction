@@ -8,14 +8,12 @@ import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
 import { useRouter } from "expo-router";
 
-import AutoScrollView from "../components/AutoScrollView";
-
 export default function Home() {
   const router = useRouter();
 
   return (
     <>
-      <AutoScrollView
+      <ScrollView
         keyboardDismissMode="on-drag"
         style={contentContainerStyles.container}
       >
@@ -57,7 +55,7 @@ export default function Home() {
         </TouchableOpacity>
 
 
-      </AutoScrollView>
+      </ScrollView>
     </>
   );
 }

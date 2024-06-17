@@ -299,9 +299,11 @@ export default function Layout() {
           </View>
           <SideMenu />
         </SafeAreaView>
+        
 
+        {/* to remove */}
         {/* Searchbar autocomplete panel */}
-        {searchbarInFocus && (
+        {/* {searchbarInFocus && (
           <ScrollView
             style={{
               height: screenHeight - 145,
@@ -336,7 +338,9 @@ export default function Layout() {
               />
             </View>
           </ScrollView>
-        )}
+        )} */}
+
+
       </PaperProvider>
     </SidemenuProvider>
   );

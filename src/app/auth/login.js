@@ -88,9 +88,6 @@ export default function Login() {
               name="password"
               defaultValue=""
             />
-
-
-
           </View>
         </View>
         <View style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}>

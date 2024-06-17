@@ -1,21 +1,8 @@
 import React, { useContext } from "react";
 
-import {
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Keyboard,
-  useColorScheme,
-} from "react-native";
+import { View, ScrollView } from "react-native";
 
-import {
-    useTheme,
-    Button,
-    Portal,
-    Modal,
-    IconButton,
-  } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
@@ -23,29 +10,10 @@ import { fontSize } from "../styles/fontConfig";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import SearchbarContext from "../context/SearchbarContext";
 
-// //  alternative
-// const Picture = (props) => {
-//     return (
-//       <div>
-//         <img src={props.src}/>
-//         {props.children}
-//       </div>
-//     )
-//   }
-
-
-
-export default function AutoScrollView({
-  children,
-}) {
-    
-    const theme = useTheme();
-    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
-
-    
-    // const searchbarInFocus = true;
-
-    // const setSearchbarInFocus = () => {};
+export default function AutoScrollView({ children }) {
+  const theme = useTheme();
+  const { searchbarInFocus, setSearchbarInFocus } =
+    useContext(SearchbarContext);
 
   return (
     <ScrollView
@@ -61,8 +29,6 @@ export default function AutoScrollView({
       {searchbarInFocus && (
         <ScrollView
           style={{
-            // height: screenHeight - 145,
-
             backgroundColor: theme.colors.background,
           }}
           keyboardShouldPersistTaps="always"
@@ -94,40 +60,3 @@ export default function AutoScrollView({
     </ScrollView>
   );
 }
-
-// {searchbarInFocus && (
-//     <ScrollView
-//       style={{
-//         height: screenHeight - 145,
-
-//         backgroundColor: theme.colors.background,
-//         paddingTop: 8,
-//         paddingLeft: 16,
-//         paddingRight: 16,
-//       }}
-//       keyboardShouldPersistTaps="always"
-//     >
-//       <View
-//         style={{
-//           flexDirection: "column",
-//           gap: 10, // gap must be placed in <View> not <ScrollView>
-//         }}
-//       >
-//         <SearchAutocompleteElement
-//           autocompleteText={"Radiopaedia"}
-//           topic={"Educational Resources"}
-//           section={"Login"}
-//           routerLink={"/dummy"}
-//           setSearchbarInFocus={setSearchbarInFocus}
-//         />
-
-//         <SearchAutocompleteElement
-//           autocompleteText={"Radiopaedia"}
-//           topic={"Conferences"}
-//           section={"Link"}
-//           routerLink={"/dummy"}
-//           setSearchbarInFocus={setSearchbarInFocus}
-//         />
-//       </View>
-//     </ScrollView>
-// )}

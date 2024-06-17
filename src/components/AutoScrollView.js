@@ -1,7 +1,9 @@
-import { ScrollView } from "react-native";
+import React, { useContext } from "react";
+
 import {
   Text,
   View,
+  ScrollView,
   TouchableOpacity,
   Keyboard,
   useColorScheme,
@@ -19,6 +21,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 
 import { fontSize } from "../styles/fontConfig";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
+import SearchbarContext from "../context/SearchbarContext";
 
 // //  alternative
 // const Picture = (props) => {
@@ -30,15 +33,19 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 //     )
 //   }
 
+
+
 export default function AutoScrollView({
   children,
 }) {
     
     const theme = useTheme();
-    
-    const searchbarInFocus = true;
+    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
 
-    const setSearchbarInFocus = () => {};
+    
+    // const searchbarInFocus = true;
+
+    // const setSearchbarInFocus = () => {};
 
   return (
     <ScrollView

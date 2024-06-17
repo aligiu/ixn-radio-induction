@@ -9,23 +9,17 @@ import {
   Text,
   Keyboard,
   Dimensions,
-  ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import {
   MD3LightTheme,
   MD3DarkTheme,
   PaperProvider,
-  Portal,
-  Modal,
-  Icon,
 } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Searchbar, IconButton } from "react-native-paper";
-import useKeyboardVisible from "../hooks/keyboard/isVisible";
 import {
   NO_HEADER_PATHS,
   NO_LEFTSWIPE_PATHS,
@@ -43,6 +37,9 @@ import {
 
 import { fontSize } from "../styles/fontConfig";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
+import { SearchbarProvider } from "../context/SearchbarContext";
+
+import SearchbarContext from "../context/SearchbarContext";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -119,11 +116,7 @@ export default function Layout() {
   const colorScheme = useColorScheme();
   const [searchText, setSearchText] = useState("");
   const navigation = useNavigation();
-  const isKeyboardVisible = useKeyboardVisible();
   const currentPathName = usePathname();
-  const [searchbarInFocus, setSearchbarInFocus] = useState(false);
-
-  const screenHeight = Dimensions.get("window").height;
 
   const [fontsLoaded, fontError] = useFonts({
     InterThin: require("assets/fonts/Inter-Thin.ttf"),
@@ -209,19 +202,21 @@ export default function Layout() {
   });
 
   function renderHeaderLeft() {
+
+    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
     const { setSidemenuVisible } = useContext(SidemenuContext);
     return (
       <View style={[styles.headerLeftContainer]}>
         <IconButton
           style={styles.iconButtonContent}
           icon={
-            !isKeyboardVisible && !navigation.canGoBack()
+            !searchbarInFocus && !navigation.canGoBack()
               ? "menu"
               : "arrow-left"
           }
           size={24}
           onPress={() => {
-            if (isKeyboardVisible) {
+            if (searchbarInFocus) {
               Keyboard.dismiss();
             } else if (navigation.canGoBack()) {
               navigation.goBack();
@@ -235,6 +230,10 @@ export default function Layout() {
   }
 
   function renderHeaderRight() {
+
+    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
+
+    // setSearchbarInFocus
     return (
       <View style={[styles.headerRightContainer]}>
         <Searchbar
@@ -256,92 +255,52 @@ export default function Layout() {
   }
 
   return (
-    <SidemenuProvider>
-      <PaperProvider theme={paperTheme}>
-        <SafeAreaView
-          style={[
-            styles.safeArea,
-            {
-              backgroundColor: paperTheme.colors.background,
-            },
-          ]}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              backgroundColor: paperTheme.colors.background,
-            }}
-            onLayout={onLayoutRootView}
-          >
-            {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
-            <PanGestureHandler>
-              <Stack
-                screenOptions={{
-                  header: () => (
-                    <View>
-                      {!NO_HEADER_PATHS.includes(currentPathName) && (
-                        <View style={styles.headerPaddedContainer}>
-                          {renderHeaderLeft()}
-                          {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
-                            renderHeaderRight()}
-                        </View>
-                      )}
-                    </View>
-                  ),
-                  headerTitle: "", // Remove header title for clean layout
-                  contentStyle: {
-                    backgroundColor: paperTheme.colors.background,
-                  },
-                }}
-              />
-            </PanGestureHandler>
-          </View>
-          <SideMenu />
-        </SafeAreaView>
-        
-
-        {/* to remove */}
-        {/* Searchbar autocomplete panel */}
-        {/* {searchbarInFocus && (
-          <ScrollView
-            style={{
-              height: screenHeight - 145,
-
-              backgroundColor: paperTheme.colors.background,
-              paddingTop: 8,
-              paddingLeft: 16,
-              paddingRight: 16,
-            }}
-            keyboardShouldPersistTaps="always"
+    <PaperProvider theme={paperTheme}>
+      <SidemenuProvider>
+        <SearchbarProvider>
+          <SafeAreaView
+            style={[
+              styles.safeArea,
+              {
+                backgroundColor: paperTheme.colors.background,
+              },
+            ]}
           >
             <View
               style={{
-                flexDirection: "column",
-                gap: 10, // gap must be placed in <View> not <ScrollView>
+                flex: 1,
+                flexDirection: "row",
+                backgroundColor: paperTheme.colors.background,
               }}
+              onLayout={onLayoutRootView}
             >
-              <SearchAutocompleteElement
-                autocompleteText={"Radiopaedia"}
-                topic={"Educational Resources"}
-                section={"Login"}
-                routerLink={"/dummy"}
-                setSearchbarInFocus={setSearchbarInFocus}
-              />
-
-              <SearchAutocompleteElement
-                autocompleteText={"Radiopaedia"}
-                topic={"Conferences"}
-                section={"Link"}
-                routerLink={"/dummy"}
-                setSearchbarInFocus={setSearchbarInFocus}
-              />
+              {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
+              <PanGestureHandler>
+                <Stack
+                  screenOptions={{
+                    header: () => (
+                      <View>
+                        {!NO_HEADER_PATHS.includes(currentPathName) && (
+                          <View style={styles.headerPaddedContainer}>
+                            {renderHeaderLeft()}
+                            {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
+                              renderHeaderRight()}
+                          </View>
+                        )}
+                      </View>
+                    ),
+                    headerTitle: "", // Remove header title for clean layout
+                    contentStyle: {
+                      backgroundColor: paperTheme.colors.background,
+                    },
+                  }}
+                />
+              </PanGestureHandler>
             </View>
-          </ScrollView>
-        )} */}
-
-
-      </PaperProvider>
-    </SidemenuProvider>
+            <SideMenu />
+          </SafeAreaView>
+        </SearchbarProvider>
+      </SidemenuProvider>
+    </PaperProvider>
   );
 }

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
 
-export const Basic = () => {
+export default function Basic () {
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,

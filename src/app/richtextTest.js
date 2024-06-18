@@ -30,6 +30,10 @@ export default function RichtextTest() {
 
       <TText style={styles.pageTitle}>RichtextTest</TText>
 
+
+      <SafeAreaView>
+      <Toolbar editor={editor} />
+      </SafeAreaView>
       <View style={{borderWidth: 1, flex: 1}}>
         <TText style={styles.sectionTitle}>Section Title</TText>
         <TText style={styles.sectionContent}>Section Content</TText>
@@ -43,7 +47,7 @@ export default function RichtextTest() {
               bottom: 0,
             }}
           >
-            <Toolbar editor={editor} />
+            {/* <Toolbar editor={editor} /> */}
           </KeyboardAvoidingView>
         </SafeAreaView>
       </View>

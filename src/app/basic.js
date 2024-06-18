@@ -50,13 +50,16 @@ export default function Basic() {
   });
 
   const keyboardHeight = useKeyboard();
+  console.log(keyboardHeight)
 
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>
       <RichText editor={editor} />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={"height"}
+        // behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={exampleStyles.keyboardAvoidingView}
+        
       >
         {/* <Toolbar editor={editor} />
          */}
@@ -64,7 +67,13 @@ export default function Basic() {
           style={{
             borderWidth: 1,
             borderColor: "red",
-            marginBottom: keyboardHeight,
+            marginBottom: Platform.OS === "ios" ? keyboardHeight : keyboardHeight,
+
+            // marginBottom: 85,
+            // marginBottom: {Platform.OS === "ios" ? 120 : keyboardHeight},
+            // marginBottom: keyboardHeight,
+            // marginBottom: {Platform.OS === "ios" ? keyboardHeight - 60 : keyboardHeight,
+            // marginBottom: 0,
           }}
         >
           <Toolbar editor={editor} />

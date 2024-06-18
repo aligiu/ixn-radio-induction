@@ -61,19 +61,13 @@ export default function Basic() {
         style={exampleStyles.keyboardAvoidingView}
         
       >
-        {/* <Toolbar editor={editor} />
-         */}
+        {/* <Toolbar editor={editor} /> */}
         <SafeAreaView
           style={{
             borderWidth: 1,
             borderColor: "red",
-            marginBottom: Platform.OS === "ios" ? keyboardHeight : keyboardHeight,
-
-            // marginBottom: 85,
-            // marginBottom: {Platform.OS === "ios" ? 120 : keyboardHeight},
-            // marginBottom: keyboardHeight,
-            // marginBottom: {Platform.OS === "ios" ? keyboardHeight - 60 : keyboardHeight,
-            // marginBottom: 0,
+            marginBottom: keyboardHeight,   // toolbar visible for all iPhones, but too high for iPhones with notch
+            // marginBottom: Platform.OS === "ios" ? keyboardHeight - 60 : keyboardHeight,   // toolbar not visible for iPhones without notch, but just right for iPhones with notch
           }}
         >
           <Toolbar editor={editor} />
@@ -82,6 +76,9 @@ export default function Basic() {
     </SafeAreaView>
   );
 }
+
+
+
 
 const exampleStyles = StyleSheet.create({
   fullScreen: {

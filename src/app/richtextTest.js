@@ -11,17 +11,53 @@ import AutoScrollView from "../components/AutoScrollView";
 
 import { useEditorBridge, RichText, Toolbar } from "@10play/tentap-editor";
 
+
+import { useEffect, useState } from 'react';
+import { Keyboard } from 'react-native';
+
+
+export const useKeyboard = () => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    function onKeyboardDidShow(e) { // Remove type here if not using TypeScript
+      setKeyboardHeight(e.endCoordinates.height);
+    }
+
+    function onKeyboardDidHide() {
+      setKeyboardHeight(0);
+    }
+
+    const showSubscription = Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  return keyboardHeight;
+};
+
+
 export default function RichtextTest() {
+
+  const keyboardHeight = useKeyboard();
 
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
     initialContent: 'Start editing!',
   });
-  
-  console.log(editor)
 
   return (
+    <>
+    <View
+    // anchor
+    style={{position: "relative", borderWidth: 2,}}
+    >
+        <Text>sss</Text>
+    </View>
     <AutoScrollView
     keyboardDismissMode="on-drag"
     style={contentContainerStyles.container}
@@ -31,9 +67,10 @@ export default function RichtextTest() {
       <TText style={styles.pageTitle}>RichtextTest</TText>
 
 
-      <SafeAreaView>
+      <SafeAreaView style={{borderWidth: 1, borderColor: "red"}}>
       <Toolbar editor={editor} />
       </SafeAreaView>
+      
       <View style={{borderWidth: 1, flex: 1}}>
         <TText style={styles.sectionTitle}>Section Title</TText>
         <TText style={styles.sectionContent}>Section Content</TText>
@@ -47,11 +84,15 @@ export default function RichtextTest() {
               bottom: 0,
             }}
           >
-            {/* <Toolbar editor={editor} /> */}
+            <SafeAreaView style={{borderWidth: 1, borderColor: "red", marginBottom: keyboardHeight}}>
+            <Toolbar editor={editor} />
+            </SafeAreaView>
           </KeyboardAvoidingView>
         </SafeAreaView>
+
       </View>
     </AutoScrollView>
+    </>
   );
 }
 

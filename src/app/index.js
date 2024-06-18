@@ -43,7 +43,19 @@ export default function Home() {
 
         <TouchableOpacity onPress={() => router.push("/dummy")}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>go to dummy</TText>
+            <TText>Go to dummy</TText>
+          </Button>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.push("/richtextTest")}>
+          <Button mode="elevated" style={{ marginTop: 15 }}>
+            <TText>Go to RichtextTest</TText>
+          </Button>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.push("/basic")}>
+          <Button mode="elevated" style={{ marginTop: 15 }}>
+            <TText>Go to RichtextBasic</TText>
           </Button>
         </TouchableOpacity>
           
@@ -52,7 +64,7 @@ export default function Home() {
           router.push(route)
           }}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>go to hosptial 1</TText>
+            <TText>Go to hosptial 1</TText>
           </Button>
         </TouchableOpacity>
 

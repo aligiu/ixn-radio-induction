@@ -15,12 +15,10 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 
 export const useKeyboardHeight = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const insets = useSafeAreaInsets(); // get rid of extra padding for ios devices, especially those with home indicator/bars
-
+  const insets = useSafeAreaInsets(); // get rid of extra padding for ios devices with home indicator/bars
 
   useEffect(() => {
     function onKeyboardDidShow(e) {
-      // Remove type here if not using TypeScript
       setKeyboardHeight(e.endCoordinates.height - insets.bottom);
     }
 
@@ -60,12 +58,10 @@ export default function Basic() {
     <SafeAreaView style={exampleStyles.fullScreen}>
       <RichText editor={editor} />
       <KeyboardAvoidingView
-        // behavior={"height"}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={exampleStyles.keyboardAvoidingView}
         
       >
-        {/* <Toolbar editor={editor} /> */}
         <SafeAreaView
           style={{
             borderWidth: 1,

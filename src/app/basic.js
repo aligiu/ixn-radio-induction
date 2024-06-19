@@ -13,7 +13,7 @@ import { Keyboard } from "react-native";
 
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export const useKeyboard = () => {
+export const useKeyboardHeight = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const insets = useSafeAreaInsets(); // get rid of extra padding for ios devices, especially those with home indicator/bars
 
@@ -53,7 +53,7 @@ export default function Basic() {
     initialContent,
   });
 
-  const keyboardHeight = useKeyboard();
+  const keyboardHeight = useKeyboardHeight();
   console.log(keyboardHeight)
 
   return (

@@ -47,9 +47,12 @@ export default function Home() {
           </Button>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push("/richtextDetectChange")}>
+        <TouchableOpacity onPress={() => {
+          const route = "/hospitals/1"
+          router.push(route)
+          }}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to richtextDetectChange</TText>
+            <TText>Go to hospital 1</TText>
           </Button>
         </TouchableOpacity>
 
@@ -58,16 +61,12 @@ export default function Home() {
             <TText>Go to RichtextBasic</TText>
           </Button>
         </TouchableOpacity>
-          
-        <TouchableOpacity onPress={() => {
-          const route = "/hospitals/1"
-          router.push(route)
-          }}>
+
+        <TouchableOpacity onPress={() => router.push("/richtextAdvanced")}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to hosptial 1</TText>
+            <TText>Go to richtextAdvanced</TText>
           </Button>
         </TouchableOpacity>
-
 
       </AutoScrollView>
     </>

@@ -51,17 +51,20 @@ export const useKeyboardHeight = () => {
   return keyboardHeight;
 };
 
-export default function richTextDetectChange() {
+export default function RichtextAdvanced() {
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
     initialContent,
   });
 
-  const content = useEditorContent(editor, { type: 'html' });
+  const content = useEditorContent(editor, { type: 'json' });
     useEffect(() => {
-      // Will render each time content is updated and call onSave
+      // Will be called every time content is updated
+      console.log("--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---")
       content && console.log(content);
+      content && console.log(content.content[0].content)
+      content && console.log(content.content[0].content[1]);
     }, [content]);
 
   const keyboardHeight = useKeyboardHeight();
@@ -98,4 +101,4 @@ const exampleStyles = StyleSheet.create({
   },
 });
 
-const initialContent = `<p>This is a richTextDetectChange example!</p>`;
+const initialContent = `<p>This is a RichtextAdvanced example!</p>`;

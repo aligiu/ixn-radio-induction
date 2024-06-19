@@ -11,7 +11,15 @@ import { RichText, Toolbar, useEditorBridge } from "@10play/tentap-editor";
 import { useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+
+// existing bug: keyboard height doesn't update when change keyboard (eg text -> emoji) on Android
+// can be solved using keyboardWillChangeFrame and keyboardDidChangeFrame, but they do not fire due to a bug on Android
+// hence not implemented
+// see more: https://github.com/facebook/react-native/issues/44200
 
 export const useKeyboardHeight = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -44,7 +52,6 @@ export const useKeyboardHeight = () => {
 };
 
 export default function Basic() {
-
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
@@ -52,7 +59,7 @@ export default function Basic() {
   });
 
   const keyboardHeight = useKeyboardHeight();
-  console.log(keyboardHeight)
+  console.log(keyboardHeight);
 
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>
@@ -60,7 +67,6 @@ export default function Basic() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={exampleStyles.keyboardAvoidingView}
-        
       >
         <SafeAreaView
           style={{
@@ -76,9 +82,6 @@ export default function Basic() {
     </SafeAreaView>
   );
 }
-
-
-
 
 const exampleStyles = StyleSheet.create({
   fullScreen: {

@@ -6,7 +6,7 @@ import {
   Platform,
   StyleSheet,
 } from "react-native";
-import { RichText, Toolbar, useEditorBridge } from "@10play/tentap-editor";
+import { RichText, Toolbar, useEditorBridge, useEditorContent } from "@10play/tentap-editor";
 
 import { useEffect, useState } from "react";
 import { Keyboard } from "react-native";
@@ -57,6 +57,12 @@ export default function richTextDetectChange() {
     avoidIosKeyboard: true,
     initialContent,
   });
+
+  const content = useEditorContent(editor, { type: 'html' });
+    useEffect(() => {
+      // Will render each time content is updated and call onSave
+      content && console.log(content);
+    }, [content]);
 
   const keyboardHeight = useKeyboardHeight();
   console.log(keyboardHeight);

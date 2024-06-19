@@ -70,8 +70,6 @@ export default function Basic() {
       >
         <SafeAreaView
           style={{
-            borderWidth: 1,
-            borderColor: "red",
             position: "absolute",
             bottom: keyboardHeight,
           }}

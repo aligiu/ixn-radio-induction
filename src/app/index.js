@@ -47,9 +47,9 @@ export default function Home() {
           </Button>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push("/richtextTest")}>
+        <TouchableOpacity onPress={() => router.push("/richtextDetectChange")}>
           <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to RichtextTest</TText>
+            <TText>Go to richtextDetectChange</TText>
           </Button>
         </TouchableOpacity>
 

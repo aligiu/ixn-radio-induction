@@ -68,6 +68,24 @@ export default function Home() {
           </Button>
         </TouchableOpacity>
 
+        <TouchableOpacity onPress={() => {
+          const route = "/topics/0"
+          router.push(route)
+          }}>
+          <Button mode="elevated" style={{ marginTop: 15 }}>
+            <TText>Go to topic 0</TText>
+          </Button>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          const route = "/topics/1"
+          router.push(route)
+          }}>
+          <Button mode="elevated" style={{ marginTop: 15 }}>
+            <TText>Go to topic 1</TText>
+          </Button>
+        </TouchableOpacity>
+
       </AutoScrollView>
     </>
   );

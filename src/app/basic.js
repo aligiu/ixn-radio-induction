@@ -59,7 +59,6 @@ export default function Basic() {
   });
 
   const keyboardHeight = useKeyboardHeight();
-  console.log(keyboardHeight);
 
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>

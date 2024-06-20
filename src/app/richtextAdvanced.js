@@ -16,6 +16,10 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
+// Node.js file system promises API (for client-side)
+// For mocking, will not be needed
+
+
 // existing bug: keyboard height doesn't update when change keyboard (eg text -> emoji) on Android
 // can be solved using keyboardWillChangeFrame and keyboardDidChangeFrame, but they do not fire due to a bug on Android
 // hence not implemented
@@ -62,9 +66,12 @@ export default function RichtextAdvanced() {
     useEffect(() => {
       // Will be called every time content is updated
       console.log("--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---")
-      content && console.log(content);
-      content && console.log(content.content[0].content)
-      content && console.log(content.content[0].content[1]);
+      // content && console.log(content);
+      // content && console.log(content.content[0].content)
+      // content && console.log(content.content[0].content[1]);
+
+      content && console.log(JSON.stringify(content, null, 2))
+
     }, [content]);
 
   const keyboardHeight = useKeyboardHeight();

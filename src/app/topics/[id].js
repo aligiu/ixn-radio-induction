@@ -63,7 +63,7 @@ export default function Topic() {
         </View>
 
         <View>
-          <TText style={styles.sectionTitle}>Details (TODO: read json of 10tip)</TText>
+          <TText style={styles.sectionTitle}>Details (TODO: read json of 10tap)</TText>
           <TText style={styles.sectionContent}>{pageData.content.toString()}</TText>
         </View>
 

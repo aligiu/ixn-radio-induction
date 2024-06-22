@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@10play/tentap-editor": "^0.5.5",
+    "@realm/react": "^0.8.0",
     "@types/react": "~18.2.79",
     "expo": "~51.0.14",
     "expo-constants": "~16.0.1",
@@ -30,6 +31,7 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.8.6",
+    "realm": "^12.11.0",
     "typescript": "~5.3.3"
   },
   "devDependencies": {

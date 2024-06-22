@@ -44,7 +44,7 @@ export default function Topic() {
   const { id } = useLocalSearchParams();
   
   // hard coded as local json for now, do useEffect to fetch data
-  const allData = require("./mockedData.json");
+  const allData = require("../mockedData.json");
   pageData = allData[id]
   
   return (

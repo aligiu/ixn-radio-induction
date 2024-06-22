@@ -1,5 +1,13 @@
 import * as React from "react";
-import { ScrollView, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useMemo } from "react";
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
@@ -10,8 +18,16 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 
+function getContentData() {
+  const contentData = [0, 1, 2, 3];
+  return contentData;
+}
+
 export default function Home() {
   const router = useRouter();
+
+  // const contentData = useMemo(() => getContentData(), []);
+  const contentData = getContentData();
 
   return (
     <>
@@ -41,50 +57,71 @@ export default function Home() {
           />
         </View>
 
-        <TouchableOpacity onPress={() => router.push("/dummy")}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to dummy</TText>
-          </Button>
-        </TouchableOpacity>
+        <View style={{ marginBottom: 20 }}>
+          <TouchableOpacity onPress={() => router.push("/dummy")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to dummy</TText>
+            </Button>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
-          const route = "/hospitals/1"
-          router.push(route)
-          }}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to hospital 1</TText>
-          </Button>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              const route = "/hospitals/1";
+              router.push(route);
+            }}
+          >
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to hospital 1</TText>
+            </Button>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push("/basic")}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to RichtextBasic</TText>
-          </Button>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/basic")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to RichtextBasic</TText>
+            </Button>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push("/richtextAdvanced")}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to richtextAdvanced</TText>
-          </Button>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/richtextAdvanced")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to richtextAdvanced</TText>
+            </Button>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
-          const route = "/topics/0"
-          router.push(route)
-          }}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to topic 0</TText>
-          </Button>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              const route = "/topics/0";
+              router.push(route);
+            }}
+          >
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to topic 0</TText>
+            </Button>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
-          const route = "/topics/1"
-          router.push(route)
-          }}>
-          <Button mode="elevated" style={{ marginTop: 15 }}>
-            <TText>Go to topic 1</TText>
-          </Button>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              const route = "/topics/1";
+              router.push(route);
+            }}
+          >
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to topic 1</TText>
+            </Button>
+          </TouchableOpacity>
+        </View>
+          
+
+        <View style={{ flexDirection: "column", gap: 10 }}>          
+          {contentData.map((value, index) => (
+            <NavBlock
+              key={index}
+              imageSource={require("assets/images/nhs-logo-square.png")}
+              title="Ashford and St Peter's"
+              description={"Parking, Induction, Study Leave, PCAS and Logins"}
+              route="/topics/1"
+            />
+          ))}
+        </View>
 
       </AutoScrollView>
     </>

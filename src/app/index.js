@@ -18,9 +18,11 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 
+
+import { mockedData } from "./mockedData";
+
 function getContentData() {
-  const contentData = [0, 1, 2, 3];
-  return contentData;
+  return mockedData;
 }
 
 export default function Home() {
@@ -112,13 +114,13 @@ export default function Home() {
           
 
         <View style={{ flexDirection: "column", gap: 10 }}>          
-          {contentData.map((value, index) => (
+          {contentData.map((item, index) => (
             <NavBlock
               key={index}
               imageSource={require("assets/images/nhs-logo-square.png")}
-              title="Ashford and St Peter's"
-              description={"Parking, Induction, Study Leave, PCAS and Logins"}
-              route="/topics/1"
+              title={item.title}
+              route={`/topics/${index}`}
+              description={item.description}
             />
           ))}
         </View>

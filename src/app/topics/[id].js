@@ -34,8 +34,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
 
-
-
 // function getObjectById(id) {
 //   return dataJSON.find((item) => item.id === id);
 // }

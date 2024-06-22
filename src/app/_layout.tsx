@@ -10,11 +10,7 @@ import {
   Keyboard,
   Dimensions,
 } from "react-native";
-import {
-  MD3LightTheme,
-  MD3DarkTheme,
-  PaperProvider,
-} from "react-native-paper";
+import { MD3LightTheme, MD3DarkTheme, PaperProvider } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
 
@@ -40,6 +36,7 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { SearchbarProvider } from "../context/SearchbarContext";
 
 import SearchbarContext from "../context/SearchbarContext";
+
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -202,17 +199,15 @@ export default function Layout() {
   });
 
   function renderHeaderLeft() {
-
-    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
+    const { searchbarInFocus, setSearchbarInFocus } =
+      useContext(SearchbarContext);
     const { setSidemenuVisible } = useContext(SidemenuContext);
     return (
       <View style={[styles.headerLeftContainer]}>
         <IconButton
           style={styles.iconButtonContent}
           icon={
-            !searchbarInFocus && !navigation.canGoBack()
-              ? "menu"
-              : "arrow-left"
+            !searchbarInFocus && !navigation.canGoBack() ? "menu" : "arrow-left"
           }
           size={24}
           onPress={() => {
@@ -230,8 +225,8 @@ export default function Layout() {
   }
 
   function renderHeaderRight() {
-
-    const { searchbarInFocus, setSearchbarInFocus } = useContext(SearchbarContext);
+    const { searchbarInFocus, setSearchbarInFocus } =
+      useContext(SearchbarContext);
 
     // setSearchbarInFocus
     return (

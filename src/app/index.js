@@ -18,7 +18,6 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 
-
 import { mockedData } from "./mockedData";
 
 function getContentData() {

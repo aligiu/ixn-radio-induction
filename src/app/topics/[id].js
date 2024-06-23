@@ -24,7 +24,16 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { ScrollView, Text, View, Image, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Link } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
@@ -38,6 +47,13 @@ import AutoScrollView from "../../components/AutoScrollView";
 import { getAllContent } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
+import {
+  RichText,
+  Toolbar,
+  useEditorBridge,
+  useEditorContent,
+} from "@10play/tentap-editor";
+
 // function getObjectById(id) {
 //   return dataJSON.find((item) => item.id === id);
 // }
@@ -48,6 +64,13 @@ export default function Topic() {
 
   const [pageData, setPageData] = useState([]);
 
+  const editor = useEditorBridge({
+    editable: false,
+    autofocus: false,
+    avoidIosKeyboard: true,
+    initialContent: `A<br><br><br>B<br><br><br>C<br><br><br>D<br><br><br>E<br><br><br>F<br><br><br>G<br><br><br>H<br><br><br>I<br><br><br>J<br><br><br>K`,
+  });
+
   useEffect(() => {
     async function setPageDataAsync(db) {
       setPageData((await getAllContent(db))[id]);
@@ -55,9 +78,11 @@ export default function Topic() {
     setPageDataAsync(db);
   }, []);
 
-  // // hard coded as local json for now, do useEffect to fetch data
-  // const allData = require("../mockedData.json");
-  // pageData = allData[id]
+  // useEffect(() => {
+  //   if (editor.isReady) {
+  //     editor.setContent(pageData.content);
+  //   }
+  // }, [editor.isReady, pageData]);
 
   return (
     <>
@@ -67,20 +92,17 @@ export default function Topic() {
       >
         {/* Scroll view needed to dismiss search bar */}
 
-        <TText style={styles.pageTitle}>{pageData.title}</TText>
-
-        <View>
-          <TText style={styles.sectionTitle}>Overview</TText>
-          <TText style={styles.sectionContent}>{pageData.description}</TText>
-        </View>
-
-        <View>
+        <View style={{flex: 1}}>
           <TText style={styles.sectionTitle}>
-            Details (TODO: read html of 10tap)
+            {pageData.title}
           </TText>
-          <TText style={styles.sectionContent}>
+          {/* <TText style={styles.sectionContent}>
             {pageData.content && JSON.stringify(pageData.content)}
-          </TText>
+          </TText> */}
+
+          <View style={{ borderWidth: 2, borderColor: "red", minHeight: 100, flex: 1 }}>
+            <RichText editor={editor} />
+          </View>
         </View>
       </AutoScrollView>
     </>
@@ -88,6 +110,11 @@ export default function Topic() {
 }
 
 const styles = StyleSheet.create({
+  textArea: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: "red",
+  },
   pageTitle: {
     fontSize: fontSize.LARGE,
     fontFamily: "InterSemiBold",

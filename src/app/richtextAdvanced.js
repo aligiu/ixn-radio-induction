@@ -66,7 +66,6 @@ export default function RichtextAdvanced() {
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
-    // initialContent,
   });
 
   const content = useEditorContent(editor, { type: "html" });
@@ -74,10 +73,9 @@ export default function RichtextAdvanced() {
   const debouncedEffect = useCallback(
     debounce((content) => {
       console.log("--- --- --- --- --- --- --- --- ");
+      // TODO: send update to local/online content for persistence later
       // content && console.log(content);
-      // content && console.log(content.content[0].content)
-      // content && console.log(content.content[0].content[1]);
-      content && console.log(JSON.stringify(content, null, 2));
+      // content && console.log(JSON.stringify(content, null, 2));
     }, 300), // Debounce delay in milliseconds
     []
   );
@@ -92,11 +90,11 @@ export default function RichtextAdvanced() {
   const keyboardHeight = useKeyboardHeight();
 
   return (
-    <SafeAreaView style={exampleStyles.fullScreen}>
+    <SafeAreaView style={styles.fullScreen}>
       <RichText editor={editor} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={exampleStyles.keyboardAvoidingView}
+        style={styles.keyboardAvoidingView}
       >
         <SafeAreaView
           style={{
@@ -111,7 +109,7 @@ export default function RichtextAdvanced() {
   );
 }
 
-const exampleStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   fullScreen: {
     flex: 1,
     marginTop: 8,

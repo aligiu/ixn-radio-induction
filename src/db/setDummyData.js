@@ -1,14 +1,14 @@
 import { mockedData } from "./mockedData";
+import { setSchema } from "./setSchema";
 
-export async function setup(db) {
+export async function setDummyData(db) {
   try {
+
     // Delete all existing data
     await db.execAsync(`DROP TABLE IF EXISTS Content`);
 
     // Initialize schema
-    await db.execAsync(`CREATE TABLE Content (
-            json_string TEXT
-    )`);
+    await setSchema(db);  // wait for schema to be completely set
 
     // Insert data for Content (prepared statement can take parameters)
     const statement = await db.prepareAsync(
@@ -18,9 +18,9 @@ export async function setup(db) {
     await statement.executeAsync({ $json_string: mockedDataString });
 
     // Confirm success
-    console.log(`Data has been reset in ${db.databaseName}`);
+    console.log(`Dummy data has been set in ${db.databaseName}`);
   } catch (error) {
-    console.error("Error executing SQL: ", error);
+    console.error("Error setting dummy data: ", error);
   }
 }
 

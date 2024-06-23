@@ -20,6 +20,8 @@ import AutoScrollView from "../components/AutoScrollView";
 import { useSQLiteContext } from "expo-sqlite";
 import { getAllContent } from "../db/queries";
 
+import { setSchema } from "../db/setSchema";
+
 export default function Home() {
   const router = useRouter();
   const db = useSQLiteContext();
@@ -66,6 +68,7 @@ export default function Home() {
               <TText>Go to dummy</TText>
             </Button>
           </TouchableOpacity>
+         
 
           <TouchableOpacity onPress={() => router.push("/sqlTest")}>
             <Button mode="elevated" style={{ marginTop: 15 }}>
@@ -131,6 +134,14 @@ export default function Home() {
               />
             ))}
         </View>
+
+
+        <TouchableOpacity onPress={() => setSchema(db)} style={{marginBottom: 20}}>
+            <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>
+              <TText>ESSENTIAL INIT</TText>
+            </Button>
+          </TouchableOpacity>
+
       </AutoScrollView>
     </>
   );

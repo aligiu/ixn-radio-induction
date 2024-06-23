@@ -8,7 +8,7 @@ import * as SQLite from "expo-sqlite"; // Import SQLite from expo-sqlite (note t
 
 import { useSQLiteContext } from "expo-sqlite";
 
-import { setup } from "../db/setup";
+import { setDummyData } from "../db/setDummyData";
 import { getAllContent } from "../db/queries";
 
 export default function SQLTest() {
@@ -22,7 +22,7 @@ export default function SQLTest() {
         <TText style={styles.sectionTitle}>DB Control Panel</TText>
         <TText style={styles.sectionContent}>Init DB</TText>
         <View style={{ gap: 10 }}>
-          <Button mode="contained" onPress={() => setup(db)}>
+          <Button mode="contained" onPress={() => setDummyData(db)}>
             Initialize DB
           </Button>
           <Button mode="contained" onPress={() => getAllContent(db)}>

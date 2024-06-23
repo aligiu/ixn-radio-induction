@@ -61,22 +61,11 @@ export default function Basic() {
   const keyboardHeight = useKeyboardHeight();
 
   return (
-    <SafeAreaView style={exampleStyles.fullScreen}>
-      <RichText editor={editor} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={exampleStyles.keyboardAvoidingView}
-      >
-        <SafeAreaView
-          style={{
-            position: "absolute",
-            bottom: keyboardHeight,
-          }}
-        >
-          <Toolbar editor={editor} />
-        </SafeAreaView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <>
+      <View style={{ borderWidth: 2, borderColor: "red", height: 100 }}>
+        <RichText editor={editor} />
+      </View>
+    </>
   );
 }
 

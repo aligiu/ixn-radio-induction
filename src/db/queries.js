@@ -9,10 +9,12 @@ export async function getAllContent(db) {
     },
     ...
   ]`
+  
   const allContentString = (await db.getFirstAsync(
     "SELECT json_string FROM Content"
   ))["json_string"];    
   const allContent = JSON.parse(allContentString)
   console.log(allContent)
+  
   return allContent
 }

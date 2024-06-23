@@ -23,6 +23,7 @@
 //   });
 
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { ScrollView, Text, View, Image, StyleSheet } from "react-native";
 import { Link } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
@@ -34,17 +35,30 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
 
+import { getAllContent } from "../../db/queries";
+import { useSQLiteContext } from "expo-sqlite";
+
 // function getObjectById(id) {
 //   return dataJSON.find((item) => item.id === id);
 // }
 
 export default function Topic() {
+  const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
-  
-  // hard coded as local json for now, do useEffect to fetch data
-  const allData = require("../mockedData.json");
-  pageData = allData[id]
-  
+
+  const [pageData, setPageData] = useState([]);
+
+  useEffect(() => {
+    async function setPageDataAsync(db) {
+      setPageData((await getAllContent(db))[id]);
+    }
+    setPageDataAsync(db);
+  }, []);
+
+  // // hard coded as local json for now, do useEffect to fetch data
+  // const allData = require("../mockedData.json");
+  // pageData = allData[id]
+
   return (
     <>
       <AutoScrollView
@@ -61,10 +75,13 @@ export default function Topic() {
         </View>
 
         <View>
-          <TText style={styles.sectionTitle}>Details (TODO: read json of 10tap)</TText>
-          <TText style={styles.sectionContent}>{pageData.content.toString()}</TText>
+          <TText style={styles.sectionTitle}>
+            Details (TODO: read json of 10tap)
+          </TText>
+          <TText style={styles.sectionContent}>
+            {pageData.content && JSON.stringify(pageData.content)}
+          </TText>
         </View>
-
       </AutoScrollView>
     </>
   );

@@ -34,7 +34,7 @@ export async function setup(db) {
     await statement.executeAsync({ $json_string: mockedDataString });
 
     // Confirm success
-    console.log(`Inserted data into ${db.databaseName}`);
+    console.log(`Data has been reset in ${db.databaseName}`);
 
   } catch (error) {
     console.error("Error executing SQL: ", error);

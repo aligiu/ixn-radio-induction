@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -17,23 +17,20 @@ import { fontSize } from "src/styles/fontConfig";
 import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
-
-
-
-// ### ### ### to replace
-import { mockedData } from "./mockedData";
-function getContentData() {
-  return mockedData;
-}
-// ### ### ### end
-
-
+import { useSQLiteContext } from "expo-sqlite";
+import { getAllContent } from "../db/queries";
 
 export default function Home() {
   const router = useRouter();
+  const db = useSQLiteContext();
+  const [contentData, setContentData] = useState();
 
-  // const contentData = useMemo(() => getContentData(), []);
-  const contentData = getContentData();
+  useEffect(() => {
+    async function setContentDataAsync(db) {
+      setContentData(await getAllContent(db));
+    }
+    setContentDataAsync(db);
+  }, []);
 
   return (
     <>
@@ -121,20 +118,19 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
         </View>
-          
 
-        <View style={{ flexDirection: "column", gap: 10 }}>          
-          {contentData && contentData.map((item, index) => (
-            <NavBlock
-              key={index}
-              imageSource={require("assets/images/nhs-logo-square.png")}
-              title={item.title}
-              route={`/topics/${index}`}
-              description={item.description}
-            />
-          ))}
+        <View style={{ flexDirection: "column", gap: 10 }}>
+          {contentData &&
+            contentData.map((item, index) => (
+              <NavBlock
+                key={index}
+                imageSource={require("assets/images/nhs-logo-square.png")}
+                title={item.title}
+                route={`/topics/${index}`}
+                description={item.description}
+              />
+            ))}
         </View>
-
       </AutoScrollView>
     </>
   );

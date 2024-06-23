@@ -28,7 +28,9 @@ export async function setup(db) {
     const statement = await db.prepareAsync(
       "INSERT INTO Content(json_string) VALUES ($json_string)"
     );
-    const mockedDataString = JSON.stringify(mockedData);
+    
+    // const mockedDataString = JSON.stringify(mockedData);
+    const mockedDataString = "{\"title\":\"Ashford and St Peter's\"}"
     await statement.executeAsync({ $json_string: mockedDataString });
 
     console.log(`Inserting data into ${db.databaseName}`);
@@ -39,14 +41,14 @@ export async function setup(db) {
       console.log(user.email, user.hashed_password, user.is_admin);
     }
 
-    const allContentString = await db.getAllAsync(
+    
+    // only parse first json object (singleton)
+    const allContentString = (await db.getFirstAsync(
       "SELECT json_string FROM Content"
-    );
-    console.log(allContentString);
-    // allContent = JSON.parse(allContentString)
-    // for (const info of allContent) {
-    //   console.log(info.toString());
-    // }
+    ))["json_string"];    
+    allContent = JSON.parse(allContentString)
+    console.log(allContent)
+
   } catch (error) {
     console.error("Error executing SQL: ", error);
   }

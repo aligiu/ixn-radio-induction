@@ -8,13 +8,12 @@ export async function getAllContent(db) {
       content: {"...": "..."}
     },
     ...
-  ]`
-  
-  const allContentString = (await db.getFirstAsync(
-    "SELECT json_string FROM Content"
-  ))["json_string"];    
-  const allContent = JSON.parse(allContentString)
-  console.log(allContent)
-  
-  return allContent
+  ]`;
+
+  const allContentString = (
+    await db.getFirstAsync("SELECT json_string FROM Content")
+  )["json_string"];
+  const allContent = JSON.parse(allContentString);
+
+  return allContent;
 }

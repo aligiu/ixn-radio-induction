@@ -70,7 +70,7 @@ export default function RichtextAdvanced() {
       // content && console.log(content.content[0].content)
       // content && console.log(content.content[0].content[1]);
 
-      // content && console.log(JSON.stringify(content, null, 2))
+      content && console.log(JSON.stringify(content, null, 2))
 
     }, [content]);
 

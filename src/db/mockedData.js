@@ -225,46 +225,154 @@ export const mockedData = [
   {
     title: "East Surrey",
     description: "Information on facilities and patient care at East Surrey.",
-    content: { "...": "..." },
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              marks: [
+                {
+                  type: "bold",
+                },
+              ],
+              text: "Example",
+            },
+            {
+              type: "text",
+              text: " text",
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     title: "Frimley",
     description: "Details about the Frimley Health NHS Foundation Trust.",
-    content: { "...": "..." },
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+        },
+      ],
+    },
   },
   {
     title: "Royal Surrey",
     description: "An in-depth look at Royal Surrey's medical services.",
-    content: { "...": "..." },
+    content: {
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph"
+    }
+  ]
+},
   },
   {
     title: "Wexham",
     description: "Insights into the Wexham Park Hospital operations.",
-    content: { "...": "..." },
+    content: {
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph"
+    }
+  ]
+},
   },
   {
     title: "Academy",
     description: "Educational programs and training at the Academy.",
-    content: { "...": "..." },
+    content: {
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph"
+    }
+  ]
+},
   },
   {
     title: "ARCP",
     description: "Annual Review of Competence Progression guidelines.",
-    content: { "...": "..." },
+    content: {
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph"
+    }
+  ]
+},
   },
   {
     title: "Conferences",
     description: "Upcoming conferences and events for medical professionals.",
-    content: { "...": "..." },
+    content: {
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph"
+    }
+  ]
+},
   },
   {
     title: "Educational Resources",
     description: "Learning materials and resources for medical education.",
-    content: { "...": "..." },
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              marks: [
+                {
+                  type: "bold",
+                },
+              ],
+              text: "Example",
+            },
+            {
+              type: "text",
+              text: " text",
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     title: "Exams",
     description: "Examination schedules and preparation tips.",
-    content: { "...": "..." },
+    content: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              marks: [
+                {
+                  type: "bold",
+                },
+              ],
+              text: "Example",
+            },
+            {
+              type: "text",
+              text: " text",
+            },
+          ],
+        },
+      ],
+    },
   },
 ];

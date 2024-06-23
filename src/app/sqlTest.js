@@ -9,6 +9,7 @@ import * as SQLite from "expo-sqlite"; // Import SQLite from expo-sqlite (note t
 import { useSQLiteContext } from "expo-sqlite";
 
 import { setup } from "../db/setup";
+import { getAllContent } from "../db/queries";
 
 export default function SQLTest() {
   const db = useSQLiteContext();
@@ -20,9 +21,12 @@ export default function SQLTest() {
       <View>
         <TText style={styles.sectionTitle}>DB Control Panel</TText>
         <TText style={styles.sectionContent}>Init DB</TText>
-        <View style={{gap: 10}}>
+        <View style={{ gap: 10 }}>
           <Button mode="contained" onPress={() => setup(db)}>
             Initialize DB
+          </Button>
+          <Button mode="contained" onPress={() => getAllContent(db)}>
+            Get all content
           </Button>
         </View>
       </View>

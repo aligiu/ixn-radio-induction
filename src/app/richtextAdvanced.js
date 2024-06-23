@@ -69,7 +69,7 @@ export default function RichtextAdvanced() {
     // initialContent,
   });
 
-  const content = useEditorContent(editor, { type: "json" });
+  const content = useEditorContent(editor, { type: "html" });
 
   const debouncedEffect = useCallback(
     debounce((content) => {

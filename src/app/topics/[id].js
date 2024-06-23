@@ -76,7 +76,7 @@ export default function Topic() {
 
         <View>
           <TText style={styles.sectionTitle}>
-            Details (TODO: read json of 10tap)
+            Details (TODO: read html of 10tap)
           </TText>
           <TText style={styles.sectionContent}>
             {pageData.content && JSON.stringify(pageData.content)}

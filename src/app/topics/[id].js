@@ -73,16 +73,13 @@ export default function Topic() {
 
   useEffect(() => {
     async function setPageDataAsync(db) {
-      setPageData((await getAllContent(db))[id]);
+      const pageData = (await getAllContent(db))[id]
+      setPageData(pageData);
+      editor.setContent(pageData.content)
     }
     setPageDataAsync(db);
-  }, []);
+  }, [editor.isReady]);
 
-  // useEffect(() => {
-  //   if (editor.isReady) {
-  //     editor.setContent(pageData.content);
-  //   }
-  // }, [editor.isReady, pageData]);
 
   return (
     <>

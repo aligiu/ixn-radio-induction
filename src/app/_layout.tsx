@@ -37,6 +37,7 @@ import { SearchbarProvider } from "../context/SearchbarContext";
 
 import SearchbarContext from "../context/SearchbarContext";
 
+import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -250,52 +251,54 @@ export default function Layout() {
   }
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <SidemenuProvider>
-        <SearchbarProvider>
-          <SafeAreaView
-            style={[
-              styles.safeArea,
-              {
-                backgroundColor: paperTheme.colors.background,
-              },
-            ]}
-          >
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                backgroundColor: paperTheme.colors.background,
-              }}
-              onLayout={onLayoutRootView}
+    <SQLiteProvider databaseName="local.db">
+      <PaperProvider theme={paperTheme}>
+        <SidemenuProvider>
+          <SearchbarProvider>
+            <SafeAreaView
+              style={[
+                styles.safeArea,
+                {
+                  backgroundColor: paperTheme.colors.background,
+                },
+              ]}
             >
-              {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
-              <PanGestureHandler>
-                <Stack
-                  screenOptions={{
-                    header: () => (
-                      <View>
-                        {!NO_HEADER_PATHS.includes(currentPathName) && (
-                          <View style={styles.headerPaddedContainer}>
-                            {renderHeaderLeft()}
-                            {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
-                              renderHeaderRight()}
-                          </View>
-                        )}
-                      </View>
-                    ),
-                    headerTitle: "", // Remove header title for clean layout
-                    contentStyle: {
-                      backgroundColor: paperTheme.colors.background,
-                    },
-                  }}
-                />
-              </PanGestureHandler>
-            </View>
-            <SideMenu />
-          </SafeAreaView>
-        </SearchbarProvider>
-      </SidemenuProvider>
-    </PaperProvider>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  backgroundColor: paperTheme.colors.background,
+                }}
+                onLayout={onLayoutRootView}
+              >
+                {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
+                <PanGestureHandler>
+                  <Stack
+                    screenOptions={{
+                      header: () => (
+                        <View>
+                          {!NO_HEADER_PATHS.includes(currentPathName) && (
+                            <View style={styles.headerPaddedContainer}>
+                              {renderHeaderLeft()}
+                              {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
+                                renderHeaderRight()}
+                            </View>
+                          )}
+                        </View>
+                      ),
+                      headerTitle: "", // Remove header title for clean layout
+                      contentStyle: {
+                        backgroundColor: paperTheme.colors.background,
+                      },
+                    }}
+                  />
+                </PanGestureHandler>
+              </View>
+              <SideMenu />
+            </SafeAreaView>
+          </SearchbarProvider>
+        </SidemenuProvider>
+      </PaperProvider>
+    </SQLiteProvider>
   );
 }

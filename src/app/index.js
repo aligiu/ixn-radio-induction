@@ -18,11 +18,16 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 
-import { mockedData } from "./mockedData";
 
+
+// ### ### ### to replace
+import { mockedData } from "./mockedData";
 function getContentData() {
   return mockedData;
 }
+// ### ### ### end
+
+
 
 export default function Home() {
   const router = useRouter();
@@ -119,7 +124,7 @@ export default function Home() {
           
 
         <View style={{ flexDirection: "column", gap: 10 }}>          
-          {contentData.map((item, index) => (
+          {contentData && contentData.map((item, index) => (
             <NavBlock
               key={index}
               imageSource={require("assets/images/nhs-logo-square.png")}

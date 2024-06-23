@@ -23,7 +23,7 @@
 //   });
 
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ScrollView,
   Text,
@@ -63,23 +63,25 @@ export default function Topic() {
   const { id } = useLocalSearchParams();
 
   const [pageData, setPageData] = useState([]);
+  const isFirstRender = useRef(true);
 
   const editor = useEditorBridge({
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: `A<br><br><br>B<br><br><br>C<br><br><br>D<br><br><br>E<br><br><br>F<br><br><br>G<br><br><br>H<br><br><br>I<br><br><br>J<br><br><br>K`,
+    // initialContent: `<p>No content yet</p>`,
   });
 
   useEffect(() => {
-    async function setPageDataAsync(db) {
-      const pageData = (await getAllContent(db))[id]
-      setPageData(pageData);
-      editor.setContent(pageData.content)
+    {
+      async function setPageDataAsync(db) {
+        const pageData = (await getAllContent(db))[id];
+        setPageData(pageData);
+        editor.isReady && editor.setContent(pageData.content ? pageData.content : "<p>No content yet</p>");
+      }
+      setPageDataAsync(db);
     }
-    setPageDataAsync(db);
-  }, [editor.isReady]);
-
+  }, [pageData, pageData.content]);
 
   return (
     <>
@@ -89,15 +91,20 @@ export default function Topic() {
       >
         {/* Scroll view needed to dismiss search bar */}
 
-        <View style={{flex: 1}}>
-          <TText style={styles.sectionTitle}>
-            {pageData.title}
-          </TText>
+        <View style={{ flex: 1 }}>
+          <TText style={styles.sectionTitle}>{pageData.title}</TText>
           {/* <TText style={styles.sectionContent}>
             {pageData.content && JSON.stringify(pageData.content)}
           </TText> */}
 
-          <View style={{ borderWidth: 2, borderColor: "red", minHeight: 100, flex: 1 }}>
+          <View
+            style={{
+              borderWidth: 2,
+              borderColor: "red",
+              minHeight: 100,
+              flex: 1,
+            }}
+          >
             <RichText editor={editor} />
           </View>
         </View>

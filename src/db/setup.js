@@ -32,7 +32,7 @@ export async function setup(db) {
     const mockedDataString = JSON.stringify(mockedData);
     await statement.executeAsync({ $json_string: mockedDataString });
 
-    console.log(`Inserting data into ${db.databaseName}`);
+    console.log(`Inserted data into ${db.databaseName}`);
 
     // Optionally, retrieve data and console log it
     const allUsers = await db.getAllAsync("SELECT * FROM Users");

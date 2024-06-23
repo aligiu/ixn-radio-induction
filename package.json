@@ -17,8 +17,10 @@
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.9",
     "expo-splash-screen": "~0.27.4",
+    "expo-sqlite": "~14.0.3",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
+    "lodash": "^4.17.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.5",
@@ -30,8 +32,7 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.8.6",
-    "typescript": "~5.3.3",
-    "expo-sqlite": "~14.0.3"
+    "typescript": "~5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

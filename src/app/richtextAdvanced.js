@@ -6,10 +6,16 @@ import {
   Platform,
   StyleSheet,
 } from "react-native";
-import { RichText, Toolbar, useEditorBridge, useEditorContent } from "@10play/tentap-editor";
+import {
+  RichText,
+  Toolbar,
+  useEditorBridge,
+  useEditorContent,
+} from "@10play/tentap-editor";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Keyboard } from "react-native";
+import { debounce } from "lodash";
 
 import {
   SafeAreaProvider,
@@ -20,7 +26,6 @@ import { contentContainerStyles } from "/src/styles/contentContainer";
 
 // Node.js file system promises API (for client-side)
 // For mocking, will not be needed
-
 
 // existing bug: keyboard height doesn't update when change keyboard (eg text -> emoji) on Android
 // can be solved using keyboardWillChangeFrame and keyboardDidChangeFrame, but they do not fire due to a bug on Android
@@ -64,25 +69,30 @@ export default function RichtextAdvanced() {
     // initialContent,
   });
 
-  const content = useEditorContent(editor, { type: 'json' });
-    useEffect(() => {
-      // Will be called every time content is updated
-      console.log("--- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---")
+  const content = useEditorContent(editor, { type: "json" });
+
+  const debouncedEffect = useCallback(
+    debounce((content) => {
+      console.log("--- --- --- --- --- --- --- --- ");
       // content && console.log(content);
       // content && console.log(content.content[0].content)
       // content && console.log(content.content[0].content[1]);
+      content && console.log(JSON.stringify(content, null, 2));
+    }, 300), // Debounce delay in milliseconds
+    []
+  );
 
-      content && console.log(JSON.stringify(content, null, 2))
-
-    }, [content]);
+  useEffect(() => {
+    debouncedEffect(content);
+    return () => {
+      debouncedEffect.cancel();
+    };
+  }, [content, debouncedEffect]);
 
   const keyboardHeight = useKeyboardHeight();
 
   return (
-    
-    <SafeAreaView 
-    style={exampleStyles.fullScreen}
-    >
+    <SafeAreaView style={exampleStyles.fullScreen}>
       <RichText editor={editor} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -100,7 +110,6 @@ export default function RichtextAdvanced() {
     </SafeAreaView>
   );
 }
-
 
 const exampleStyles = StyleSheet.create({
   fullScreen: {

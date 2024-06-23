@@ -16,6 +16,8 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
+import { contentContainerStyles } from "/src/styles/contentContainer";
+
 // Node.js file system promises API (for client-side)
 // For mocking, will not be needed
 
@@ -77,7 +79,10 @@ export default function RichtextAdvanced() {
   const keyboardHeight = useKeyboardHeight();
 
   return (
-    <SafeAreaView style={exampleStyles.fullScreen}>
+    
+    <SafeAreaView 
+    style={exampleStyles.fullScreen}
+    >
       <RichText editor={editor} />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -96,9 +101,13 @@ export default function RichtextAdvanced() {
   );
 }
 
+
 const exampleStyles = StyleSheet.create({
   fullScreen: {
     flex: 1,
+    marginTop: 8,
+    marginLeft: 16,
+    marginRight: 16,
   },
   keyboardAvoidingView: {
     position: "absolute",

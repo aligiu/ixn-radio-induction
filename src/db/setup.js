@@ -29,8 +29,7 @@ export async function setup(db) {
       "INSERT INTO Content(json_string) VALUES ($json_string)"
     );
     
-    // const mockedDataString = JSON.stringify(mockedData);
-    const mockedDataString = "{\"title\":\"Ashford and St Peter's\"}"
+    const mockedDataString = JSON.stringify(mockedData);
     await statement.executeAsync({ $json_string: mockedDataString });
 
     console.log(`Inserting data into ${db.databaseName}`);

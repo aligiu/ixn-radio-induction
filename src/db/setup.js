@@ -8,14 +8,15 @@ export async function setup(db) {
                       hashed_password TEXT NOT NULL,
                       is_admin BOOLEAN
       )`);
-    await db.execAsync(`CREATE TABLE IF NOT EXISTS Information (
+    await db.execAsync(`CREATE TABLE IF NOT EXISTS Content (
             json_string TEXT
     )`);
 
     // Delete all existing data
     await db.execAsync(`DELETE FROM Users`);
-    await db.execAsync(`DELETE FROM Information`);
+    await db.execAsync(`DELETE FROM Content`);
 
+    // Insert data for Users
     await db.execAsync(`
                   INSERT INTO Users 
                   VALUES ('user1@example.com', '111', 1),
@@ -23,19 +24,12 @@ export async function setup(db) {
                          ('user3@example.com', '333', 0);
               `);
 
-    const mockedDataString = JSON.stringify(mockedData)
-
-     // Use parameterized query not possible
-    //  await db.execAsync(`
-    //     INSERT INTO Information(json_string)
-    //     VALUES (${mockedDataString});
-    // `);
-
-     await db.execAsync(`
-        INSERT INTO Information(json_string)
-        VALUES ("hello world");
-    `);
-    
+    // Insert data for Content (prepared statement can take parameters)
+    const statement = await db.prepareAsync(
+      "INSERT INTO Content(json_string) VALUES ($json_string)"
+    );
+    const mockedDataString = JSON.stringify(mockedData);
+    await statement.executeAsync({ $json_string: mockedDataString });
 
     console.log(`Inserting data into ${db.databaseName}`);
 
@@ -45,14 +39,14 @@ export async function setup(db) {
       console.log(user.email, user.hashed_password, user.is_admin);
     }
 
-    const allInformationString = await db.getAllAsync("SELECT json_string FROM Information");
-    console.log(allInformationString)
-    // allInformation = JSON.parse(allInformationString)
-    // for (const info of allInformation) {
+    const allContentString = await db.getAllAsync(
+      "SELECT json_string FROM Content"
+    );
+    console.log(allContentString);
+    // allContent = JSON.parse(allContentString)
+    // for (const info of allContent) {
     //   console.log(info.toString());
     // }
-
-
   } catch (error) {
     console.error("Error executing SQL: ", error);
   }

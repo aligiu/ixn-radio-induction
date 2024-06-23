@@ -42,12 +42,7 @@ export default function SQLTest() {
 
     // Call insertGrab to perform database operations
     insertGrab();
-
-    // Cleanup function (optional)
-    return () => {
-      // Close database connection if needed
-      db.close();
-    };
+    
   }, []); // Empty dependency array ensures useEffect runs only once
 
   return (

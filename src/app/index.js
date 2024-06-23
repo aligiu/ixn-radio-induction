@@ -65,6 +65,12 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => router.push("/sqlTest")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to sqlTest</TText>
+            </Button>
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => {
               const route = "/hospitals/1";

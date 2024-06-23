@@ -61,7 +61,7 @@ export default function RichtextAdvanced() {
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
-    initialContent,
+    // initialContent,
   });
 
   const content = useEditorContent(editor, { type: 'json' });
@@ -116,4 +116,4 @@ const exampleStyles = StyleSheet.create({
   },
 });
 
-const initialContent = `<p>This is a RichtextAdvanced example!</p>`;
+// const initialContent = `<p>This is a RichtextAdvanced example!</p>`;

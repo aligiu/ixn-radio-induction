@@ -85,8 +85,7 @@ export default function Topic() {
 
           <View
             style={{
-              borderWidth: 2,
-              borderColor: "red",
+              
               minHeight: 100,
               flex: 1,
             }}

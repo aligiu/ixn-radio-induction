@@ -68,7 +68,7 @@ export default function Topic() {
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: `A<br><br><br>B<br><br><br>C<br><br><br>D<br><br><br>E<br><br><br>F<br><br><br>G<br><br><br>H<br><br><br>I<br><br><br>J<br><br><br>K`,
+    initialContent: `A<br><br><br><br><br><br>B<br><br><br><br><br><br>C<br><br><br><br><br><br>D<br><br><br><br><br><br>E<br><br><br><br><br><br>F<br><br><br><br><br><br>G<br><br><br><br><br><br>H<br><br><br><br><br><br>I<br><br><br><br><br><br>J<br><br><br><br><br><br>K`,
   });
 
   useEffect(() => {

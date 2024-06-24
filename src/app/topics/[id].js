@@ -54,34 +54,24 @@ import {
   useEditorContent,
 } from "@10play/tentap-editor";
 
-// function getObjectById(id) {
-//   return dataJSON.find((item) => item.id === id);
-// }
+import { useRoute } from '@react-navigation/native';
 
 export default function Topic() {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
 
   const [pageData, setPageData] = useState([]);
-  const isFirstRender = useRef(true);
+
+  const route = useRoute();
+  const { content } = route.params;
 
   const editor = useEditorBridge({
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    // initialContent: `<p>No content yet</p>`,
+    initialContent: content,
   });
 
-  useEffect(() => {
-    {
-      async function setPageDataAsync(db) {
-        const pageData = (await getAllContent(db))[id];
-        setPageData(pageData);
-        editor.isReady && editor.setContent(pageData.content ? pageData.content : "<p>No content yet</p>");
-      }
-      setPageDataAsync(db);
-    }
-  }, [pageData, pageData.content]);
 
   return (
     <>
@@ -127,7 +117,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: fontSize.LARGE,
     fontFamily: "InterMedium",
-    paddingTop: 16,
     paddingBottom: 8,
   },
   sectionContent: {

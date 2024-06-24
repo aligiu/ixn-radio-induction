@@ -22,6 +22,8 @@ import { getAllContent } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
 
+import { useNavigation } from '@react-navigation/native';
+
 export default function Home() {
   const router = useRouter();
   const db = useSQLiteContext();
@@ -33,6 +35,10 @@ export default function Home() {
     }
     setContentDataAsync(db);
   }, []);
+
+
+
+  
 
   return (
     <>
@@ -121,7 +127,7 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
         </View>
-
+        
         <View style={{ flexDirection: "column", gap: 10 }}>
           {contentData &&
             contentData.map((item, index) => (
@@ -131,6 +137,7 @@ export default function Home() {
                 title={item.title}
                 route={`/topics/${index}`}
                 description={item.description}
+                content={item.content}
               />
             ))}
         </View>
@@ -161,13 +168,17 @@ const styles = StyleSheet.create({
   },
 });
 
-function NavBlock({ title, description, imageSource, route }) {
-  const router = useRouter();
+function NavBlock({ title, description, imageSource, route, content }) {
+  const navigation = useNavigation();
+
+  const goToTopics = (content) => {
+    navigation.navigate(`topics/[id]`, { content: content });
+  };
 
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push(route);
+        goToTopics(content)
       }}
     >
       <View

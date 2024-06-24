@@ -168,11 +168,11 @@ const styles = StyleSheet.create({
   },
 });
 
-function NavBlock({ title, description, imageSource, route, content }) {
+function NavBlock({ title, description, imageSource, content }) {
   const navigation = useNavigation();
 
   const goToTopics = (content) => {
-    navigation.navigate(`topics/[id]`, { content: content });
+    navigation.navigate(`topics/[id]`, { content: content, title: title });
   };
 
   return (

@@ -60,10 +60,9 @@ export default function Topic() {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
 
-  const [pageData, setPageData] = useState([]);
 
   const route = useRoute();
-  const { content } = route.params;
+  const { content, title } = route.params;
 
   const editor = useEditorBridge({
     editable: false,
@@ -82,10 +81,7 @@ export default function Topic() {
         {/* Scroll view needed to dismiss search bar */}
 
         <View style={{ flex: 1 }}>
-          <TText style={styles.sectionTitle}>{pageData.title}</TText>
-          {/* <TText style={styles.sectionContent}>
-            {pageData.content && JSON.stringify(pageData.content)}
-          </TText> */}
+          <TText style={styles.sectionTitle}>{title}</TText>
 
           <View
             style={{

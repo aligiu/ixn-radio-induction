@@ -75,7 +75,7 @@ export default function Topic() {
     async function setPageDataAsync(db) {
       const pageData = (await getAllContent(db))[id]
       setPageData(pageData);
-      editor.setContent(pageData.content)
+      editor.setContent(pageData.content ? pageData.content : "<p>No content yet</p>")
     }
     setPageDataAsync(db);
   }, [editor]);

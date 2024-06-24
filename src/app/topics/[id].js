@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: fontSize.LARGE,
     fontFamily: "InterMedium",
-    paddingTop: 16,
     paddingBottom: 8,
   },
   sectionContent: {

@@ -78,7 +78,7 @@ export default function Topic() {
       editor.setContent(pageData.content ? pageData.content : "<p>No content yet</p>")
     }
     setPageDataAsync(db);
-  }, [editor]);
+  }, []);
 
 
   return (

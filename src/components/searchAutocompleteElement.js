@@ -6,6 +6,7 @@ import { fontSize } from "../styles/fontConfig";
 import React from "react";
 import { useTheme } from "react-native-paper";
 import { useRouter } from "expo-router";
+import { useNavigation } from "expo-router";
 
 import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
@@ -16,6 +17,8 @@ export default function SearchAutocompleteElement({
   section,
   routerLink,
   setSearchbarInFocus,
+  content="",
+  title="",
 }) {
   const theme = useTheme();
   const router = useRouter();
@@ -36,12 +39,14 @@ export default function SearchAutocompleteElement({
     );
   };
 
+  const navigation = useNavigation();    
+
   return (
     <TouchableOpacity
       onPress={() => {
         Keyboard.dismiss();
         setSearchbarInFocus(false);
-        router.push(routerLink);
+        navigation.navigate(routerLink, { content: content, title: title });
       }}
     >
       <View

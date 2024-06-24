@@ -78,7 +78,7 @@ export default function Topic() {
       editor.setContent(pageData.content)
     }
     setPageDataAsync(db);
-  }, [editor.isReady]);
+  }, [editor]);
 
 
   return (

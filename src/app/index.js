@@ -21,6 +21,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getAllContent } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
+import { setDummyData } from "../db/setDummyData";
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -143,7 +144,10 @@ export default function Home() {
         </View>
 
 
-        <TouchableOpacity onPress={() => setSchema(db)} style={{marginBottom: 20}}>
+        <TouchableOpacity onPress={() => {
+          setSchema(db)
+          setDummyData(db)
+          }} style={{marginBottom: 20}}>
             <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>
               <TText>ESSENTIAL INIT</TText>
             </Button>

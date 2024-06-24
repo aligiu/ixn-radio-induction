@@ -68,7 +68,7 @@ export default function Topic() {
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: content,
+    initialContent: content ? content : "<p> No content yet. </p>",
   });
 
 

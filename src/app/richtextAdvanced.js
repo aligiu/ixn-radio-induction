@@ -72,10 +72,8 @@ export default function RichtextAdvanced() {
 
   const debouncedEffect = useCallback(
     debounce((content) => {
-      console.log("--- --- --- --- --- --- --- --- ");
       // TODO: send update to local/online content for persistence later
-      // content && console.log(content);
-      // content && console.log(JSON.stringify(content, null, 2));
+      content && console.log(content);
     }, 300), // Debounce delay in milliseconds
     []
   );

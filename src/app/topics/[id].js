@@ -85,7 +85,6 @@ export default function Topic() {
 
           <View
             style={{
-              
               minHeight: 100,
               flex: 1,
             }}

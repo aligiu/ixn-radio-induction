@@ -9,6 +9,7 @@ import {
   Text,
   Keyboard,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import { MD3LightTheme, MD3DarkTheme, PaperProvider } from "react-native-paper";
 import { customLightColors } from "../theme/colors";
@@ -255,6 +256,9 @@ export default function Layout() {
   return (
     <SQLiteProvider databaseName="local.db">
       <PaperProvider theme={paperTheme}>
+      <StatusBar
+          barStyle="dark-content"
+        />
         <SidemenuProvider>
           <SearchbarProvider>
             <SafeAreaView

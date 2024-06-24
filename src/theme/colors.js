@@ -47,7 +47,7 @@ export const customLightColors = {
       "smoke": "rgb(1, 97, 163)",
       "onSmoke": "rgb(255, 255, 255)",
       "smokeContainer": "rgb(209, 228, 255)",
-      "onSmokeContainer": "rgb(0, 29, 54)"
+      "onSmokeContainer": "rgb(0, 29, 54)",
     }
   }
 

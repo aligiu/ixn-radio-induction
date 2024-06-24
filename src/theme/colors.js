@@ -16,7 +16,7 @@ export const customLightColors = {
       "onError": "rgb(255, 255, 255)",
       "errorContainer": "rgb(255, 218, 214)",
       "onErrorContainer": "rgb(65, 0, 2)",
-      "background": "rgb(254, 251, 255)",
+      "background": "rgb(255, 255, 255)",
       "onBackground": "rgb(27, 27, 31)",
       "surface": "rgb(254, 251, 255)",
       "onSurface": "rgb(27, 27, 31)",

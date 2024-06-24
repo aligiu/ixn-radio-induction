@@ -43,7 +43,8 @@ import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
   const paperTheme =
-    colorScheme === "dark"
+    // colorScheme === "dark"
+    false
       ? { ...MD3DarkTheme, colors: customDarkColors.colors }
       : { ...MD3LightTheme, colors: customLightColors.colors };
   return (
@@ -139,7 +140,8 @@ export default function Layout() {
   }
 
   const paperTheme =
-    colorScheme === "dark"
+    // colorScheme === "dark"
+    false
       ? { ...MD3DarkTheme, colors: customDarkColors.colors }
       : { ...MD3LightTheme, colors: customLightColors.colors };
 

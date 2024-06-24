@@ -6,7 +6,11 @@ import { customDarkColors } from '../theme/colors';
 
 export default function CustomHeader({ navigation, route }) {
     const colorScheme = useColorScheme();
-    const paperTheme = colorScheme === 'dark' ? customDarkColors : customLightColors;
+    const paperTheme = 
+    // colorScheme === 'dark' 
+    false
+    ? customDarkColors 
+    : customLightColors;
 
     return (
         <Searchbar

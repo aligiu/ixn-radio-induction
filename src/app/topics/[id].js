@@ -54,9 +54,7 @@ import {
   useEditorContent,
 } from "@10play/tentap-editor";
 
-// function getObjectById(id) {
-//   return dataJSON.find((item) => item.id === id);
-// }
+import { useRoute } from '@react-navigation/native';
 
 export default function Topic() {
   const db = useSQLiteContext();
@@ -64,21 +62,15 @@ export default function Topic() {
 
   const [pageData, setPageData] = useState([]);
 
+  const route = useRoute();
+  const { content } = route.params;
+
   const editor = useEditorBridge({
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: `A<br><br><br><br><br><br>B<br><br><br><br><br><br>C<br><br><br><br><br><br>D<br><br><br><br><br><br>E<br><br><br><br><br><br>F<br><br><br><br><br><br>G<br><br><br><br><br><br>H<br><br><br><br><br><br>I<br><br><br><br><br><br>J<br><br><br><br><br><br>K`,
+    initialContent: content,
   });
-
-  useEffect(() => {
-    async function setPageDataAsync(db) {
-      const pageData = (await getAllContent(db))[id]
-      setPageData(pageData);
-      editor.setContent(pageData.content ? pageData.content : "<p>No content yet</p>")
-    }
-    setPageDataAsync(db);
-  }, []);
 
 
   return (

@@ -6,7 +6,7 @@ export async function setDummyData(db) {
 
     // Delete all existing data
     await db.execAsync(`DROP TABLE IF EXISTS Content`);
-
+    
     // Initialize schema
     await setSchema(db);  // wait for schema to be completely set
 
@@ -31,7 +31,7 @@ export async function setDummyData(db) {
 
     // Confirm success
     console.log(`Dummy data has been set in ${db.databaseName}`);
-    
+
     // Iterate over the results and print fields in the same row
     const results = await db.getAllAsync('SELECT * FROM Content;')
     for (let i = 0; i < results.length; i++) {

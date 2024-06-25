@@ -44,7 +44,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
 
-import { getAllContent } from "../../db/queries";
+import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
 import {

@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 import { useSQLiteContext } from "expo-sqlite";
-import { getAllContent } from "../db/queries";
+import { getAllContentSorted } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
 import { setDummyData } from "../db/setDummyData";
@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     async function setContentDataAsync(db) {
-      setContentData(await getAllContent(db));
+      setContentData(await getAllContentSorted(db));
     }
     setContentDataAsync(db);
   }, []);

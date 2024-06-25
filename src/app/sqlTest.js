@@ -9,7 +9,7 @@ import * as SQLite from "expo-sqlite"; // Import SQLite from expo-sqlite (note t
 import { useSQLiteContext } from "expo-sqlite";
 
 import { setDummyData } from "../db/setDummyData";
-import { getAllContent } from "../db/queries";
+import { getAllContentSorted } from "../db/queries";
 
 export default function SQLTest() {
   const db = useSQLiteContext();
@@ -25,7 +25,7 @@ export default function SQLTest() {
           <Button mode="contained" onPress={() => setDummyData(db)}>
             Initialize DB
           </Button>
-          <Button mode="contained" onPress={() => getAllContent(db)}>
+          <Button mode="contained" onPress={() => getAllContentSorted(db)}>
             Get all content
           </Button>
         </View>

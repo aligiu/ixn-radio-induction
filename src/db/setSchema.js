@@ -24,3 +24,4 @@ export async function setSchema(db) {
     console.error("Error setting schema: ", error);
   }
 }
+

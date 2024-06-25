@@ -80,14 +80,3 @@ export async function getAllContentSorted(db) {
   return allContent;
 }
 
-// insertion eg
-// -- Assume new article details are (new_id, new_title, new_description, new_content)
-// -- Insert new article
-// INSERT INTO Articles (id, title, description, content, next_id, prev_id)
-// VALUES (new_id, new_title, new_description, new_content, B.id, A.id);
-
-// -- Update Article A to point to the new article
-// UPDATE Articles SET next_id = new_id WHERE id = A.id;
-
-// -- Update Article B to point to the new article
-// UPDATE Articles SET prev_id = new_id WHERE id = B.id;

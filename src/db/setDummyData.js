@@ -31,6 +31,15 @@ export async function setDummyData(db) {
 
     // Confirm success
     console.log(`Dummy data has been set in ${db.databaseName}`);
+    
+    // Iterate over the results and print fields in the same row
+    const results = await db.getAllAsync('SELECT * FROM Content;')
+    for (let i = 0; i < results.length; i++) {
+      const row = results[i];
+      console.log(`Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${row.description}, Content: ${row.content}, Next ID: ${row.next_id}, Previous ID: ${row.prev_id}`);
+    }
+    console.log('All content data printed.');
+
   } catch (error) {
     console.error("Error setting dummy data: ", error);
   }

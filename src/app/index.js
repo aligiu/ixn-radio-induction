@@ -148,7 +148,7 @@ export default function Home() {
           setDummyData(db)
           }} style={{marginBottom: 20}}>
             <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>
-              <TText>ESSENTIAL INIT</TText>
+              <TText>Init Schema and Dummy Data (Essential)</TText>
             </Button>
           </TouchableOpacity>
 

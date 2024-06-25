@@ -3,12 +3,11 @@ import { setSchema } from "./setSchema";
 
 export async function setDummyData(db) {
   try {
-
     // Delete all existing data
     await db.execAsync(`DROP TABLE IF EXISTS Content`);
-    
+
     // Initialize schema
-    await setSchema(db);  // wait for schema to be completely set
+    await setSchema(db); // wait for schema to be completely set
 
     // Insert data for Content (prepared statement can take parameters)
     const statement = await db.prepareAsync(`
@@ -16,30 +15,37 @@ export async function setDummyData(db) {
       VALUES ($id, $title, $description, $content, $next_id, $prev_id);
     `);
 
-    await Promise.all(mockedData.map((datapoint, index) => {
-      statement.executeAsync({
-        $id: index + 1,
-        $title: datapoint.title,
-        $description: datapoint.description,
-        $content: datapoint.content,
-        $next_id: index !== (mockedData.length - 1) ? index + 2 : null,
-        $prev_id: index !== 0 ? index : null,
-      });
-    }));
-    
+    await Promise.all(
+      mockedData.map((datapoint, index) => {
+        statement.executeAsync({
+          $id: index + 1,
+          $title: datapoint.title,
+          $description: datapoint.description,
+          $content: datapoint.content,
+          $next_id: index !== mockedData.length - 1 ? index + 2 : null,
+          $prev_id: index !== 0 ? index : null,
+        });
+      })
+    );
+
     await statement.finalizeAsync();
 
     // Confirm success
     console.log(`Dummy data has been set in ${db.databaseName}`);
 
     // Iterate over the results and print fields in the same row
-    const results = await db.getAllAsync('SELECT * FROM Content;')
+    const results = await db.getAllAsync("SELECT * FROM Content;");
     for (let i = 0; i < results.length; i++) {
       const row = results[i];
-      console.log(`Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${row.description}, Content: ${row.content}, Next ID: ${row.next_id}, Previous ID: ${row.prev_id}`);
+      console.log(
+        `Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${
+          row.description
+        }, Content: ${row.content}, Next ID: ${row.next_id}, Previous ID: ${
+          row.prev_id
+        }`
+      );
     }
-    console.log('All content data printed.');
-
+    console.log("All content data printed.");
   } catch (error) {
     console.error("Error setting dummy data: ", error);
   }

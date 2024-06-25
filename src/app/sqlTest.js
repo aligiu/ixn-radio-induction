@@ -8,8 +8,11 @@ import * as SQLite from "expo-sqlite"; // Import SQLite from expo-sqlite (note t
 
 import { useSQLiteContext } from "expo-sqlite";
 
+import { setSchema } from "../db/setSchema";
 import { setDummyData } from "../db/setDummyData";
-import { getAllContent } from "../db/queries";
+import { getAllContentSorted } from "../db/queries";
+
+import { deleteFromTable, dropTable } from "../db/dropOrDelete";
 
 export default function SQLTest() {
   const db = useSQLiteContext();
@@ -22,11 +25,23 @@ export default function SQLTest() {
         <TText style={styles.sectionTitle}>DB Control Panel</TText>
         <TText style={styles.sectionContent}>Init DB</TText>
         <View style={{ gap: 10 }}>
-          <Button mode="contained" onPress={() => setDummyData(db)}>
-            Initialize DB
+        <Button mode="contained" onPress={() => setSchema(db)}>
+            Init Schema only
           </Button>
-          <Button mode="contained" onPress={() => getAllContent(db)}>
-            Get all content
+          <Button mode="contained" onPress={() => setDummyData(db)}>
+            Init Schema and Dummy Data (Essential)
+          </Button>
+          <Button mode="contained" onPress={() => getAllContentSorted(db)}>
+            Get all content (sorted)
+          </Button>
+          <Button
+            mode="contained"
+            onPress={() => deleteFromTable(db, "Content")}
+          >
+            Delete from content
+          </Button>
+          <Button mode="contained" onPress={() => dropTable(db, "Content")}>
+            Drop content
           </Button>
         </View>
       </View>

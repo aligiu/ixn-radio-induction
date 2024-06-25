@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 
 import AutoScrollView from "../components/AutoScrollView";
 import { useSQLiteContext } from "expo-sqlite";
-import { getAllContent } from "../db/queries";
+import { getAllContentSorted } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
 import { setDummyData } from "../db/setDummyData";
@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     async function setContentDataAsync(db) {
-      setContentData(await getAllContent(db));
+      setContentData(await getAllContentSorted(db));
     }
     setContentDataAsync(db);
   }, []);
@@ -51,24 +51,6 @@ export default function Home() {
 
         <TText style={styles.pageTitle}>Home</TText>
 
-        <View style={{ gap: 10 }}>
-          <NavBlock
-            imageSource={require("assets/images/nhs-logo-square.png")}
-            title="Ashford and St Peter's"
-            description={"Parking, Induction, Study Leave, PCAS and Logins"}
-            route="/hospitals/1"
-          />
-
-          <NavBlock
-            imageSource={require("assets/images/nhs-logo-square.png")}
-            title="Frimley"
-            description={
-              "Parking, Induction, Study Leave, PCAS and Logins, some more very long text, verbose description, more stuff, etc etc"
-            }
-            route="/hospitals/2"
-          />
-        </View>
-
         <View style={{ marginBottom: 20 }}>
           <TouchableOpacity onPress={() => router.push("/dummy")}>
             <Button mode="elevated" style={{ marginTop: 15 }}>
@@ -83,48 +65,9 @@ export default function Home() {
             </Button>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              const route = "/hospitals/1";
-              router.push(route);
-            }}
-          >
-            <Button mode="elevated" style={{ marginTop: 15 }}>
-              <TText>Go to hospital 1</TText>
-            </Button>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push("/basic")}>
-            <Button mode="elevated" style={{ marginTop: 15 }}>
-              <TText>Go to RichtextBasic</TText>
-            </Button>
-          </TouchableOpacity>
-
           <TouchableOpacity onPress={() => router.push("/richtextAdvanced")}>
             <Button mode="elevated" style={{ marginTop: 15 }}>
               <TText>Go to richtextAdvanced</TText>
-            </Button>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              const route = "/topics/0";
-              router.push(route);
-            }}
-          >
-            <Button mode="elevated" style={{ marginTop: 15 }}>
-              <TText>Go to topic 0</TText>
-            </Button>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              const route = "/topics/1";
-              router.push(route);
-            }}
-          >
-            <Button mode="elevated" style={{ marginTop: 15 }}>
-              <TText>Go to topic 1</TText>
             </Button>
           </TouchableOpacity>
         </View>
@@ -145,11 +88,10 @@ export default function Home() {
 
 
         <TouchableOpacity onPress={() => {
-          setSchema(db)
           setDummyData(db)
           }} style={{marginBottom: 20}}>
             <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>
-              <TText>ESSENTIAL INIT</TText>
+              <TText>Init Schema and Dummy Data (Essential)</TText>
             </Button>
           </TouchableOpacity>
 

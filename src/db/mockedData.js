@@ -1,3 +1,15 @@
+// CREATE TABLE Articles (
+//   id SERIAL PRIMARY KEY,
+//   title VARCHAR(255) NOT NULL,
+//   description TEXT NOT NULL,
+//   content TEXT,
+//   next_id INT UNIQUE,
+//   prev_id INT UNIQUE,
+//   CONSTRAINT fk_next FOREIGN KEY (next_id) REFERENCES Articles(id),
+//   CONSTRAINT fk_prev FOREIGN KEY (prev_id) REFERENCES Articles(id)
+// );
+
+
 export const mockedData = [
   {
     title: "Ashford and St Peter's",

@@ -11,11 +11,23 @@ export async function setDummyData(db) {
     await setSchema(db);  // wait for schema to be completely set
 
     // Insert data for Content (prepared statement can take parameters)
-    const statement = await db.prepareAsync(
-      "INSERT INTO Content(json_string) VALUES ($json_string)"
-    );
-    const mockedDataString = JSON.stringify(mockedData);
-    await statement.executeAsync({ $json_string: mockedDataString });
+    const statement = await db.prepareAsync(`
+      INSERT INTO Content (id, title, description, content, next_id, prev_id)
+      VALUES ($id, $title, $description, $content, $next_id, $prev_id);
+    `);
+
+    await Promise.all(mockedData.map((datapoint, index) => {
+      statement.executeAsync({
+        $id: index + 1,
+        $title: datapoint.title,
+        $description: datapoint.description,
+        $content: datapoint.content,
+        $next_id: index !== (mockedData.length - 1) ? index + 2 : null,
+        $prev_id: index !== 0 ? index : null,
+      });
+    }));
+    
+    await statement.finalizeAsync();
 
     // Confirm success
     console.log(`Dummy data has been set in ${db.databaseName}`);

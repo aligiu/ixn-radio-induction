@@ -145,7 +145,6 @@ export default function Home() {
 
 
         <TouchableOpacity onPress={() => {
-          setSchema(db)
           setDummyData(db)
           }} style={{marginBottom: 20}}>
             <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>

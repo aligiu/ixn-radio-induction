@@ -1,4 +1,4 @@
-// array is represented in this format, note the array is ordered by tracing next_id & prev_id
+// array is represented in this format where next_id, prev_id is in correct order (indeed points to next/prev elements)
 // but id/next_id/prev_id might not be monotonic
 // [
 //     {
@@ -10,27 +10,32 @@
 //     ...
 //   ]
 
+// arrayOrdering is used for rendering, since using .map()
+// next_id, prev_id is used for storage, since SQL record storage should not depend on order
+
+// TODO: refactor to only use next_id and prev_id, and have dedicated sort method to get the linked list into array format
+
 // splice https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
 
-// function getArrayIndexById(array, id) {
-//     index = 0
-//     while (index < array.length) {
-//         if (array[index][id] == id) {
-//             return index
-//         }
-//         index++
-//     }
-//     throw new Error(`Id ${id} not found in array`)
-// }
+function getArrayIndexById(array, id) {
+    index = 0
+    while (index < array.length) {
+        if (array[index][id] === id) {
+            return index
+        }
+        index++
+    }
+    throw new Error(`Id ${id} not found in array`)
+}
 
 function getUnusedIdFromArray(array) {
-    maxIndex = -1
-    for (item in array) {
-        if (item.id > maxIndex) {
-            maxIndex = item.id
+    let maxId = -1
+    for (item of array) {
+        if (item.id > maxId) {
+            maxId = item.id
         }
     }
-    return maxIndex + 1  // + 1 to ensure larger than max, hence unused
+    return maxId + 1  // + 1 to ensure larger than max, hence unused
 }
 
 function insertAtIndex(array, index, object) {
@@ -41,15 +46,24 @@ function insertAtIndex(array, index, object) {
         throw new Error(`Index ${index} out of range (length is ${array.length})`)
     }
 
-    
-
+    object.id = getUnusedIdFromArray(array)  // O(n)
     const prev_id = array[index].prev_id
     const next_id = array[index].next_id
-    const prev = array[getArrayIndexById(array, prev_id)]  // O(n)
-    const next = array[getArrayIndexById(array, next_id)]  // O(n)
-    prev.next_id = object
-    // incomplete, look into actually making this a linked list
+    let prev = null;
+    let next = null;
+    
+    if (prev_id !== null) {
+        prev = array[getArrayIndexById(array, prev_id)]  // O(n)
+        prev.next_id = object.id
+    }
+    if (next_id !== null) {
+        next = array[getArrayIndexById(array, next_id)]  // O(n)
+        next.prev_id = object.id
+    }
+    object.prev_id = prev_id
+    object.next_id = next_id
 
+    array.splice(index, 0, object)
 }
 
 function deleteAtIndex(array, index) {
@@ -60,6 +74,19 @@ function deleteAtIndex(array, index) {
     if (index < 0 || index >= array.length) {
         throw new Error(`Index ${index} out of range (length is ${array.length})`)
     }
+
+    const prev_id = array[index].prev_id
+    const next_id = array[index].next_id
+    if (prev_id !== null) {
+        const prev = array[getArrayIndexById(array, prev_id)]  // O(n)
+        prev.next_id = next_id
+    } 
+    if (next_id !== null) {
+        const next = array[getArrayIndexById(array, next_id)]  // O(n)
+        next.prev_id = prev_id
+    }
+
+    array.splice(index, 1)
 }
 
 

@@ -28,7 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function Home() {
   const router = useRouter();
   const db = useSQLiteContext();
-  const [contentData, setContentData] = useState();
+  const [contentData, setContentData] = useState([]);
 
   useEffect(() => {
     async function setContentDataAsync(db) {

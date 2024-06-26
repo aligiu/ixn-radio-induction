@@ -28,7 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function Home() {
   const router = useRouter();
   const db = useSQLiteContext();
-  const [contentData, setContentData] = useState();
+  const [contentData, setContentData] = useState([]);
 
   useEffect(() => {
     async function setContentDataAsync(db) {
@@ -70,6 +70,19 @@ export default function Home() {
               <TText>Go to richtextAdvanced</TText>
             </Button>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/rlist")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to rlist</TText>
+            </Button>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/rlistData")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to rlistData</TText>
+            </Button>
+          </TouchableOpacity>
+
         </View>
         
         <View style={{ flexDirection: "column", gap: 10 }}>

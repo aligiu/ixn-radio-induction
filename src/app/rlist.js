@@ -15,7 +15,7 @@ function getColor(i) {
 const initialData = [...Array(NUM_ITEMS)].map((d, index) => {
   const backgroundColor = getColor(index);
   return {
-    key: index,
+    key: `list-${index}`,
     label: String(index) + "",
     height: 100,
     width: 60 + Math.random() * 40,

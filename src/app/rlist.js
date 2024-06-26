@@ -15,12 +15,11 @@ function getColor(i) {
 const initialData = [...Array(NUM_ITEMS)].map((d, index) => {
   const backgroundColor = getColor(index);
   return {
-    key: `left-item-${index}`,
+    key: index,
     label: String(index) + "",
     height: 100,
     width: 60 + Math.random() * 40,
     backgroundColor,
-    listId: "left", // assign list ID
   };
 });
 
@@ -45,7 +44,7 @@ export default function Rearrangablelist() {
     );
   };
 
-  const handleDragEnd = (fromListId, toListId, item) => {
+  const handleDragEnd = () => {
 
   };
 
@@ -56,7 +55,7 @@ export default function Rearrangablelist() {
       keyExtractor={(item) => item.key}
       renderItem={renderItem}
       onDragEnd={({ data }) => {
-        handleDragEnd("left", "right", data[0]); // assuming only 1 item is dragged
+        handleDragEnd();
         setData(data);
       }}
     />

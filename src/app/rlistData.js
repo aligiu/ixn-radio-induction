@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
   onDragEnd,
 } from "react-native-draggable-flatlist";
 import { Dimensions } from "react-native";
+
+import { useRouter } from "expo-router";
+import { getAllContentSorted } from "../db/queries";
 
 const NUM_ITEMS = 10;
 function getColor(i) {
@@ -13,58 +16,66 @@ function getColor(i) {
   return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
 }
 
-const initialData = [...Array(NUM_ITEMS)].map((d, index) => {
-  const backgroundColor = getColor(index);
-  return {
-    key: `list-${index}`,
-    label: String(index) + "",
-    height: 100,
-    width: 100,
-    backgroundColor,
-  };
-});
 
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function Rearrangablelist() {
   const screenWidth = Dimensions.get("window").width;
-  const [data, setData] = useState(initialData);
+  const [contentData, setContentData] = useState([]);
 
-  const renderItem = ({ item, drag, isActive } ) => {
+  const router = useRouter();
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    async function setContentDataAsync(db) {
+      const sortedContent = await getAllContentSorted(db);
+      const sortedContentWithKey = sortedContent.map((obj, index) => ({
+        ...obj,
+        key: index,
+      }));
+      setContentData(sortedContentWithKey);
+    }
+    setContentDataAsync(db);
+  }, []);
+
+  const renderItem = ({ item, drag, isActive }) => {
     return (
       <ScaleDecorator>
+        <View style={{ borderWidth: 2, minWidth: 100, minHeight: 100 }}>
+          <TouchableOpacity
+            onLongPress={drag}
+            disabled={isActive}
+            style={[
+              styles.rowItem,
+              { backgroundColor: isActive ? "red" : item.backgroundColor },
+            ]}
+          >
+            <Text>{item.title}</Text>
+          </TouchableOpacity>
+        </View>
         <View style={{
           paddingLeft: 20,
           paddingRight: 20,
           paddingTop: 10,
         }}>
-        <TouchableOpacity
-          onLongPress={drag}
-          disabled={isActive}
-          style={[
-            styles.rowItem,
-            { backgroundColor: isActive ? "red" : item.backgroundColor },
-          ]}
-        >
-          <Text style={styles.text}>{item.label}</Text>
-        </TouchableOpacity>
         </View>
       </ScaleDecorator>
     );
   };
 
   const handleDragEnd = () => {
-
+    setContentData(data);
   };
 
   // Custom DraggableFlatList for each list
   const RearrangableList = () => (
     <DraggableFlatList
-      data={data}
-      keyExtractor={(item) => item.key}
+      data={contentData}
+      keyExtractor={(item) => `key-${item.key}`}
       renderItem={renderItem}
-      onDragEnd={({ data }) => {
+      onDragEnd={({ contentData }) => {
         handleDragEnd();
-        setData(data);
+        setContentData(contentData);
       }}
       style={{
         width: screenWidth,
@@ -94,12 +105,11 @@ const styles = StyleSheet.create({
   rowItem: {
     height: 100,
     width: "100%",
-    borderRadius: 20,
+    // borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
-    color: "white",
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",

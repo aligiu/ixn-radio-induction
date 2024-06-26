@@ -63,7 +63,7 @@ export default function Rearrangablelist() {
     );
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = ({ data }) => {
     setContentData(data);
   };
 
@@ -73,10 +73,7 @@ export default function Rearrangablelist() {
       data={contentData}
       keyExtractor={(item) => `key-${item.key}`}
       renderItem={renderItem}
-      onDragEnd={({ contentData }) => {
-        handleDragEnd();
-        setContentData(contentData);
-      }}
+      onDragEnd={handleDragEnd}
       style={{
         width: screenWidth,
       }}

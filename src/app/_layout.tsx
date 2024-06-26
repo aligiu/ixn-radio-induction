@@ -256,9 +256,7 @@ export default function Layout() {
   return (
     <SQLiteProvider databaseName="local.db">
       <PaperProvider theme={paperTheme}>
-      <StatusBar
-          barStyle="dark-content"
-        />
+        <StatusBar barStyle="dark-content" />
         <SidemenuProvider>
           <SearchbarProvider>
             <SafeAreaView
@@ -278,7 +276,8 @@ export default function Layout() {
                 onLayout={onLayoutRootView}
               >
                 {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
-                <PanGestureHandler>
+                {/* <PanGestureHandler> */}
+                <GestureHandlerRootView>
                   <Stack
                     screenOptions={{
                       header: () => (
@@ -298,7 +297,8 @@ export default function Layout() {
                       },
                     }}
                   />
-                </PanGestureHandler>
+                </GestureHandlerRootView>
+                {/* </PanGestureHandler> */}
               </View>
               <SideMenu />
             </SafeAreaView>

@@ -12,7 +12,7 @@ function getColor(i) {
   return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
 }
 
-const initialDataLeft = [...Array(NUM_ITEMS / 2)].map((d, index) => {
+const initialData = [...Array(NUM_ITEMS)].map((d, index) => {
   const backgroundColor = getColor(index);
   return {
     key: `left-item-${index}`,
@@ -24,21 +24,9 @@ const initialDataLeft = [...Array(NUM_ITEMS / 2)].map((d, index) => {
   };
 });
 
-const initialDataRight = [...Array(NUM_ITEMS / 2)].map((d, index) => {
-  const backgroundColor = getColor(NUM_ITEMS / 2 + index);
-  return {
-    key: `right-item-${index}`,
-    label: String(index) + "",
-    height: 100,
-    width: 60 + Math.random() * 40,
-    backgroundColor,
-    listId: "right", // assign list ID
-  };
-});
 
-export default function Rlist() {
-  const [leftData, setLeftData] = useState(initialDataLeft);
-  const [rightData, setRightData] = useState(initialDataRight);
+export default function Rearrangablelist() {
+  const [data, setData] = useState(initialData);
 
   const renderItem = ({ item, drag, isActive } ) => {
     return (
@@ -58,34 +46,18 @@ export default function Rlist() {
   };
 
   const handleDragEnd = (fromListId, toListId, item) => {
-    const fromList = (fromListId === "left") ? leftData : rightData;
-    const toList = (toListId === "left") ? setLeftData : setRightData;
 
-    const updatedFromList = fromList.filter((i) => i.key !== item.key);
-    toList((prevData) => [...prevData, item]);
   };
 
   // Custom DraggableFlatList for each list
-  const LeftFlatList = () => (
+  const RearrangableList = () => (
     <DraggableFlatList
-      data={leftData}
+      data={data}
       keyExtractor={(item) => item.key}
       renderItem={renderItem}
       onDragEnd={({ data }) => {
         handleDragEnd("left", "right", data[0]); // assuming only 1 item is dragged
-        setLeftData(data);
-      }}
-    />
-  );
-
-  const RightFlatList = () => (
-    <DraggableFlatList
-      data={rightData}
-      keyExtractor={(item) => item.key}
-      renderItem={renderItem}
-      onDragEnd={({ data }) => {
-        handleDragEnd("right", "left", data[0]); // assuming only 1 item is dragged
-        setRightData(data);
+        setData(data);
       }}
     />
   );
@@ -93,10 +65,7 @@ export default function Rlist() {
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
-        <LeftFlatList />
-      </View>
-      <View style={styles.listContainer}>
-        <RightFlatList />
+        <RearrangableList />
       </View>
     </View>
   );

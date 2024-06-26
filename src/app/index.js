@@ -70,6 +70,13 @@ export default function Home() {
               <TText>Go to richtextAdvanced</TText>
             </Button>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/rlist")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Go to rlist</TText>
+            </Button>
+          </TouchableOpacity>
+
         </View>
         
         <View style={{ flexDirection: "column", gap: 10 }}>

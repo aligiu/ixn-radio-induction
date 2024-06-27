@@ -45,7 +45,8 @@ export default function RearrangableTopics() {
           <TouchableOpacity
             onLongPress={() => {
               const userIsAdmin = true; // TODO
-              if (userIsAdmin) {
+              const isEditing = true; // TODO
+              if (userIsAdmin && isEditing) {
                 console.log("long press");
                 drag();
               }

@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
 
-export default function Rearrangablelist() {
+export default function RearrangableTopic() {
   const screenWidth = Dimensions.get("window").width;
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();

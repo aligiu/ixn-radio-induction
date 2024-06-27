@@ -12,7 +12,7 @@ import SearchbarContext from "../context/SearchbarContext";
 export default function AutoScrollView({ children }) {
   const theme = useTheme();
   const { searchbarInFocus, setSearchbarInFocus } =
-    useContext(SearchbarContext);
+    useContext(SearchbarContext); 
 
   // If search bar is not in focus, then display children normally
   // Otherwise, display the search bar results

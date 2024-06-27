@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
@@ -11,8 +11,17 @@ import { useNavigation } from "@react-navigation/native";
 
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
+import AutoScrollView from "../components/AutoScrollView";
+
+import SearchAutocompleteElement from "../components/searchAutocompleteElement";
+import SearchbarContext from "../context/SearchbarContext";
+import { contentContainerStyles } from "../styles/contentContainer";
+
 
 export default function RearrangableTopics() {
+  const { searchbarInFocus, setSearchbarInFocus } =
+  useContext(SearchbarContext); 
+
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
   const db = useSQLiteContext();
@@ -102,11 +111,48 @@ export default function RearrangableTopics() {
     />
   );
 
-  return (
-    <View style={styles.container}>
-      <RearrangableList />
-    </View>
-  );
+  if (!searchbarInFocus) {
+    return (
+      <View style={styles.container}>
+        <RearrangableList />
+      </View>
+    );
+  } else {
+    return (
+      <ScrollView
+      style={
+        contentContainerStyles.container
+        // {backgroundColor: theme.colors.background}
+      }
+      keyboardShouldPersistTaps="always"
+    >
+      <View
+        style={{
+          flexDirection: "column",
+          gap: 10, // gap must be placed in <View> not <ScrollView>
+        }}
+      >
+        <SearchAutocompleteElement
+          autocompleteText={"Radiopaedia"}
+          topic={"Educational Resources"}
+          section={"Login"}
+          routerLink={"topics/[id]"}
+          title={"Title for topic x"}  // title necessary if using topics route
+          content={"<p>Content of topic x</p>"}  // content necessary if using topics route
+          setSearchbarInFocus={setSearchbarInFocus}
+        />
+
+        <SearchAutocompleteElement
+          autocompleteText={"Radiopaedia"}
+          topic={"Conferences"}
+          section={"Link"}
+          routerLink={"dummy"}
+          setSearchbarInFocus={setSearchbarInFocus}
+        />
+      </View>
+    </ScrollView>
+    )
+  }
 }
 
 const styles = StyleSheet.create({

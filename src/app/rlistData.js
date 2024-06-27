@@ -48,8 +48,11 @@ export default function Rearrangablelist() {
         >
           <TouchableOpacity
             onLongPress={() => {
-              console.log("long press");
-              drag();
+              const userIsAdmin = true;  // TODO
+              if (userIsAdmin) {
+                console.log("long press");
+                drag();
+              }
             }}
             onPress={() => {
               console.log("short press");

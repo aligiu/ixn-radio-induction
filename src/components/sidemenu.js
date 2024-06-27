@@ -90,6 +90,13 @@ export default function SideMenu() {
             >
               <SideMenuButton
                 onPress={() => {
+                  router.push("/oldIndex");
+                  closeModal();
+                }}
+                text={"Old Index [TEMP]"}
+              />
+              <SideMenuButton
+                onPress={() => {
                   router.push("/auth/login");
                   closeModal();
                 }}

@@ -21,44 +21,44 @@ export const mockedData = [
     description: "Information on facilities and patient care at East Surrey.",
     content: "<p>Some important content</p>",
   },
-  // {
-  //   title: "Frimley",
-  //   description: "Details about the Frimley Health NHS Foundation Trust.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Royal Surrey",
-  //   description: "An in-depth look at Royal Surrey's medical services.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Wexham",
-  //   description: "Insights into the Wexham Park Hospital operations.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Academy",
-  //   description: "Educational programs and training at the Academy.",
-  //   content: "",
-  // },
-  // {
-  //   title: "ARCP",
-  //   description: "Annual Review of Competence Progression guidelines.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Conferences",
-  //   description: "Upcoming conferences and events for medical professionals.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Educational Resources",
-  //   description: "Learning materials and resources for medical education.",
-  //   content: "",
-  // },
-  // {
-  //   title: "Exams",
-  //   description: "Examination schedules and preparation tips.",
-  //   content: "",
-  // },
+  {
+    title: "Frimley",
+    description: "Details about the Frimley Health NHS Foundation Trust.",
+    content: "",
+  },
+  {
+    title: "Royal Surrey",
+    description: "An in-depth look at Royal Surrey's medical services.",
+    content: "",
+  },
+  {
+    title: "Wexham",
+    description: "Insights into the Wexham Park Hospital operations.",
+    content: "",
+  },
+  {
+    title: "Academy",
+    description: "Educational programs and training at the Academy.",
+    content: "",
+  },
+  {
+    title: "ARCP",
+    description: "Annual Review of Competence Progression guidelines.",
+    content: "",
+  },
+  {
+    title: "Conferences",
+    description: "Upcoming conferences and events for medical professionals.",
+    content: "",
+  },
+  {
+    title: "Educational Resources",
+    description: "Learning materials and resources for medical education.",
+    content: "",
+  },
+  {
+    title: "Exams",
+    description: "Examination schedules and preparation tips.",
+    content: "",
+  },
 ];

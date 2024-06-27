@@ -5,16 +5,11 @@ import DraggableFlatList, {
   onDragEnd,
 } from "react-native-draggable-flatlist";
 import { Dimensions } from "react-native";
+import { useTheme } from "react-native-paper";
 
 import { useRouter } from "expo-router";
 import { getAllContentSorted } from "../db/queries";
 
-const NUM_ITEMS = 10;
-function getColor(i) {
-  const multiplier = 255 / (NUM_ITEMS - 1);
-  const colorVal = i * multiplier;
-  return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
-}
 import { useSQLiteContext } from "expo-sqlite";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,9 +20,8 @@ export default function Rearrangablelist() {
   const screenWidth = Dimensions.get("window").width;
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
-
-  const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useTheme();
 
   useEffect(() => {
     async function setContentDataAsync(db) {
@@ -68,7 +62,12 @@ export default function Rearrangablelist() {
             disabled={isActive}
             style={[
               styles.rowItem,
-              { backgroundColor: isActive ? "red" : item.backgroundColor},
+              {
+                borderRadius: 20,
+                borderColor: isActive ? theme.colors.primary : "grey",
+                borderWidth: isActive ? 2 : 1,
+                backgroundColor: "white"
+              },
             ]}
           >
             <View style={{ width: "100%" }}>
@@ -124,7 +123,6 @@ const styles = StyleSheet.create({
   },
   rowItem: {
     width: "100%",
-    borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -164,9 +162,6 @@ function TopicBlock({ title, description, imageSource, content }) {
       style={{
         flexDirection: "row",
         gap: 10,
-        borderWidth: 1,
-        borderColor: "grey",
-        borderRadius: 20,
         padding: 10,
       }}
     >

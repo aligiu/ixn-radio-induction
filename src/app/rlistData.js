@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
 
-export default function RearrangableTopic() {
+export default function RearrangableTopics() {
   const screenWidth = Dimensions.get("window").width;
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
@@ -41,7 +41,7 @@ export default function RearrangableTopic() {
         <View
           style={{
             minWidth: 100,
-            minHeight: 100,
+            marginTop: 10,
             marginLeft: 10,
             marginRight: 10,
           }}
@@ -77,7 +77,7 @@ export default function RearrangableTopic() {
               <TopicBlock
                 imageSource={require("assets/images/nhs-logo-square.png")}
                 title={item.title}
-                route={`/topics/${item.key}`} // not really used, since passing content as prop already
+                route={`/topics/${item.key}`} // routen not really dynamic since passing content as prop already
                 description={item.description}
                 content={item.content}
               />

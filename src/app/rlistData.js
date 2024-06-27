@@ -65,7 +65,7 @@ export default function Rearrangablelist() {
               {
                 borderRadius: 20,
                 borderColor: isActive ? theme.colors.primary : "grey",
-                borderWidth: isActive ? 2 : 1,
+                borderWidth: isActive ? 3 : 1,
                 backgroundColor: "white"
               },
             ]}

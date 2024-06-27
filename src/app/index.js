@@ -36,9 +36,10 @@ export default function RearrangableTopics() {
         <View
           style={{
             minWidth: 100,
-            marginTop: 10,
-            // marginLeft: 10,
-            // marginRight: 10,
+            marginTop: 5,
+            marginBottom: 5,
+            paddingLeft: 19,
+            paddingRight: 19,
           }}
         >
           <TouchableOpacity
@@ -95,8 +96,7 @@ export default function RearrangableTopics() {
       renderItem={renderItem}
       onDragEnd={handleDragEnd}
       style={{
-        paddingLeft: 16,
-        paddingRight: 16
+        backgroundColor: null,
       }}
     />
   );

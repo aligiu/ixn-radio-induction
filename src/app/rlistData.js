@@ -16,7 +16,6 @@ function getColor(i) {
   return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
 }
 
-
 import { useSQLiteContext } from "expo-sqlite";
 
 export default function Rearrangablelist() {
@@ -41,7 +40,18 @@ export default function Rearrangablelist() {
   const renderItem = ({ item, drag, isActive }) => {
     return (
       <ScaleDecorator>
-        <View style={{ borderWidth: 2, minWidth: 100, minHeight: 100 }}>
+        <View
+          style={{
+            borderWidth: 2,
+            minWidth: 100,
+            minHeight: 100,
+            marginTop: 10,
+            borderWidth: 2,
+            marginLeft: 10,
+            marginRight: 10,
+            borderColor: "blue",
+          }}
+        >
           <TouchableOpacity
             onLongPress={drag}
             disabled={isActive}
@@ -52,12 +62,6 @@ export default function Rearrangablelist() {
           >
             <Text>{item.title}</Text>
           </TouchableOpacity>
-        </View>
-        <View style={{
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 10,
-        }}>
         </View>
       </ScaleDecorator>
     );

@@ -43,6 +43,7 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
+import { Button, Portal } from "react-native-paper";
 
 import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -54,12 +55,14 @@ import {
   useEditorContent,
 } from "@10play/tentap-editor";
 
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
+
+import FileModal from "../../components/FileModal";
+import SecretModal from "../../components/SecretModal";
 
 export default function Topic() {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
-
 
   const route = useRoute();
   const { content, title } = route.params;
@@ -71,6 +74,8 @@ export default function Topic() {
     initialContent: content ? content : "<p> No content yet. </p>",
   });
 
+  const [secretModalVisible, setSecretModalVisible] = React.useState(false);
+  const [fileModalVisible, setFileModalVisible] = React.useState(false);
 
   return (
     <>
@@ -79,7 +84,6 @@ export default function Topic() {
         style={contentContainerStyles.container}
       >
         {/* Scroll view needed to dismiss search bar */}
-
         <View style={{ flex: 1 }}>
           <TText style={styles.sectionTitle}>{title}</TText>
 
@@ -90,9 +94,41 @@ export default function Topic() {
             }}
           >
             <RichText editor={editor} />
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 10,
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity onPress={() => setSecretModalVisible(true)}>
+                  <Button mode="outlined">View Secrets</Button>
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity onPress={() => setFileModalVisible(true)}>
+                  <Button mode="outlined">View Files</Button>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       </AutoScrollView>
+      <View>
+      <SecretModal
+        visible={secretModalVisible}
+        closeModal={() => {
+          setSecretModalVisible(false);
+        }}
+      />
+      <FileModal
+        visible={fileModalVisible}
+        closeModal={() => {
+          setFileModalVisible(false);
+        }}
+      />
+      </View>
     </>
   );
 }

@@ -50,9 +50,7 @@ import { useSQLiteContext } from "expo-sqlite";
 
 import {
   RichText,
-  Toolbar,
   useEditorBridge,
-  useEditorContent,
 } from "@10play/tentap-editor";
 
 import { useRoute } from "@react-navigation/native";

@@ -97,16 +97,17 @@ export default function Topic() {
                 display: "flex",
                 flexDirection: "row",
                 gap: 10,
+                marginBottom: 10,
               }}
             >
               <View style={{ flex: 1 }}>
                 <TouchableOpacity onPress={() => setSecretModalVisible(true)}>
-                  <Button mode="outlined">View Secrets</Button>
+                  <Button mode="outlined">Secrets</Button>
                 </TouchableOpacity>
               </View>
               <View style={{ flex: 1 }}>
                 <TouchableOpacity onPress={() => setFileModalVisible(true)}>
-                  <Button mode="outlined">View Files</Button>
+                  <Button mode="outlined">Files</Button>
                 </TouchableOpacity>
               </View>
             </View>

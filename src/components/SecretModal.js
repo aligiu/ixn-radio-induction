@@ -71,7 +71,6 @@ const SecretModal = ({ visible, closeModal }) => {
             style={{
               minHeight: 100,
               flex: 1,
-              paddingRight: 10,
             }}
           >
             <RichText editor={editorSecret} />

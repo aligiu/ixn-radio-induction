@@ -7,6 +7,7 @@ export async function setSchema(db) {
         title TEXT NOT NULL,
         description TEXT NOT NULL,
         content TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,  -- New timestamp column
         next_id INTEGER UNIQUE,
         prev_id INTEGER UNIQUE,
         FOREIGN KEY (next_id) REFERENCES Content(id),

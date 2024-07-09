@@ -42,7 +42,8 @@ export async function setDummyData(db) {
           row.description
         }, Content: ${row.content}, Next ID: ${row.next_id}, Previous ID: ${
           row.prev_id
-        }`
+        }, Timestamp: ${row.timestamp}
+        `
       );
     }
     console.log("All content data printed.");

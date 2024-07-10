@@ -11,8 +11,8 @@ export async function setDummyData(db) {
 
     // Insert data for Content (prepared statement can take parameters)
     const statement = await db.prepareAsync(`
-      INSERT INTO Content (id, title, description, content, next_id, prev_id)
-      VALUES ($id, $title, $description, $content, $next_id, $prev_id);
+      INSERT INTO Content (id, title, description, content, nextId, prevId)
+      VALUES ($id, $title, $description, $content, $nextId, $prevId);
     `);
 
     await Promise.all(
@@ -22,8 +22,8 @@ export async function setDummyData(db) {
           $title: datapoint.title,
           $description: datapoint.description,
           $content: datapoint.content,
-          $next_id: index !== mockedData.length - 1 ? index + 2 : null,
-          $prev_id: index !== 0 ? index : null,
+          $nextId: index !== mockedData.length - 1 ? index + 2 : null,
+          $prevId: index !== 0 ? index : null,
         });
       })
     );
@@ -40,8 +40,8 @@ export async function setDummyData(db) {
       console.log(
         `Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${
           row.description
-        }, Content: ${row.content}, Next ID: ${row.next_id}, Previous ID: ${
-          row.prev_id
+        }, Content: ${row.content}, Next ID: ${row.nextId}, Previous ID: ${
+          row.prevId
         }, Timestamp: ${row.timestamp}
         `
       );

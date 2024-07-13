@@ -186,7 +186,7 @@ export default function Login() {
 
           <TText style={{ fontSize: fontSize.MEDIUM, textAlign: "center" }}>
             New User?{" "}
-            <Link href="auth/register">
+            <Link href="auth/registerUser">
               <TText style={{ textDecorationLine: "underline" }}>
                 Register
               </TText>

@@ -23,8 +23,8 @@ export default function Register() {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(" "); // set as 1 char space to prevent layout shift
-  const [isAdminSwitchOn, setIsAdminSwitchOn] = React.useState(false);
-  const onToggleSwitch = () => setIsAdminSwitchOn(!isAdminSwitchOn);
+  // const [isAdminSwitchOn, setIsAdminSwitchOn] = React.useState(false);
+  // const onToggleSwitch = () => setIsAdminSwitchOn(!isAdminSwitchOn);
 
   const onSubmit = async (data) => {
     console.log("Register form submitted");
@@ -45,10 +45,10 @@ export default function Register() {
       const payload = JSON.stringify({
         email: data.email,
         password: data.password,
-        role: isAdminSwitchOn ? "ROLE_ADMIN" : "ROLE_USER",
+        // role: isAdminSwitchOn ? "ROLE_ADMIN" : "ROLE_USER",
       });
       console.log(payload);
-      const route = "/auth/register";
+      const route = "/auth/register-user";
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {
@@ -135,7 +135,7 @@ export default function Register() {
           </View>
 
           <View style={{ height: "50%", justifyContent: "flex-end", gap: 6 }}>
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -152,7 +152,7 @@ export default function Register() {
                 Register an admin
               </TText>
               <Switch value={isAdminSwitchOn} onValueChange={onToggleSwitch} />
-            </View>
+            </View> */}
 
             <Controller
               control={control}

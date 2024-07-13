@@ -25,7 +25,7 @@ import { setDummyData } from "../db/setDummyData";
 
 import { useNavigation } from '@react-navigation/native';
 
-export default function Home() {
+export default function AdminPanel() {
   const router = useRouter();
   const db = useSQLiteContext();
   const [contentData, setContentData] = useState([]);
@@ -49,7 +49,7 @@ export default function Home() {
       >
         {/* Scroll view needed to dismiss search bar */}
 
-        <TText style={styles.pageTitle}>Old Index [TEMP]</TText>
+        <TText style={styles.pageTitle}>Admin Control Panel</TText>
 
         <View style={{ marginBottom: 20 }}>
           <TouchableOpacity onPress={() => router.push("/dummy")}>
@@ -57,7 +57,12 @@ export default function Home() {
               <TText>Go to dummy</TText>
             </Button>
           </TouchableOpacity>
-         
+
+          <TouchableOpacity onPress={() => router.push("/auth/registerAdminOrUser")}>
+            <Button mode="elevated" style={{ marginTop: 15 }}>
+              <TText>Add a user</TText>
+            </Button>
+          </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push("/sqlTest")}>
             <Button mode="elevated" style={{ marginTop: 15 }}>

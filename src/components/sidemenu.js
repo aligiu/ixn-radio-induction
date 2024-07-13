@@ -90,10 +90,10 @@ export default function SideMenu() {
             >
               <SideMenuButton
                 onPress={() => {
-                  router.push("/oldIndex");
+                  router.push("/adminControlPanel");
                   closeModal();
                 }}
-                text={"Old Index [TEMP]"}
+                text={"Admin Control Panel"}
               />
               <SideMenuButton
                 onPress={() => {

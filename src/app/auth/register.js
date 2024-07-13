@@ -58,7 +58,7 @@ export default function Register() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
+                <TextInput autoCapitalize='none'
                   label="Email"
                   mode="outlined"
                   onBlur={onBlur}
@@ -76,7 +76,7 @@ export default function Register() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
+                <TextInput autoCapitalize='none'
                   ref={passwordRef}
                   label="Password"
                   mode="outlined"
@@ -96,7 +96,7 @@ export default function Register() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
+                <TextInput autoCapitalize='none'
                   ref={confirmPasswordRef}
                   label="Confirm Password"
                   mode="outlined"

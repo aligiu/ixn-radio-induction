@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useState, useRef } from "react";
-import { Text, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
@@ -14,39 +21,37 @@ export default function Login() {
   const { control, handleSubmit, focus, setValue } = useForm();
   const passwordRef = useRef(null);
   const navigation = useNavigation();
-  const [errorMessage, setErrorMessage] = useState(" ");  // set as 1 char space to prevent layout shift
+  const [errorMessage, setErrorMessage] = useState(" "); // set as 1 char space to prevent layout shift
 
   const onSubmit = async (data) => {
     console.log("Login form submitted:", data);
 
+    data.email = data.email.trim();
+
     try {
-      console.log(
-        JSON.stringify({
-          email: data.email,
-          password: data.password,
-        })
-      )
-      const route = "/auth/authenticate"
+      const payload = JSON.stringify({
+        email: data.email,
+        password: data.password,
+      });
+      console.log(payload);
+      const route = "/auth/authenticate";
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
+        body: payload,
       });
 
       if (response.status === 403) {
         // Handle incorrect credentials
         setErrorMessage("Incorrect email or password");
       } else if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       } else {
         const result = await response.json();
         console.log("Login successful:", result);
-        setErrorMessage(" ")  // set as 1 char space to prevent layout shift
+        setErrorMessage(" "); // set as 1 char space to prevent layout shift
 
         // Navigate to the home screen upon successful login
         navigation.navigate("index");
@@ -56,7 +61,6 @@ export default function Login() {
       setErrorMessage("Network failure");
     }
   };
-
 
   const handleEmailSubmit = () => {
     passwordRef.current?.focus();
@@ -68,12 +72,25 @@ export default function Login() {
       contentContainerStyle={{ flexGrow: 1 }}
       style={contentContainerStyles.container}
     >
-      <View style={{ flexDirection: "column", justifyContent: "space-between", height: "100%", flexGrow: 1 }}>
-        <View style={{ justifyContent: "space-between", height: "55%" }}>
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          flexGrow: 1,
+        }}
+      >
+        <View style={{ justifyContent: "space-between", height: "60%" }}>
           <View>
             <View style={{ alignItems: "flex-end" }}>
               <Link href="">
-                <TText style={{ textDecorationLine: "underline", fontSize: fontSize.MEDIUM, fontWeight: "500" }}>
+                <TText
+                  style={{
+                    textDecorationLine: "underline",
+                    fontSize: fontSize.MEDIUM,
+                    fontWeight: "500",
+                  }}
+                >
                   Continue as Guest
                 </TText>
               </Link>
@@ -85,7 +102,14 @@ export default function Login() {
                 style={styles.nhsLogo}
               />
             </View>
-            <TText variant="headlineSmall" style={{ fontSize: fontSize.LARGE, fontFamily: "InterSemiBold", textAlign: "center" }}>
+            <TText
+              variant="headlineSmall"
+              style={{
+                fontSize: fontSize.LARGE,
+                fontFamily: "InterSemiBold",
+                textAlign: "center",
+              }}
+            >
               Radiologist Induction Companion
             </TText>
           </View>
@@ -94,7 +118,8 @@ export default function Login() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput autoCapitalize='none'
+                <TextInput
+                  autoCapitalize="none"
                   label="Email"
                   mode="outlined"
                   onBlur={onBlur}
@@ -112,7 +137,8 @@ export default function Login() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput autoCapitalize='none'
+                <TextInput
+                  autoCapitalize="none"
                   ref={passwordRef}
                   label="Password"
                   mode="outlined"
@@ -129,29 +155,41 @@ export default function Login() {
               defaultValue=""
             />
 
-
-
-        {errorMessage && (
-          <View>
-            <Text style={{ color: 'red', textAlign: 'center', opacity: errorMessage.trim()=="" ? 0 : 1 }}>{errorMessage}</Text>
-          </View>
-        )}
+            <View>
+              <Text
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  opacity: errorMessage.trim() == "" ? 0 : 1,
+                  fontSize: 16,
+                }}
+              >
+                {errorMessage}
+              </Text>
+            </View>
           </View>
         </View>
 
-
-
-        <View style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}>
+        <View
+          style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}
+        >
           <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-            <Button mode="contained" style={{ height: 50, borderRadius: 25, justifyContent: "center" }}>
-              <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE }}>Log In</Text>
+            <Button
+              mode="contained"
+              style={{ height: 50, borderRadius: 25, justifyContent: "center" }}
+            >
+              <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE }}>
+                Log In
+              </Text>
             </Button>
           </TouchableOpacity>
 
           <TText style={{ fontSize: fontSize.MEDIUM, textAlign: "center" }}>
             New User?{" "}
             <Link href="auth/register">
-              <TText style={{ textDecorationLine: "underline" }}>Register</TText>
+              <TText style={{ textDecorationLine: "underline" }}>
+                Register
+              </TText>
             </Link>
           </TText>
         </View>

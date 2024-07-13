@@ -1,21 +1,81 @@
 import * as React from "react";
 import { useState, useRef } from "react";
-import { Text, View, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Button, TextInput, Switch, ToggleButton } from "react-native-paper";
 import { Link } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { fontSize } from "src/styles/fontConfig";
 import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
+import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Register() {
+  const navigation = useNavigation();
   const { control, handleSubmit, focus, setValue } = useForm();
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState(" "); // set as 1 char space to prevent layout shift
+  const [isAdminSwitchOn, setIsAdminSwitchOn] = React.useState(false);
+  const onToggleSwitch = () => setIsAdminSwitchOn(!isAdminSwitchOn);
 
-  const onSubmit = (data) => {
-    console.log("Register form submitted:", data);
-    // TODO: add handle form submission logic
+  const onSubmit = async (data) => {
+    console.log("Register form submitted");
+
+    data.email = data.email.trim();
+
+    if (!data.email || !data.password) {
+      setErrorMessage("Please provide your email and password");
+      return;
+    }
+
+    if (data.password != data.confirmPassword) {
+      setErrorMessage("Passwords must match");
+      return;
+    }
+
+    try {
+      const payload = JSON.stringify({
+        email: data.email,
+        password: data.password,
+        role: isAdminSwitchOn ? "ROLE_ADMIN" : "ROLE_USER",
+      });
+      console.log(payload);
+      const route = "/auth/register";
+      const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: payload,
+      });
+
+      if (response.status === 409) {
+        // Handle conflicting request
+        const result = await response.json();
+        console.log("***", result);
+        setErrorMessage(result.errorMessage);
+      } else if (!response.ok) {
+        throw new Error("Network response was not ok");
+      } else {
+        const result = await response.json();
+        console.log("Registration successful:", result);
+        setErrorMessage(" "); // set as 1 char space to prevent layout shift
+
+        // Navigate to the home screen upon successful registration
+        navigation.navigate("index");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setErrorMessage("Network failure");
+    }
   };
 
   const handleEmailSubmit = () => {
@@ -32,12 +92,25 @@ export default function Register() {
       contentContainerStyle={{ flexGrow: 1 }}
       style={contentContainerStyles.container}
     >
-      <View style={{ flexDirection: "column", justifyContent: "space-between", height: "100%", flexGrow: 1 }}>
-        <View style={{ justifyContent: "space-between", height: "55%" }}>
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          flexGrow: 1,
+        }}
+      >
+        <View style={{ justifyContent: "space-between", height: "60%" }}>
           <View>
             <View style={{ alignItems: "flex-end" }}>
               <Link href="">
-                <TText style={{ textDecorationLine: "underline", fontSize: fontSize.MEDIUM, fontWeight: "500" }}>
+                <TText
+                  style={{
+                    textDecorationLine: "underline",
+                    fontSize: fontSize.MEDIUM,
+                    fontWeight: "500",
+                  }}
+                >
                   Continue as Guest
                 </TText>
               </Link>
@@ -49,16 +122,43 @@ export default function Register() {
                 style={styles.nhsLogo}
               />
             </View>
-            <TText variant="headlineSmall" style={{ fontSize: fontSize.LARGE, fontFamily: "InterSemiBold", textAlign: "center" }}>
+            <TText
+              variant="headlineSmall"
+              style={{
+                fontSize: fontSize.LARGE,
+                fontFamily: "InterSemiBold",
+                textAlign: "center",
+              }}
+            >
               Radiologist Induction Companion
             </TText>
           </View>
 
           <View style={{ height: "50%", justifyContent: "flex-end", gap: 6 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10",
+              }}
+            >
+              <TText
+                style={{
+                  fontSize: fontSize.MEDIUM,
+                  fontWeight: "400",
+                }}
+              >
+                Register an admin
+              </TText>
+              <Switch value={isAdminSwitchOn} onValueChange={onToggleSwitch} />
+            </View>
+
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput autoCapitalize='none'
+                <TextInput
+                  autoCapitalize="none"
                   label="Email"
                   mode="outlined"
                   onBlur={onBlur}
@@ -76,7 +176,8 @@ export default function Register() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput autoCapitalize='none'
+                <TextInput
+                  autoCapitalize="none"
                   ref={passwordRef}
                   label="Password"
                   mode="outlined"
@@ -96,7 +197,8 @@ export default function Register() {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput autoCapitalize='none'
+                <TextInput
+                  autoCapitalize="none"
                   ref={confirmPasswordRef}
                   label="Confirm Password"
                   mode="outlined"
@@ -112,14 +214,31 @@ export default function Register() {
               name="confirmPassword"
               defaultValue=""
             />
-
-
+            <View>
+              <Text
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  opacity: errorMessage.trim() == "" ? 0 : 1,
+                  fontSize: 16,
+                }}
+              >
+                {errorMessage}
+              </Text>
+            </View>
           </View>
         </View>
-        <View style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}>
+        <View
+          style={{ gap: 10, marginBottom: 60, justifyContent: "space-between" }}
+        >
           <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-            <Button mode="contained" style={{ height: 50, borderRadius: 25, justifyContent: "center" }}>
-              <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE }}>Register</Text>
+            <Button
+              mode="contained"
+              style={{ height: 50, borderRadius: 25, justifyContent: "center" }}
+            >
+              <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE }}>
+                Register
+              </Text>
             </Button>
           </TouchableOpacity>
 

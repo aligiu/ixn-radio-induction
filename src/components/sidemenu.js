@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Linking } from "react-native";
 import {
   View,
@@ -20,6 +20,7 @@ import {
 import SidemenuContext from "../context/SidemenuContext";
 import { fontSize } from "src/styles/fontConfig";
 import { useRouter } from "expo-router";
+import { getToken, storeToken, removeToken } from "../utils/jwt";
 
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
@@ -27,12 +28,23 @@ export default function SideMenu() {
   const theme = useTheme();
   const backgroundColor = theme.colors.background;
   const textColor = theme.colors.inverseSurface;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const router = useRouter();
 
   const closeModal = () => {
     setSidemenuVisible(false);
   };
+
+  useEffect(() => {
+    async function handleLoginStatus() {
+      const jwt = await getToken();
+      setIsLoggedIn(jwt !== null);
+      console.log(jwt);
+    }
+    handleLoginStatus();
+  }, [sidemenuVisible]);
+  console.log("isLoggedIn")
 
   return (
     <Portal>
@@ -95,13 +107,29 @@ export default function SideMenu() {
                 }}
                 text={"Admin Control Panel"}
               />
-              <SideMenuButton
-                onPress={() => {
-                  router.push("/auth/login");
-                  closeModal();
-                }}
-                text={"Log In"}
-              />
+              {isLoggedIn && (
+                <SideMenuButton
+                  onPress={() => {
+                    console.log("log out button pressed");
+                    removeToken()
+                    setIsLoggedIn(false)
+                    closeModal();
+                    router.push("/auth/login");
+                  }}
+                  text={"Log Out"}
+                />
+              )}
+
+              {!isLoggedIn && (
+                <SideMenuButton
+                  onPress={() => {
+                    router.push("/auth/login");
+                    closeModal();
+                  }}
+                  text={"Log In"}
+                />
+              )}
+
               <SideMenuButton
                 onPress={() => {
                   router.push("/help/userManual");

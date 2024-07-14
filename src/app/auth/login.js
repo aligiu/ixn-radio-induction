@@ -36,6 +36,7 @@ export default function Login() {
       });
       console.log(payload);
       const route = "/auth/authenticate";
+      // no need to use fetchWithAuth because assume no JWT in local storage before login
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {

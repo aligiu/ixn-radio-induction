@@ -16,6 +16,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { useNavigation } from "@react-navigation/native";
+import { fetchWithJWT } from "../../utils/jwt";
 
 export default function RegisterAdminOrUser() {
   const navigation = useNavigation();
@@ -49,7 +50,8 @@ export default function RegisterAdminOrUser() {
       });
       console.log(payload);
       const route = "/auth/register-admin-or-user";
-      const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+      // include JWT in fetch because the /auth/register-admin-or-user route is only accessible by admins
+      const response = await fetchWithJWT(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +64,15 @@ export default function RegisterAdminOrUser() {
         const result = await response.json();
         console.log("***", result);
         setErrorMessage(result.errorMessage);
-      } else if (!response.ok) {
+      } 
+      if (response.status === 403) {
+        // Handle conflicting request
+        const result = await response.json();
+        console.log("***", result);
+        setErrorMessage("Admin privileges required");
+      }
+      
+      else if (!response.ok) {
         console.log(response.body);
         setErrorMessage("Network failure");
       } else {

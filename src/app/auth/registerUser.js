@@ -47,6 +47,7 @@ export default function Register() {
       });
       console.log(payload);
       const route = "/auth/register-user";
+      // no need to use fetchWithAuth because assume no JWT in local storage before registration
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {

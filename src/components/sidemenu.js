@@ -129,13 +129,15 @@ export default function SideMenu() {
                 alignItems: "center",
               }}
             >
-              <SideMenuButton
-                onPress={() => {
-                  router.push("/adminControlPanel");
-                  closeModal();
-                }}
-                text={"Admin Control Panel"}
-              />
+              {isLoggedIn && isAdmin && 
+                <SideMenuButton
+                  onPress={() => {
+                    router.push("/adminControlPanel");
+                    closeModal();
+                  }}
+                  text={"Admin Control Panel"}
+                />
+              }
               {isLoggedIn && (
                 <SideMenuButton
                   onPress={() => {

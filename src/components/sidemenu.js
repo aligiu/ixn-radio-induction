@@ -117,7 +117,9 @@ export default function SideMenu() {
                     textAlign: "center",
                   }}
                 >
-                  Welcome, {email ? email : "Guest"} ({isAdmin ? "admin" : "normal user"})
+                  Welcome, {email ? email : "Guest"} 
+                  {isLoggedIn && isAdmin && (" (admin)")}
+                  {isLoggedIn && !isAdmin && (" (normal user)")}
                 </TText>
               </View>
             </View>

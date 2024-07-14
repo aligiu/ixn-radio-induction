@@ -16,7 +16,8 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { useNavigation } from "@react-navigation/native";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
-import { getToken, storeToken, removeToken, getEmail, storeEmail } from "../../utils/jwt";
+import { getToken, storeToken, removeToken, getEmail, storeEmail, storeIsAdmin,
+  getIsAdmin,  } from "../../utils/auth";
 
 export default function Login() {
   const { control, handleSubmit, focus, setValue } = useForm();
@@ -57,6 +58,8 @@ export default function Login() {
         
         await storeToken(result.token);
         await storeEmail(result.email);
+        console.log("result.isAdmin", result.isAdmin)
+        await storeIsAdmin(result.isAdmin ? "true" : "false");
         console.log('JWT stored locally in expo-secure-store');
         
         setErrorMessage(" "); // set as 1 char space to prevent layout shift

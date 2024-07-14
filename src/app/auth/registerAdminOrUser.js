@@ -16,7 +16,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { useNavigation } from "@react-navigation/native";
-import { fetchWithJWT } from "../../utils/jwt";
+import { fetchWithJWT } from "../../utils/auth";
 
 export default function RegisterAdminOrUser() {
   const navigation = useNavigation();

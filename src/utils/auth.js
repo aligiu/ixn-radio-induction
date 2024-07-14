@@ -19,6 +19,15 @@ export const storeEmail = async (email) => {
   }
 };
 
+export const storeIsAdmin = async (isAdmin) => {
+  try {
+    await SecureStore.setItemAsync("isAdmin", isAdmin);
+    console.log("isAdmin stored successfully");
+  } catch (error) {
+    console.error("Error storing the isAdmin", error);
+  }
+};
+
 
 export const getToken = async () => {
   try {
@@ -54,6 +63,22 @@ export const getEmail = async () => {
   return null;
 }
 
+export const getIsAdmin = async () => {
+  try {
+    const isAdmin = await SecureStore.getItemAsync("isAdmin");
+    if (isAdmin) {
+      console.log("isAdmin retrieved successfully");
+      return isAdmin === "true";
+    } else {
+      console.log("No isAdmin stored");
+    }
+  } catch (error) {
+    console.error("Error retrieving the isAdmin", error);
+  }
+  return null;
+};
+
+
 export const removeToken = async () => {
   try {
     await SecureStore.deleteItemAsync("jwt");
@@ -62,6 +87,16 @@ export const removeToken = async () => {
     console.error("Error removing the token", error);
   }
 };
+
+export const removeIsAdmin = async () => {
+  try {
+    await SecureStore.deleteItemAsync("isAdmin");
+    console.log("Token removed successfully");
+  } catch (error) {
+    console.error("Error removing the token", error);
+  }
+};
+
 
 export const fetchWithJWT = async (url, options = {}) => {
 

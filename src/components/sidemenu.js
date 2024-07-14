@@ -26,7 +26,10 @@ import {
   removeToken,
   getEmail,
   storeEmail,
-} from "../utils/jwt";
+  storeIsAdmin,
+  getIsAdmin,
+  removeIsAdmin,
+} from "../utils/auth";
 
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
@@ -36,6 +39,7 @@ export default function SideMenu() {
   const textColor = theme.colors.inverseSurface;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const router = useRouter();
 
@@ -47,12 +51,16 @@ export default function SideMenu() {
     async function handleLoginStatus() {
       const jwt = await getToken();
       const emailVal = await getEmail();
+      const isAdminVal = await getIsAdmin();
       setIsLoggedIn(jwt !== null);
       setEmail(emailVal);
+      setIsAdmin(isAdminVal);
     }
     handleLoginStatus();
   }, [sidemenuVisible]);
   console.log("isLoggedIn");
+
+  console.log("isAdmin", isAdmin)
 
   return (
     <Portal>
@@ -109,7 +117,7 @@ export default function SideMenu() {
                     textAlign: "center",
                   }}
                 >
-                  Welcome, {email ? email : "Guest"}
+                  Welcome, {email ? email : "Guest"} ({isAdmin ? "admin" : "normal user"})
                 </TText>
               </View>
             </View>
@@ -132,6 +140,7 @@ export default function SideMenu() {
                     console.log("log out button pressed");
                     removeToken();
                     setIsLoggedIn(false);
+                    removeIsAdmin(); 
                     closeModal();
                     router.push("/auth/login");
                   }}

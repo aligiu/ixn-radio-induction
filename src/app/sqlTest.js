@@ -31,7 +31,7 @@ export default function SQLTest() {
           <Button mode="contained" onPress={() => setDummyData(db)}>
             Init Schema and Dummy Data (Essential)
           </Button>
-          <Button mode="contained" onPress={() => getAllContentSorted(db)}>
+          <Button mode="contained" onPress={() => getAllContentSorted(db, "Content")}>
             Get all content (sorted)
           </Button>
           <Button

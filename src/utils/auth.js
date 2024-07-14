@@ -33,7 +33,7 @@ export const getToken = async () => {
   try {
     const token = await SecureStore.getItemAsync("jwt");
     if (token) {
-      console.log("Token retrieved successfully");
+      // console.log("Token retrieved successfully");
       return token;
     } else {
       console.log("No token stored");
@@ -52,7 +52,7 @@ export const getEmail = async () => {
   try {
     const email = await SecureStore.getItemAsync("email");
     if (email) {
-      console.log("Email retrieved successfully");
+      // console.log("Email retrieved successfully");
       return email;
     } else {
       console.log("No email stored");
@@ -67,7 +67,7 @@ export const getIsAdmin = async () => {
   try {
     const isAdmin = await SecureStore.getItemAsync("isAdmin");
     if (isAdmin) {
-      console.log("isAdmin retrieved successfully");
+      // console.log("isAdmin retrieved successfully");
       return isAdmin === "true";
     } else {
       console.log("No isAdmin stored");

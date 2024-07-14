@@ -58,9 +58,6 @@ export default function SideMenu() {
     }
     handleLoginStatus();
   }, [sidemenuVisible]);
-  console.log("isLoggedIn");
-
-  console.log("isAdmin", isAdmin)
 
   return (
     <Portal>
@@ -136,6 +133,15 @@ export default function SideMenu() {
                     closeModal();
                   }}
                   text={"Admin Control Panel"}
+                />
+              }
+              {isLoggedIn && isAdmin && 
+                <SideMenuButton
+                  onPress={() => {
+                    router.push("/admin/contentToEdit");
+                    closeModal();
+                  }}
+                  text={"Edit Content"}
                 />
               }
               {isLoggedIn && (

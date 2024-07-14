@@ -2,10 +2,10 @@
 // getAllContentUnsorted
 // sortContent
 
-async function getRootContent(db) {
+async function getRootContent(db, table) {
   const roots = await db.getAllAsync(`
     SELECT *
-    FROM Content 
+    FROM ${table} 
     WHERE prevId IS NULL;`);
   if (roots.length !== 1) {
     throw new Error("More than one record with NULL prevId found!");
@@ -13,10 +13,10 @@ async function getRootContent(db) {
   return roots[0]; // there should only be one root
 }
 
-async function getTailContent(db) {
+async function getTailContent(db, table) {
   const tails = await db.getAllAsync(`
     SELECT *
-    FROM Content 
+    FROM ${table} 
     WHERE nextId IS NULL;`);
   if (tails.length !== 1) {
     throw new Error("More than one record with NULL nextId found!");
@@ -24,10 +24,10 @@ async function getTailContent(db) {
   return tails[0]; // there should only be one tail
 }
 
-async function getNextContent(db, curr_id) {
+async function getNextContent(db, table, curr_id) {
   const nexts = await db.getAllAsync(`
     SELECT *
-    FROM Content 
+    FROM ${table} 
     WHERE prevId IS ${curr_id};`);
   if (nexts.length !== 1) {
     throw new Error(
@@ -37,10 +37,10 @@ async function getNextContent(db, curr_id) {
   return nexts[0]; // there should only be one next
 }
 
-async function getPrevContent(db, curr_id) {
+async function getPrevContent(db, table, curr_id) {
   const prevs = await db.getAllAsync(`
     SELECT *
-    FROM Content 
+    FROM ${table} 
     WHERE nextId IS ${curr_id};`);
   if (prevs.length !== 1) {
     throw new Error(
@@ -50,7 +50,7 @@ async function getPrevContent(db, curr_id) {
   return prevs[0]; // there should only be one prev
 }
 
-export async function getAllContentSorted(db) {
+export async function getAllContentSorted(db, table) {
   `returns content as an array of objects
   [
     {
@@ -64,21 +64,20 @@ export async function getAllContentSorted(db) {
     ...
   ]`;
   allContent = [];
-  n = (await db.getFirstAsync(`SELECT COUNT(*) AS n FROM Content`))["n"];
+  n = (await db.getFirstAsync(`SELECT COUNT(*) AS n FROM ${table}`))["n"];
   if (n === 0) {
     return [];
   }
-  root = await getRootContent(db);
+  root = await getRootContent(db, table);
   allContent.push(root);
 
   while (allContent.length < n) {
     prev = allContent[allContent.length - 1];
-    curr = await getNextContent(db, prev.id);
+    curr = await getNextContent(db, table, prev.id);
     allContent.push(curr);
   }
 
-  console.log(allContent)
+  console.log(allContent);
 
   return allContent;
 }
-

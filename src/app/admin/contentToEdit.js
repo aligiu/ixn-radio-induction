@@ -5,17 +5,17 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import { useTheme } from "react-native-paper";
 
-import { getAllContentSorted } from "../db/queries";
+import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 import { useNavigation } from "@react-navigation/native";
 
-import { TText } from "./_layout";
+import { TText } from "../_layout";
 import { fontSize } from "src/styles/fontConfig";
-import AutoScrollView from "../components/AutoScrollView";
+import AutoScrollView from "../../components/AutoScrollView";
 
-import SearchAutocompleteElement from "../components/searchAutocompleteElement";
-import SearchbarContext from "../context/SearchbarContext";
-import { contentContainerStyles } from "../styles/contentContainer";
+import SearchAutocompleteElement from "../../components/searchAutocompleteElement";
+import SearchbarContext from "../../context/SearchbarContext";
+import { contentContainerStyles } from "../../styles/contentContainer";
 
 
 export default function RearrangableTopics() {
@@ -29,7 +29,7 @@ export default function RearrangableTopics() {
 
   useEffect(() => {
     async function setContentDataAsync(db) {
-      const sortedContent = await getAllContentSorted(db, "Content");
+      const sortedContent = await getAllContentSorted(db, "ContentToEdit");
       const sortedContentWithKey = sortedContent.map((obj, index) => ({
         ...obj,
         key: index,

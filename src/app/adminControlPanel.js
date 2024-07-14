@@ -32,7 +32,7 @@ export default function AdminPanel() {
 
   useEffect(() => {
     async function setContentDataAsync(db) {
-      setContentData(await getAllContentSorted(db));
+      setContentData(await getAllContentSorted(db, "Content"));
     }
     setContentDataAsync(db);
   }, []);

@@ -18,11 +18,25 @@ export async function setSchema(db) {
     await db.execAsync(`
       CREATE INDEX idx_prevId ON Content(prevId);
       CREATE INDEX idx_nextId ON Content(nextId);
-      `);
+    `);
+
+    await db.execAsync(`
+      CREATE TABLE ContentToEdit (
+        id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        content TEXT,
+        timestamp DATETIME,
+        nextId INTEGER UNIQUE,
+        prevId INTEGER UNIQUE,
+        FOREIGN KEY (nextId) REFERENCES Content(id),
+        FOREIGN KEY (prevId) REFERENCES Content(id)
+      );
+    `);
+
 
     console.log(`Schema has been set in ${db.databaseName}`);
   } catch (error) {
     console.error("Error setting schema: ", error);
   }
 }
-

@@ -83,7 +83,7 @@ export default function RearrangableTopics() {
               <TopicBlock
                 imageSource={require("assets/images/nhs-logo-square.png")}
                 title={item.title}
-                route={`/topics/${item.key}`} // routen not really dynamic since passing content as prop already
+                route={`/topics/${item.key}`} // route not really dynamic since passing content as prop already
                 description={item.description}
                 content={item.content}
               />

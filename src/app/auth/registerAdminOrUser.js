@@ -66,8 +66,13 @@ export default function RegisterAdminOrUser() {
         console.log(response.body);
         setErrorMessage("Network failure");
       } else {
+        // response is ok at this point
         const result = await response.json();
         console.log("Registration successful:", result);
+
+        // token not set in registerAdminOrUser, unlike registerUser
+        // because registerAdminOrUser is used to register other users rather than for own use
+
         setErrorMessage(" "); // set as 1 char space to prevent layout shift
 
         // Navigate to the home screen upon successful registration
@@ -113,7 +118,7 @@ export default function RegisterAdminOrUser() {
             </TText>
           </View>
 
-          <View style={{gap: 6, marginTop: 20, marginBottom: 20, }}>
+          <View style={{ gap: 6, marginTop: 20, marginBottom: 20 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -220,7 +225,6 @@ export default function RegisterAdminOrUser() {
               </Text>
             </Button>
           </TouchableOpacity>
-
         </View>
       </View>
     </ScrollView>

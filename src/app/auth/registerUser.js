@@ -16,6 +16,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { useNavigation } from "@react-navigation/native";
+import { storeToken, getToken, removeToken } from "../../utils/jwt";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -62,8 +63,13 @@ export default function Register() {
       } else if (!response.ok) {
         setErrorMessage("Network failure");
       } else {
+        // response is ok at this point
         const result = await response.json();
         console.log("Registration successful:", result);
+        
+        await storeToken(result.token);
+        console.log('JWT stored locally in expo-secure-store');
+
         setErrorMessage(" "); // set as 1 char space to prevent layout shift
 
         // Navigate to the home screen upon successful registration

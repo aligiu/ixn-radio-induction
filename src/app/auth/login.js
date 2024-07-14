@@ -58,6 +58,7 @@ export default function Login() {
         console.log('JWT stored locally in expo-secure-store');
         
         setErrorMessage(" "); // set as 1 char space to prevent layout shift
+        
         // Navigate to the home screen upon successful login
         navigation.navigate("index");
       }

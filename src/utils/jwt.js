@@ -9,6 +9,17 @@ export const storeToken = async (token) => {
   }
 };
 
+
+export const storeEmail = async (email) => {
+  try {
+    await SecureStore.setItemAsync("email", email);
+    console.log("Email stored successfully");
+  } catch (error) {
+    console.error("Error storing the email", error);
+  }
+};
+
+
 export const getToken = async () => {
   try {
     const token = await SecureStore.getItemAsync("jwt");
@@ -23,6 +34,25 @@ export const getToken = async () => {
   }
   return null;
 };
+
+export const getEmail = async () => {
+  const jwt = await getToken()
+  if (jwt === null) {
+    return null
+  }
+  try {
+    const email = await SecureStore.getItemAsync("email");
+    if (email) {
+      console.log("Email retrieved successfully");
+      return email;
+    } else {
+      console.log("No email stored");
+    }
+  } catch (error) {
+    console.error("Error retrieving the email", error);
+  }
+  return null;
+}
 
 export const removeToken = async () => {
   try {
@@ -54,3 +84,4 @@ export const fetchWithJWT = async (url, options = {}) => {
     headers,
   });
 };
+

@@ -20,7 +20,13 @@ import {
 import SidemenuContext from "../context/SidemenuContext";
 import { fontSize } from "src/styles/fontConfig";
 import { useRouter } from "expo-router";
-import { getToken, storeToken, removeToken } from "../utils/jwt";
+import {
+  getToken,
+  storeToken,
+  removeToken,
+  getEmail,
+  storeEmail,
+} from "../utils/jwt";
 
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
@@ -29,6 +35,7 @@ export default function SideMenu() {
   const backgroundColor = theme.colors.background;
   const textColor = theme.colors.inverseSurface;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState(null);
 
   const router = useRouter();
 
@@ -39,12 +46,13 @@ export default function SideMenu() {
   useEffect(() => {
     async function handleLoginStatus() {
       const jwt = await getToken();
+      const emailVal = await getEmail();
       setIsLoggedIn(jwt !== null);
-      console.log(jwt);
+      setEmail(emailVal);
     }
     handleLoginStatus();
   }, [sidemenuVisible]);
-  console.log("isLoggedIn")
+  console.log("isLoggedIn");
 
   return (
     <Portal>
@@ -92,6 +100,17 @@ export default function SideMenu() {
                 >
                   Radiologist Induction Companion
                 </TText>
+                <TText
+                  variant="headlineSmall"
+                  style={{
+                    marginTop: 12,
+                    fontSize: fontSize.MEDIUM,
+                    fontFamily: "InterRegular",
+                    textAlign: "center",
+                  }}
+                >
+                  Welcome, {email ? email : "Guest"}
+                </TText>
               </View>
             </View>
             <View
@@ -111,8 +130,8 @@ export default function SideMenu() {
                 <SideMenuButton
                   onPress={() => {
                     console.log("log out button pressed");
-                    removeToken()
-                    setIsLoggedIn(false)
+                    removeToken();
+                    setIsLoggedIn(false);
                     closeModal();
                     router.push("/auth/login");
                   }}

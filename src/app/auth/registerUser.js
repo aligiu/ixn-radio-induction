@@ -16,7 +16,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { useNavigation } from "@react-navigation/native";
-import { storeToken, getToken, removeToken } from "../../utils/jwt";
+import { getToken, storeToken, removeToken, getEmail, storeEmail } from "../../utils/jwt";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -69,6 +69,7 @@ export default function Register() {
         console.log("Registration successful:", result);
         
         await storeToken(result.token);
+        await storeEmail(result.email);
         console.log('JWT stored locally in expo-secure-store');
 
         setErrorMessage(" "); // set as 1 char space to prevent layout shift

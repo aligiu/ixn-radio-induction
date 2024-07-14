@@ -31,8 +31,12 @@ import {
   removeIsAdmin,
 } from "../utils/auth";
 
+import { useSQLiteContext } from "expo-sqlite";
+import { copyContentToContentToEdit } from "../db/queries";
+
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
+  const db = useSQLiteContext();
 
   const theme = useTheme();
   const backgroundColor = theme.colors.background;
@@ -138,6 +142,7 @@ export default function SideMenu() {
               {isLoggedIn && isAdmin && 
                 <SideMenuButton
                   onPress={() => {
+                    copyContentToContentToEdit(db) // before entering editing mode, 
                     router.push("/admin/contentToEdit");
                     closeModal();
                   }}

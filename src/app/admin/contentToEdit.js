@@ -96,7 +96,7 @@ export default function RearrangableTopics() {
 
   const handleDragEnd = ({ data }) => {
     setContentData(data);
-    console.log("New firstElement:",  data[0])
+    // console.log("New firstElement:",  data[0])
   };
 
   // Custom DraggableFlatList for each list

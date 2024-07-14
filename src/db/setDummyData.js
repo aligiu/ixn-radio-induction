@@ -5,6 +5,7 @@ export async function setDummyData(db) {
   try {
     // Delete all existing data
     await db.execAsync(`DROP TABLE IF EXISTS Content`);
+    await db.execAsync(`DROP TABLE IF EXISTS ContentToEdit`);
 
     // Initialize schema
     await setSchema(db); // wait for schema to be completely set

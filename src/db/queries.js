@@ -2,7 +2,7 @@
 // getAllContentUnsorted
 // sortContent
 
-async function getRootContent(db, table) {
+export async function getRootContent(db, table) {
   const roots = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -13,7 +13,7 @@ async function getRootContent(db, table) {
   return roots[0]; // there should only be one root
 }
 
-async function getTailContent(db, table) {
+export async function getTailContent(db, table) {
   const tails = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -24,7 +24,7 @@ async function getTailContent(db, table) {
   return tails[0]; // there should only be one tail
 }
 
-async function getNextContent(db, table, curr_id) {
+export async function getNextContent(db, table, curr_id) {
   const nexts = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -37,7 +37,7 @@ async function getNextContent(db, table, curr_id) {
   return nexts[0]; // there should only be one next
 }
 
-async function getPrevContent(db, table, curr_id) {
+export async function getPrevContent(db, table, curr_id) {
   const prevs = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -80,4 +80,19 @@ export async function getAllContentSorted(db, table) {
   console.log(allContent);
 
   return allContent;
+}
+
+
+export async function copyContentToContentToEdit(db) {
+  // Clear the ContentToEdit table
+  await db.execAsync(`DELETE FROM ContentToEdit`);
+
+  // Copy content from Content to ContentToEdit
+  await db.execAsync(`
+    INSERT INTO ContentToEdit
+    SELECT *
+    FROM Content
+  `);
+
+  console.log("Content copied to ContentToEdit successfully.");
 }

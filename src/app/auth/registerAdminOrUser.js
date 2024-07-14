@@ -64,7 +64,7 @@ export default function RegisterAdminOrUser() {
         setErrorMessage(result.errorMessage);
       } else if (!response.ok) {
         console.log(response.body);
-        throw new Error("Network response was not ok");
+        setErrorMessage("Network failure");
       } else {
         const result = await response.json();
         console.log("Registration successful:", result);
@@ -75,7 +75,7 @@ export default function RegisterAdminOrUser() {
       }
     } catch (error) {
       console.error("Registration failed:", error);
-      setErrorMessage("Network failure");
+      setErrorMessage("An unknown error occurred");
     }
   };
 

@@ -23,8 +23,6 @@ export default function Register() {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(" "); // set as 1 char space to prevent layout shift
-  // const [isAdminSwitchOn, setIsAdminSwitchOn] = React.useState(false);
-  // const onToggleSwitch = () => setIsAdminSwitchOn(!isAdminSwitchOn);
 
   const onSubmit = async (data) => {
     console.log("Register form submitted");
@@ -45,7 +43,6 @@ export default function Register() {
       const payload = JSON.stringify({
         email: data.email,
         password: data.password,
-        // role: isAdminSwitchOn ? "ROLE_ADMIN" : "ROLE_USER",
       });
       console.log(payload);
       const route = "/auth/register-user";
@@ -63,7 +60,7 @@ export default function Register() {
         console.log("***", result);
         setErrorMessage(result.errorMessage);
       } else if (!response.ok) {
-        throw new Error("Network response was not ok");
+        setErrorMessage("Network failure");
       } else {
         const result = await response.json();
         console.log("Registration successful:", result);
@@ -74,7 +71,7 @@ export default function Register() {
       }
     } catch (error) {
       console.error("Registration failed:", error);
-      setErrorMessage("Network failure");
+      setErrorMessage("An unknown error occurred");
     }
   };
 
@@ -135,25 +132,7 @@ export default function Register() {
           </View>
 
           <View style={{ height: "50%", justifyContent: "flex-end", gap: 6 }}>
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10",
-              }}
-            >
-              <TText
-                style={{
-                  fontSize: fontSize.MEDIUM,
-                  fontWeight: "400",
-                }}
-              >
-                Register an admin
-              </TText>
-              <Switch value={isAdminSwitchOn} onValueChange={onToggleSwitch} />
-            </View> */}
-
+  
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (

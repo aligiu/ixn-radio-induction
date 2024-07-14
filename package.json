@@ -34,7 +34,8 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.8.6",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "expo-secure-store": "~13.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

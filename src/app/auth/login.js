@@ -16,6 +16,7 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { useNavigation } from "@react-navigation/native";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
+import { storeToken, getToken, removeToken } from "../../utils/jwt";
 
 export default function Login() {
   const { control, handleSubmit, focus, setValue } = useForm();
@@ -47,18 +48,22 @@ export default function Login() {
         // Handle incorrect credentials
         setErrorMessage("Incorrect email or password");
       } else if (!response.ok) {
-        throw new Error("Network response was not ok");
+        setErrorMessage("Network failure");
       } else {
+        // response is ok at this point
         const result = await response.json();
         console.log("Login successful:", result);
+        
+        await storeToken(result.token);
+        console.log('JWT stored locally in expo-secure-store');
+        
         setErrorMessage(" "); // set as 1 char space to prevent layout shift
-
         // Navigate to the home screen upon successful login
         navigation.navigate("index");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setErrorMessage("Network failure");
+      setErrorMessage("An unknown error occurred");
     }
   };
 

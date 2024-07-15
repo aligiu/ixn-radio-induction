@@ -14,7 +14,7 @@ import { Icon, useTheme, Button } from "react-native-paper";
 
 import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { TText } from "../_layout";
 import { fontSize } from "src/styles/fontConfig";
@@ -25,6 +25,7 @@ import SearchbarContext from "../../context/SearchbarContext";
 import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
+
 
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
@@ -39,18 +40,27 @@ export default function RearrangableTopics() {
   const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
   React.useState(false);
 
+  // Fetch content data function
+  const fetchContentData = async () => {
+    const sortedContent = await getAllContentSorted(db, "ContentToEdit");
+    const sortedContentWithKey = sortedContent.map((obj, index) => ({
+      ...obj,
+      key: index.toString(), // Ensure key is a string
+    }));
+    setContentData(sortedContentWithKey);
+  };
+
+  // Fetch data on initial mount
   useEffect(() => {
-    async function setContentDataAsync(db) {
-      // fetch from ContentToEdit instead of Content
-      const sortedContent = await getAllContentSorted(db, "ContentToEdit");
-      const sortedContentWithKey = sortedContent.map((obj, index) => ({
-        ...obj,
-        key: index,
-      }));
-      setContentData(sortedContentWithKey);
-    }
-    setContentDataAsync(db);
+    fetchContentData();
   }, []);
+
+  // Fetch data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchContentData();
+    }, [])
+  );
 
   const renderItem = ({ item, drag, isActive }) => {
     return (

@@ -7,7 +7,7 @@ import { useTheme } from "react-native-paper";
 
 import { getAllContentSorted } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
@@ -27,17 +27,27 @@ export default function RearrangableTopics() {
   const db = useSQLiteContext();
   const theme = useTheme();
 
+  // Fetch content data function
+  const fetchContentData = async () => {
+    const sortedContent = await getAllContentSorted(db, "Content");
+    const sortedContentWithKey = sortedContent.map((obj, index) => ({
+      ...obj,
+      key: index.toString(), // Ensure key is a string
+    }));
+    setContentData(sortedContentWithKey);
+  };
+
+  // Fetch data on initial mount
   useEffect(() => {
-    async function setContentDataAsync(db) {
-      const sortedContent = await getAllContentSorted(db, "Content");
-      const sortedContentWithKey = sortedContent.map((obj, index) => ({
-        ...obj,
-        key: index,
-      }));
-      setContentData(sortedContentWithKey);
-    }
-    setContentDataAsync(db);
+    fetchContentData();
   }, []);
+
+  // Fetch data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchContentData();
+    }, [])
+  );
 
   const renderItem = ({ item, drag, isActive }) => {
     return (

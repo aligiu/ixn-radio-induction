@@ -43,7 +43,7 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../../components/AutoScrollView";
-import { Button, Portal } from "react-native-paper";
+import { Button, Portal, TextInput } from "react-native-paper";
 
 import { getAllContentSorted } from "../../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -66,14 +66,15 @@ export default function Topic() {
   const { content, title } = route.params;
 
   const editor = useEditorBridge({
-    editable: false,
+    editable: true,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: content ? content : "<p> No content yet. </p>",
+    initialContent: content ? content : "",
   });
 
   const [secretModalVisible, setSecretModalVisible] = React.useState(false);
   const [fileModalVisible, setFileModalVisible] = React.useState(false);
+  const [titleValue, setTitleValue] = React.useState(title);
 
   return (
     <>
@@ -83,7 +84,17 @@ export default function Topic() {
       >
         {/* Scroll view needed to dismiss search bar */}
         <View style={{ flex: 1 }}>
-          <TText style={styles.sectionTitle}>{title}</TText>
+          <TextInput mode="outlined" 
+            onChangeText={ titleValue => {
+              setTitleValue(titleValue);
+              db.runAsync(`
+                
+                `)
+            }
+            }
+            value={titleValue}
+            
+            />
 
           <View
             style={{

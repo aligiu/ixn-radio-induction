@@ -96,3 +96,15 @@ export async function copyContentToContentToEdit(db) {
 
   console.log("Content copied to ContentToEdit successfully.");
 }
+
+export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
+  try {await db.getAllAsync(`
+    UPDATE ContentToEdit
+    SET ${field} = ${newValue}
+    WHERE id IS ${id};`);}
+  catch (error) {
+    console.log(`Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`)
+    console.error(error);
+  }
+}
+

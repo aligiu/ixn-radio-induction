@@ -121,7 +121,9 @@ export default function RearrangableTopics() {
 
   const handleDragEnd = ({ data }) => {
     setContentData(data);
-    // console.log("New firstElement:",  data[0])
+    console.log("*** data: ", data);
+    // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"}, 
+    // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
   };
 
   // Custom DraggableFlatList for each list

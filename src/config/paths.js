@@ -7,7 +7,8 @@ export const NO_SEARCHBAR_PATHS = [
   "/admin/viewEditHistory",
   "/help/userManual",
   "/auth/registerAdminOrUser",
-  "/adminControlPanel"
+  "/adminControlPanel",
+  "/admin/topicsWrite/"
 ];
 export const NO_LEFTSWIPE_PATHS = ["/auth/login", "/auth/registerUser"];
 

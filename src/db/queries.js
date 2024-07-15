@@ -82,7 +82,6 @@ export async function getAllContentSorted(db, table) {
   return allContent;
 }
 
-
 export async function copyContentToContentToEdit(db) {
   // Clear the ContentToEdit table
   await db.execAsync(`DELETE FROM ContentToEdit`);
@@ -97,14 +96,36 @@ export async function copyContentToContentToEdit(db) {
   console.log("Content copied to ContentToEdit successfully.");
 }
 
+
+// not working
+// const query = `
+//   UPDATE ContentToEdit
+//   SET ${field} = ?
+//   WHERE id = ?;
+// `;
+// await db.execAsync(query, [newValue, id]);
+  
 export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
-  try {await db.getAllAsync(`
-    UPDATE ContentToEdit
-    SET ${field} = ${newValue}
-    WHERE id IS ${id};`);}
-  catch (error) {
-    console.log(`Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`)
+  try {
+
+    const statement = await db.prepareAsync(`
+      UPDATE ContentToEdit
+      SET description = $newValue
+      WHERE id = $id;
+    `);
+    // turn description to ${field}
+
+    await statement.executeAsync({
+      $id: id,
+      $newValue: newValue,
+    });
+
+    const newContent = await getAllContentSorted(db, "ContentToEdit");
+    console.log("newContent ***", newContent);
+  } catch (error) {
+    console.log(
+      `Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`
+    );
     console.error(error);
   }
 }
-

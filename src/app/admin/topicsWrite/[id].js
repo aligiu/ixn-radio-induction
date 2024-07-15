@@ -54,6 +54,7 @@ import { useRoute } from "@react-navigation/native";
 
 import FileModal from "../../../components/FileModal";
 import SecretModal from "../../../components/SecretModal";
+import { updateFieldById_ContentToEdit } from "../../../db/queries";
 
 export default function Topic() {
   const db = useSQLiteContext();
@@ -102,9 +103,8 @@ export default function Topic() {
             value={descriptionValue}
             onChangeText={(descriptionValue) => {
               setDescriptionValue(descriptionValue);
-              // db.runAsync(`
-                
-              //   `);
+              // updateFieldById_ContentToEdit(db, id, "description", descriptionValue)
+              updateFieldById_ContentToEdit(db, id, "description", "sss")
             }}
           />
 

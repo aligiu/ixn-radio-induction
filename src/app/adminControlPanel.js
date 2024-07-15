@@ -130,7 +130,7 @@ function NavBlock({ title, description, imageSource, content }) {
   const navigation = useNavigation();
 
   const goToTopics = (content) => {
-    navigation.navigate(`topics/[id]`, { content: content, title: title });
+    navigation.navigate(`topicsReadOnly/[id]`, { content: content, title: title });
     // pass parameters to pages https://reactnavigation.org/docs/params/#what-should-be-in-params
   };
 

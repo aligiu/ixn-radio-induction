@@ -77,7 +77,7 @@ export default function RearrangableTopics() {
             }}
             onPress={() => {
               console.log("short press");
-              navigation.navigate(`topics/[id]`, {
+              navigation.navigate(`admin/topicsWrite/[id]`, {
                 content: item.content,
                 title: item.title,
               });
@@ -252,7 +252,7 @@ function TopicBlock({ title, description, imageSource, content }) {
   // const navigation = useNavigation();
 
   // const goToTopics = (content) => {
-  //   navigation.navigate(`topics/[id]`, { content: content, title: title });
+  //   navigation.navigate(`topicsReadOnly/[id]`, { content: content, title: title });
   //   // pass parameters to pages https://reactnavigation.org/docs/params/#what-should-be-in-params
   // };
 

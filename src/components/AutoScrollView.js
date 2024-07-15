@@ -45,7 +45,7 @@ export default function AutoScrollView({ children }) {
           autocompleteText={"Radiopaedia"}
           topic={"Educational Resources"}
           section={"Login"}
-          routerLink={"topics/[id]"}
+          routerLink={"topicsReadOnly/[id]"}
           title={"Title for topic x"}  // title necessary if using topics route
           content={"<p>Content of topic x</p>"}  // content necessary if using topics route
           setSearchbarInFocus={setSearchbarInFocus}

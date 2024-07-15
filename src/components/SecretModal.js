@@ -7,7 +7,7 @@ import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { fontSize } from "src/styles/fontConfig";
 
-// fetch content from naviation, see index.js and topics/[id].js
+// fetch content from naviation, see index.js and topicsReadOnly/[id].js
 content = `<p> Username: user1</p>
            <p> Password: password1</p>
            <p> Username: user2</p>

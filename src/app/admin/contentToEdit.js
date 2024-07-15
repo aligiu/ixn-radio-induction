@@ -80,6 +80,7 @@ export default function RearrangableTopics() {
               navigation.navigate(`admin/topicsWrite/[id]`, {
                 content: item.content,
                 title: item.title,
+                description: item.description,
               });
               // pass parameters to pages https://reactnavigation.org/docs/params/#what-should-be-in-params
             }}
@@ -251,19 +252,7 @@ const styles = StyleSheet.create({
 });
 
 function TopicBlock({ title, description, imageSource, content }) {
-  // const navigation = useNavigation();
-
-  // const goToTopics = (content) => {
-  //   navigation.navigate(`topicsReadOnly/[id]`, { content: content, title: title });
-  //   // pass parameters to pages https://reactnavigation.org/docs/params/#what-should-be-in-params
-  // };
-
   return (
-    // <TouchableOpacity
-    //   onPress={() => {
-    //     goToTopics(content);
-    //   }}
-    // >
     <View
       style={{
         flexDirection: "row",

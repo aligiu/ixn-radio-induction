@@ -48,10 +48,7 @@ import { Button, Portal, TextInput } from "react-native-paper";
 import { getAllContentSorted } from "../../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
-import {
-  RichText,
-  useEditorBridge,
-} from "@10play/tentap-editor";
+import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { useRoute } from "@react-navigation/native";
 
@@ -63,7 +60,7 @@ export default function Topic() {
   const { id } = useLocalSearchParams();
 
   const route = useRoute();
-  const { content, title } = route.params;
+  const { content, title, description } = route.params;
 
   const editor = useEditorBridge({
     editable: true,
@@ -75,6 +72,8 @@ export default function Topic() {
   const [secretModalVisible, setSecretModalVisible] = React.useState(false);
   const [fileModalVisible, setFileModalVisible] = React.useState(false);
   const [titleValue, setTitleValue] = React.useState(title);
+  const [descriptionValue, setDescriptionValue] = React.useState(description);
+  
 
   return (
     <>
@@ -83,18 +82,31 @@ export default function Topic() {
         style={contentContainerStyles.container}
       >
         {/* Scroll view needed to dismiss search bar */}
-        <View style={{ flex: 1 }}>
-          <TextInput mode="outlined" 
-            onChangeText={ titleValue => {
+        <View style={{ flex: 1, gap: 10 }}>
+          <TextInput
+            label="Title"
+            mode="outlined"
+            onChangeText={(titleValue) => {
               setTitleValue(titleValue);
-              db.runAsync(`
+              // db.runAsync(`
                 
-                `)
-            }
-            }
+              //   `);
+            }}
             value={titleValue}
-            
-            />
+          />
+          <TextInput
+            label="Description"
+            mode="outlined"
+            multiline={true}
+            numberOfLines={4} // Adjust the number of lines as needed
+            value={descriptionValue}
+            onChangeText={(descriptionValue) => {
+              setDescriptionValue(descriptionValue);
+              // db.runAsync(`
+                
+              //   `);
+            }}
+          />
 
           <View
             style={{
@@ -126,18 +138,18 @@ export default function Topic() {
         </View>
       </AutoScrollView>
       <View>
-      <SecretModal
-        visible={secretModalVisible}
-        closeModal={() => {
-          setSecretModalVisible(false);
-        }}
-      />
-      <FileModal
-        visible={fileModalVisible}
-        closeModal={() => {
-          setFileModalVisible(false);
-        }}
-      />
+        <SecretModal
+          visible={secretModalVisible}
+          closeModal={() => {
+            setSecretModalVisible(false);
+          }}
+        />
+        <FileModal
+          visible={fileModalVisible}
+          closeModal={() => {
+            setFileModalVisible(false);
+          }}
+        />
       </View>
     </>
   );

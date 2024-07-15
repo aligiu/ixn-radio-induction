@@ -22,12 +22,14 @@ const CancelEditModal = ({ visible, closeModal }) => {
     paddingRight: 10,
     paddingTop: 20,
     paddingBottom: 20,
+    borderRadius: 10,
   };
 
   const navigation = useNavigation();
 
   return (
-    <Portal>
+    <Portal
+    >
       <Modal
         visible={visible}
         onDismiss={closeModal}

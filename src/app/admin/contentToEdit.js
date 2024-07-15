@@ -105,11 +105,7 @@ export default function RearrangableTopics() {
             style={{ justifyContent: "space-around", alignItems: "center" }}
           >
             <TouchableOpacity onPress={() => {}}>
-              <Icon
-                source="delete"
-                color={theme.colors.primary}
-                size={24 * 1.3}
-              />
+              <Icon source="delete" color={theme.colors.primary} size={32} />
             </TouchableOpacity>
           </View>
         </View>
@@ -131,6 +127,7 @@ export default function RearrangableTopics() {
       onDragEnd={handleDragEnd}
       style={{
         backgroundColor: null,
+        paddingBottom: 200,
       }}
     />
   );
@@ -139,6 +136,23 @@ export default function RearrangableTopics() {
     <>
       <View style={styles.container}>
         <RearrangableList />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          paddingRight: 16,
+          paddingLeft: 16,
+          marginTop: 10,
+        }}
+      >
+        <TouchableOpacity>
+          <View
+            style={{ borderRadius: 10, backgroundColor: theme.colors.primary }}
+          >
+            <Icon source="plus" color="white" size={36} />
+          </View>
+        </TouchableOpacity>
       </View>
       <View
         style={{

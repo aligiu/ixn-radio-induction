@@ -21,6 +21,7 @@ const FileModal = ({ visible, closeModal }) => {
     paddingTop: 10,
     paddingBottom: 10,
     height: "85%",
+    borderRadius: 10,
   };
 
   return (

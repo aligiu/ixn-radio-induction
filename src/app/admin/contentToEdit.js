@@ -50,10 +50,10 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   };
 
-  // Fetch data on initial mount
-  useEffect(() => {
-    fetchContentData();
-  }, []);
+  // // Fetch data on initial mount (disabled to not double fetch)
+  // useEffect(() => {
+  //   fetchContentData();
+  // }, []);
 
   // Fetch data when screen comes into focus
   useFocusEffect(

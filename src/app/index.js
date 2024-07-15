@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   rowItem: {
-    width: "100%",
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { useTheme } from "react-native-paper";
+import { Icon, useTheme, Button } from "react-native-paper";
 
 import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -17,10 +24,9 @@ import SearchAutocompleteElement from "../../components/searchAutocompleteElemen
 import SearchbarContext from "../../context/SearchbarContext";
 import { contentContainerStyles } from "../../styles/contentContainer";
 
-
 export default function RearrangableTopics() {
-  const { searchbarInFocus, setSearchbarInFocus } =
-  useContext(SearchbarContext); 
+  // const { searchbarInFocus, setSearchbarInFocus } =
+  // useContext(SearchbarContext);
 
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
@@ -29,6 +35,7 @@ export default function RearrangableTopics() {
 
   useEffect(() => {
     async function setContentDataAsync(db) {
+      // fetch from ContentToEdit instead of Content
       const sortedContent = await getAllContentSorted(db, "ContentToEdit");
       const sortedContentWithKey = sortedContent.map((obj, index) => ({
         ...obj,
@@ -49,6 +56,8 @@ export default function RearrangableTopics() {
             marginBottom: 5,
             paddingLeft: 19,
             paddingRight: 19,
+            flexDirection: "row",
+            gap: 10,
           }}
         >
           <TouchableOpacity
@@ -89,6 +98,17 @@ export default function RearrangableTopics() {
               />
             </View>
           </TouchableOpacity>
+          <View
+            style={{ justifyContent: "space-around", alignItems: "center" }}
+          >
+            <TouchableOpacity onPress={() => {}}>
+              <Icon
+                source="delete"
+                color={theme.colors.primary}
+                size={24 * 1.3}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScaleDecorator>
     );
@@ -112,48 +132,12 @@ export default function RearrangableTopics() {
     />
   );
 
-  if (!searchbarInFocus) {
-    return (
-      <View style={styles.container}>
-        <RearrangableList />
-      </View>
-    );
-  } else {
-    return (
-      <ScrollView
-      style={
-        contentContainerStyles.container
-        // {backgroundColor: theme.colors.background}
-      }
-      keyboardShouldPersistTaps="always"
-    >
-      <View
-        style={{
-          flexDirection: "column",
-          gap: 10, // gap must be placed in <View> not <ScrollView>
-        }}
-      >
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Educational Resources"}
-          section={"Login"}
-          routerLink={"topics/[id]"}
-          title={"Title for topic x"}  // title necessary if using topics route
-          content={"<p>Content of topic x</p>"}  // content necessary if using topics route
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Conferences"}
-          section={"Link"}
-          routerLink={"dummy"}
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-      </View>
-    </ScrollView>
-    )
-  }
+  return (
+    <View style={styles.container}>
+      <RearrangableList />
+      {/* <Button>ok</Button> */}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -162,7 +146,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   rowItem: {
-    width: "100%",
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },

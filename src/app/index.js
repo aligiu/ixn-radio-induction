@@ -63,6 +63,7 @@ export default function RearrangableTopics() {
             onPress={() => {
               console.log("short press");
               navigation.navigate(`topicsReadOnly/[id]`, {
+                id: item.id,
                 content: item.content,
                 title: item.title,
               });

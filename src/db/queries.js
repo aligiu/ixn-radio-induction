@@ -110,15 +110,16 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
 
     const statement = await db.prepareAsync(`
       UPDATE ContentToEdit
-      SET description = $newValue
+      SET ${field} = $newValue
       WHERE id = $id;
     `);
-    // turn description to ${field}
 
     await statement.executeAsync({
       $id: id,
       $newValue: newValue,
     });
+
+    console.log(`attempted updating ${id} ${field} to ${newValue}`)
 
     const newContent = await getAllContentSorted(db, "ContentToEdit");
     console.log("newContent ***", newContent);

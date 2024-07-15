@@ -89,9 +89,7 @@ export default function Topic() {
             mode="outlined"
             onChangeText={(titleValue) => {
               setTitleValue(titleValue);
-              // db.runAsync(`
-                
-              //   `);
+              updateFieldById_ContentToEdit(db, id, "title", titleValue)
             }}
             value={titleValue}
           />
@@ -103,8 +101,7 @@ export default function Topic() {
             value={descriptionValue}
             onChangeText={(descriptionValue) => {
               setDescriptionValue(descriptionValue);
-              // updateFieldById_ContentToEdit(db, id, "description", descriptionValue)
-              updateFieldById_ContentToEdit(db, id, "description", "sss")
+              updateFieldById_ContentToEdit(db, id, "description", descriptionValue)
             }}
           />
 

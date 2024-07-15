@@ -78,6 +78,7 @@ export default function RearrangableTopics() {
             onPress={() => {
               console.log("short press");
               navigation.navigate(`admin/topicsWrite/[id]`, {
+                id: item.id,
                 content: item.content,
                 title: item.title,
                 description: item.description,

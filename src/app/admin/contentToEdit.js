@@ -140,6 +140,24 @@ export default function RearrangableTopics() {
 
   return (
     <>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 10,
+          marginBottom: 10,
+          marginLeft: 16,
+          marginRight: 16,
+        }}
+      >
+      <TText
+          style={{
+            fontSize: fontSize.LARGE,
+            fontFamily: "InterMedium",
+          }}
+        >
+          Admin Content Editor
+        </TText>
+      </View>
       <View style={styles.container}>
         <RearrangableList />
       </View>

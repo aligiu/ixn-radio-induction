@@ -24,6 +24,7 @@ import SearchAutocompleteElement from "../../components/searchAutocompleteElemen
 import SearchbarContext from "../../context/SearchbarContext";
 import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
@@ -35,6 +36,8 @@ export default function RearrangableTopics() {
   const theme = useTheme();
   const [cancelEditModalVisible, setCancelEditModalVisible] =
     React.useState(false);
+  const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
+  React.useState(false);
 
   useEffect(() => {
     async function setContentDataAsync(db) {
@@ -104,7 +107,10 @@ export default function RearrangableTopics() {
           <View
             style={{ justifyContent: "space-around", alignItems: "center" }}
           >
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => {
+
+              setConfirmDeleteModalVisible(true)
+            }}>
               <Icon source="delete" color={theme.colors.primary} size={32} />
             </TouchableOpacity>
           </View>
@@ -183,6 +189,12 @@ export default function RearrangableTopics() {
         visible={cancelEditModalVisible}
         closeModal={() => {
           setCancelEditModalVisible(false);
+        }}
+      />
+      <ConfirmDeleteModal
+        visible={confirmDeleteModalVisible}
+        closeModal={() => {
+          setConfirmDeleteModalVisible(false);
         }}
       />
     </>

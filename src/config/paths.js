@@ -1,10 +1,10 @@
 export const NO_HEADER_PATHS = [
   "/auth/login",
   "/auth/registerUser",
+  "/admin/contentToEdit",
 ];
 export const NO_SEARCHBAR_PATHS = [
   "/admin/viewEditHistory",
-  "/admin/contentToEdit",
   "/help/userManual",
   "/auth/registerAdminOrUser",
   "/adminControlPanel"

@@ -23,6 +23,7 @@ import AutoScrollView from "../../components/AutoScrollView";
 import SearchAutocompleteElement from "../../components/searchAutocompleteElement";
 import SearchbarContext from "../../context/SearchbarContext";
 import { contentContainerStyles } from "../../styles/contentContainer";
+import CancelEditModal from "../../components/CancelEditModal";
 
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
@@ -32,6 +33,8 @@ export default function RearrangableTopics() {
   const navigation = useNavigation();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const [cancelEditModalVisible, setCancelEditModalVisible] =
+    React.useState(false);
 
   useEffect(() => {
     async function setContentDataAsync(db) {
@@ -148,10 +151,12 @@ export default function RearrangableTopics() {
         }}
       >
         <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={() => {
-            navigation.goBack()
-          }}>
-            <Button mode="outlined">Cancel</Button>
+          <TouchableOpacity
+            onPress={() => {
+              setCancelEditModalVisible(true);
+            }}
+          >
+            <Button mode="outlined">Cancel Edit</Button>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -160,6 +165,12 @@ export default function RearrangableTopics() {
           </TouchableOpacity>
         </View>
       </View>
+      <CancelEditModal
+        visible={cancelEditModalVisible}
+        closeModal={() => {
+          setCancelEditModalVisible(false);
+        }}
+      />
     </>
   );
 }

@@ -133,10 +133,34 @@ export default function RearrangableTopics() {
   );
 
   return (
-    <View style={styles.container}>
-      <RearrangableList />
-      {/* <Button>ok</Button> */}
-    </View>
+    <>
+      <View style={styles.container}>
+        <RearrangableList />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 10,
+          marginBottom: 10,
+          marginTop: 10,
+          marginLeft: 16,
+          marginRight: 16,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack()
+          }}>
+            <Button mode="outlined">Cancel</Button>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity>
+            <Button mode="contained">Review</Button>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 }
 
@@ -144,6 +168,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    flexDirection: "column",
   },
   rowItem: {
     flex: 1,

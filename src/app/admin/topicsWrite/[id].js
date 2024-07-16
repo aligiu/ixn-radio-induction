@@ -68,6 +68,13 @@ export default function Topic() {
     autofocus: false,
     avoidIosKeyboard: true,
     initialContent: content ? content : "",
+    onChange: () => {
+      async function updateContent() {
+        const newContent = await editor.getHTML()
+        updateFieldById_ContentToEdit(db, id, "content", newContent)
+      }
+      updateContent()
+    }
   });
 
   const [secretModalVisible, setSecretModalVisible] = React.useState(false);

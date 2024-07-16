@@ -26,6 +26,8 @@ import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 
+import { overwriteContentToEdit } from "../../db/queries";
+
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
   // useContext(SearchbarContext);
@@ -137,16 +139,22 @@ export default function RearrangableTopics() {
   };
 
   const handleDragEnd = ({ data }) => {
-    console.log("*** start")
-    const prevId = null;
-    for (i = 0; i < data.length; i++) {
-      data[i]["prevId"] = prevId;
-      data[i]["nextId"] = i < data.length - 1 ? data[i + 1] : null;
-      prevId = data[i];
-      console.log("i, id, prevId, nextId", i, data[i]["id"], data[i]["prevId"], data[i]["nextId"])
-    }
-    setContentData(data);
+    console.log("*** start");
+    const newData = data.map((item, index) => ({
+      ...item,
+      prevId: index === 0 ? null : data[index - 1].id,
+      nextId: index === data.length - 1 ? null : data[index + 1].id,
+    }));
+    
+    // Update the state with the new data
+    setContentData(newData);
+     // Log newData in the desired format
+    newData.forEach((item, i) => {
+      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
+      console.log("title", item.title)
+    });
     console.log("*** end")
+    overwriteContentToEdit(db, newData)
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
     // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},

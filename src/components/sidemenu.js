@@ -32,7 +32,7 @@ import {
 } from "../utils/auth";
 
 import { useSQLiteContext } from "expo-sqlite";
-import { copyContentToContentToEdit } from "../db/queries";
+import { overwriteTargetWithSource } from "../db/queries";
 
 export default function SideMenu() {
   const { sidemenuVisible, setSidemenuVisible } = useContext(SidemenuContext);
@@ -142,7 +142,8 @@ export default function SideMenu() {
               {isLoggedIn && isAdmin && 
                 <SideMenuButton
                   onPress={() => {
-                    copyContentToContentToEdit(db) // before entering editing mode, 
+                    // Overwrite ContentToEdit before entering editing mode, 
+                    overwriteTargetWithSource(db, "ContentToEdit", "Content")
                     router.push("/admin/contentToEdit");
                     closeModal();
                   }}

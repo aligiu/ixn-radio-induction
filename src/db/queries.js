@@ -82,18 +82,18 @@ export async function getAllContentSorted(db, table) {
   return allContent;
 }
 
-export async function copyContentToContentToEdit(db) {
-  // Clear the ContentToEdit table
-  await db.execAsync(`DELETE FROM ContentToEdit`);
+export async function overwriteTargetWithSource(db, target, source) {
+  // Clear the target
+  await db.execAsync(`DELETE FROM ${target}`);
 
-  // Copy content from Content to ContentToEdit
+  // Copy data from source to target
   await db.execAsync(`
-    INSERT INTO ContentToEdit
+    INSERT INTO ${target}
     SELECT *
-    FROM Content
+    FROM ${source}
   `);
 
-  console.log("Content copied to ContentToEdit successfully.");
+  console.log("Content copied to ${target} successfully.");
 }
 
 
@@ -122,11 +122,48 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
     console.log(`attempted updating ${id} ${field} to ${newValue}`)
 
     const newContent = await getAllContentSorted(db, "ContentToEdit");
-    console.log("newContent ***", newContent);
+    // console.log("newContent ***", newContent);
   } catch (error) {
     console.log(
       `Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`
     );
     console.error(error);
+  }
+}
+
+
+export async function overwriteContentToEdit(db, contentToEditJson) {
+  try {
+    // Clear the ContentToEdit table
+    await db.execAsync(`DELETE FROM ContentToEdit`);
+
+
+    // console.log("contentToEditJson", contentToEditJson)
+
+    const insertStatement = await db.prepareAsync(`
+      INSERT INTO ContentToEdit (id, title, description, content, nextId, prevId)
+      VALUES ($id, $title, $description, $content, $nextId, $prevId)
+    `);
+    
+
+    await contentToEditJson.forEach(row => {
+      insertStatement.executeAsync({
+        $id: row.id,
+        $title: row.title,
+        $description: row.description,
+        $content: row.content,
+        $nextId: row.nextId,
+        $prevId: row.prevId,
+      });
+    });
+
+    console.log("ContentToEdit table overwritten successfully.");
+    // console.log("*** ContentToEdit start")
+    // console.log(await getAllContentSorted(db, "ContentToEdit"))
+    // console.log("*** ContentToEdit end")
+    
+  } catch (error) {
+    console.error("Error overwriting ContentToEdit table:", error);
+    throw error;
   }
 }

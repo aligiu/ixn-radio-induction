@@ -97,7 +97,7 @@ export default function Topic() {
             label="Description"
             mode="outlined"
             multiline={true}
-            numberOfLines={4} // Adjust the number of lines as needed
+            numberOfLines={4}
             value={descriptionValue}
             onChangeText={(descriptionValue) => {
               setDescriptionValue(descriptionValue);

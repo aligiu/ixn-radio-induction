@@ -21,6 +21,7 @@ import {
   NO_HEADER_PATHS,
   NO_LEFTSWIPE_PATHS,
   NO_SEARCHBAR_PATHS,
+  NO_SEARCHBAR_PREFIXES,
 } from "../config/paths";
 
 import { SidemenuProvider } from "../context/SidemenuContext";
@@ -253,6 +254,10 @@ export default function Layout() {
     );
   }
 
+  function startsWithAnyPrefix(str: string, prefixList: string[]): boolean {
+    return prefixList.some((prefix) => str.startsWith(prefix));
+  }
+
   return (
     <SQLiteProvider databaseName="local.db">
       <PaperProvider theme={paperTheme}>
@@ -285,7 +290,12 @@ export default function Layout() {
                           {!NO_HEADER_PATHS.includes(currentPathName) && (
                             <View style={styles.headerPaddedContainer}>
                               {renderHeaderLeft()}
+                              {/* Only render search bar if not excluded in NO_SEARCHBAR_PATHS nor NO_SEARCHBAR_PREFIXES*/}
                               {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
+                                !startsWithAnyPrefix(
+                                  currentPathName,
+                                  NO_SEARCHBAR_PREFIXES
+                                ) &&
                                 renderHeaderRight()}
                             </View>
                           )}

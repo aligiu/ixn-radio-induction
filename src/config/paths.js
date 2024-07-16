@@ -8,8 +8,14 @@ export const NO_SEARCHBAR_PATHS = [
   "/help/userManual",
   "/auth/registerAdminOrUser",
   "/adminControlPanel",
-  "/admin/topicsWrite/"
+  
 ];
+export const NO_SEARCHBAR_PREFIXES = [
+  "/admin/topicsWrite/",
+];
+
+
+
 export const NO_LEFTSWIPE_PATHS = ["/auth/login", "/auth/registerUser"];
 
 export const PROTOCOL = "http";

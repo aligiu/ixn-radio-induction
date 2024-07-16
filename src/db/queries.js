@@ -77,7 +77,7 @@ export async function getAllContentSorted(db, table) {
     allContent.push(curr);
   }
 
-  console.log(allContent);
+  // console.log(allContent);
 
   return allContent;
 }

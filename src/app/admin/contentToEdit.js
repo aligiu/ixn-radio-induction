@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -26,19 +26,18 @@ import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 
-
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
   // useContext(SearchbarContext);
 
-  const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
+  const [contentData, setContentData] = useState([]);
   const db = useSQLiteContext();
   const theme = useTheme();
   const [cancelEditModalVisible, setCancelEditModalVisible] =
     React.useState(false);
   const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
-  React.useState(false);
+    React.useState(false);
 
   // Fetch content data function
   const fetchContentData = async () => {
@@ -57,10 +56,15 @@ export default function RearrangableTopics() {
 
   // Fetch data when screen comes into focus
   useFocusEffect(
-    React.useCallback(() => {
-      fetchContentData();
+    useCallback(() => {
+      const fetchData = async () => {
+        await fetchContentData();
+      };
+
+      fetchData();
     }, [])
   );
+
 
   const renderItem = ({ item, drag, isActive }) => {
     return (
@@ -119,10 +123,11 @@ export default function RearrangableTopics() {
           <View
             style={{ justifyContent: "space-around", alignItems: "center" }}
           >
-            <TouchableOpacity onPress={() => {
-
-              setConfirmDeleteModalVisible(true)
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setConfirmDeleteModalVisible(true);
+              }}
+            >
               <Icon source="delete" color={theme.colors.primary} size={32} />
             </TouchableOpacity>
           </View>
@@ -132,9 +137,18 @@ export default function RearrangableTopics() {
   };
 
   const handleDragEnd = ({ data }) => {
+    console.log("*** start")
+    const prevId = null;
+    for (i = 0; i < data.length; i++) {
+      data[i]["prevId"] = prevId;
+      data[i]["nextId"] = i < data.length - 1 ? data[i + 1] : null;
+      prevId = data[i];
+      console.log("i, id, prevId, nextId", i, data[i]["id"], data[i]["prevId"], data[i]["nextId"])
+    }
     setContentData(data);
-    console.log("*** data: ", data);
-    // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"}, 
+    console.log("*** end")
+    // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
+    // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
   };
 
@@ -163,7 +177,7 @@ export default function RearrangableTopics() {
           marginRight: 16,
         }}
       >
-      <TText
+        <TText
           style={{
             fontSize: fontSize.LARGE,
             fontFamily: "InterMedium",

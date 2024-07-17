@@ -247,7 +247,7 @@ export default function RearrangableTopics() {
   }
 
   // TODO: test
-  function appendToData(data, id, title, description) {
+  function appendToData(data, id, title, description, content) {
     // Create a new copy of the data array to avoid mutating the original array
     const newData = data.map((item) => ({ ...item }));
     console.log(newData);
@@ -257,7 +257,7 @@ export default function RearrangableTopics() {
       id: id,
       title: title,
       description: description,
-      content: "",
+      content: content,
       prevId: null,
       nextId: null,
       timestamp: new Date().toISOString(),
@@ -333,7 +333,14 @@ export default function RearrangableTopics() {
             const smallestAbsentPositive = getSmallestAbsentPositive(contentData.map(d=>d.id))
             const title="Untitled"
             const description=""
-            appendToData(contentData, smallestAbsentPositive, title, description)
+            const content = ""
+            appendToData(contentData, smallestAbsentPositive, title, description, content)
+            navigation.navigate(`admin/topicsWrite/[id]`, {
+              id: smallestAbsentPositive,
+              title: title,
+              description: description,
+              content: content,
+            });
 
           }}
         >

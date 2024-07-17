@@ -164,8 +164,7 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
     console.log("*** ContentToEdit start")
     const sortedContent = await getAllContentSorted(db, "ContentToEdit")
     sortedContent.forEach((item, i) => {
-      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
-      console.log("title", item.title)
+      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}   (${item.title})`);
     });
     console.log("*** ContentToEdit end")
     

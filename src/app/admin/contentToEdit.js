@@ -148,6 +148,7 @@ export default function RearrangableTopics() {
     );
   };
 
+  // TODO: test
   const handleDeleteById = (data, id) => {
     console.log(`want to delete id ${id}`);
     // Create a new copy of the data array to avoid mutating the original array
@@ -173,6 +174,7 @@ export default function RearrangableTopics() {
     overwriteContentToEdit(db, newData);  // persist in ContentToEdit, IMPORTANT
   };
 
+  // TODO: test
   function getContentById(data, id) {
     console.log("data is: ", data);
     for (let d of data) {
@@ -183,6 +185,7 @@ export default function RearrangableTopics() {
     throw new Error(`No record with id = ${id}!`);
   }
 
+  // TODO: test
   function getPrevContentById(data, id) {
     const currentRecord = getContentById(data, id);
     if (currentRecord.prevId === null) {
@@ -191,6 +194,7 @@ export default function RearrangableTopics() {
     return getContentById(data, currentRecord.prevId);
   }
 
+  // TODO: test
   function getNextContentById(data, id) {
     const currentRecord = getContentById(data, id);
     if (currentRecord.nextId === null) {
@@ -199,6 +203,7 @@ export default function RearrangableTopics() {
     return getContentById(data, currentRecord.nextId);
   }
 
+  // TODO: test
   const handleDragEnd = ({ data }) => {
     // console.log("*** start");
     const newData = data.map((item, index) => ({

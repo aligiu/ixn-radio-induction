@@ -47,7 +47,7 @@ export default function RearrangableTopics() {
     const sortedContent = await getAllContentSorted(db, "ContentToEdit");
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
-      key: index.toString(), // Ensure key is a string
+      key: obj.id.toString(), // Ensure key is a string
     }));
     setContentData(sortedContentWithKey);
   };
@@ -171,7 +171,7 @@ export default function RearrangableTopics() {
     }
 
     setContentData(newData);
-    overwriteContentToEdit(db, newData);  // persist in ContentToEdit, IMPORTANT
+    overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
   };
 
   // TODO: test
@@ -219,11 +219,67 @@ export default function RearrangableTopics() {
     //   console.log("title", item.title)
     // });
     // console.log("*** end");
-    overwriteContentToEdit(db, newData);  // persist in ContentToEdit, IMPORTANT
+    overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
     // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
   };
+
+  // TODO: test
+  function getSmallestAbsentPositive(nums) {
+    // Finds the smallest missing positive number in an array of numbers
+
+    // Create set
+    const numSet = new Set();
+    for (const num of nums) {
+      if (num <= 0) {
+        throw new Error(`Non-positive number ${num} detected in array`);
+      }
+      numSet.add(num);
+    }
+
+    // Iterate through numbers starting from 1
+    let smallestAbsentPositive = 1;
+    while (numSet.has(smallestAbsentPositive)) {
+      smallestAbsentPositive++;
+    }
+    return smallestAbsentPositive;
+  }
+
+  // TODO: test
+  function appendToData(data, id, title, description) {
+    // Create a new copy of the data array to avoid mutating the original array
+    const newData = data.map((item) => ({ ...item }));
+    console.log(newData);
+
+    // Create the new element with the given properties
+    const newElement = {
+      id: id,
+      title: title,
+      description: description,
+      content: "",
+      prevId: null,
+      nextId: null,
+      timestamp: new Date().toISOString(),
+      key: id.toString(), // Ensure key is unique by using id
+    };
+
+    // Find the current last element in the list
+    const lastElement = newData[newData.length - 1];
+
+    // Update the last element's nextId to point to the new element
+    lastElement.nextId = id;
+    newElement.prevId = lastElement.id;
+
+    // Append the new element to the list
+    newData.push(newElement);
+
+    setContentData(newData);
+    overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
+  }
+
+  // console.log("***");
+  // appendToData(contentData, 999);
 
   // Custom DraggableFlatList for each list
   const RearrangableList = () => (
@@ -271,7 +327,16 @@ export default function RearrangableTopics() {
           marginTop: 10,
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("add");
+            const smallestAbsentPositive = getSmallestAbsentPositive(contentData.map(d=>d.id))
+            const title="Untitled"
+            const description=""
+            appendToData(contentData, smallestAbsentPositive, title, description)
+
+          }}
+        >
           <View
             style={{ borderRadius: 10, backgroundColor: theme.colors.primary }}
           >

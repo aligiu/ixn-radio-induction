@@ -7,6 +7,9 @@ export async function getRootContent(db, table) {
     SELECT *
     FROM ${table} 
     WHERE prevId IS NULL;`);
+    if (roots.length === 0) {
+      throw new Error("No root found, as there are no records with NULL prevId!");
+    }
   if (roots.length !== 1) {
     throw new Error("More than one record with NULL prevId found!");
   }
@@ -158,9 +161,13 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
     });
 
     console.log("ContentToEdit table overwritten successfully.");
-    // console.log("*** ContentToEdit start")
-    // console.log(await getAllContentSorted(db, "ContentToEdit"))
-    // console.log("*** ContentToEdit end")
+    console.log("*** ContentToEdit start")
+    const sortedContent = await getAllContentSorted(db, "ContentToEdit")
+    sortedContent.forEach((item, i) => {
+      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
+      console.log("title", item.title)
+    });
+    console.log("*** ContentToEdit end")
     
   } catch (error) {
     console.error("Error overwriting ContentToEdit table:", error);

@@ -148,11 +148,10 @@ export default function RearrangableTopics() {
     
     // Update the state with the new data
     setContentData(newData);
-     // Log newData in the desired format
-    newData.forEach((item, i) => {
-      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
-      console.log("title", item.title)
-    });
+    // newData.forEach((item, i) => {
+    //   console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
+    //   console.log("title", item.title)
+    // });
     console.log("*** end")
     overwriteContentToEdit(db, newData)
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));

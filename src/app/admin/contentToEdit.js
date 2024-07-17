@@ -40,6 +40,7 @@ export default function RearrangableTopics() {
     React.useState(false);
   const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
     React.useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   // Fetch content data function
   const fetchContentData = async () => {
@@ -67,6 +68,11 @@ export default function RearrangableTopics() {
     }, [])
   );
 
+  console.log("*** start")
+    contentData.forEach((item, i) => {
+      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}  (${item.title})`);
+    });
+  console.log("*** end");
 
   const renderItem = ({ item, drag, isActive }) => {
     return (
@@ -128,6 +134,7 @@ export default function RearrangableTopics() {
             <TouchableOpacity
               onPress={() => {
                 setConfirmDeleteModalVisible(true);
+                setDeleteTargetId(item.id);
               }}
             >
               <Icon source="delete" color={theme.colors.primary} size={32} />
@@ -145,15 +152,15 @@ export default function RearrangableTopics() {
       prevId: index === 0 ? null : data[index - 1].id,
       nextId: index === data.length - 1 ? null : data[index + 1].id,
     }));
-    
+
     // Update the state with the new data
     setContentData(newData);
     // newData.forEach((item, i) => {
     //   console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
     //   console.log("title", item.title)
     // });
-    console.log("*** end")
-    overwriteContentToEdit(db, newData)
+    console.log("*** end");
+    overwriteContentToEdit(db, newData);
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
     // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
@@ -249,6 +256,7 @@ export default function RearrangableTopics() {
         closeModal={() => {
           setConfirmDeleteModalVisible(false);
         }}
+        deleteTargetId={deleteTargetId}
       />
     </>
   );

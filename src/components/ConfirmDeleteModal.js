@@ -14,7 +14,7 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ConfirmDeleteModal = ({ visible, closeModal }) => {
+const ConfirmDeleteModal = ({ visible, closeModal, deleteTargetId }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -66,7 +66,10 @@ const ConfirmDeleteModal = ({ visible, closeModal }) => {
               console.log("Delete instruction confirmed")
             }
           >
-            <Button mode="contained">Yes</Button>
+            <Button onPress={() => {
+              console.log("delete target id: ",deleteTargetId)
+            }}
+            mode="contained">Yes</Button>
           </TouchableOpacity>
         </View>
       </Modal>

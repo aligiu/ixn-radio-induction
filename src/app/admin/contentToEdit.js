@@ -170,6 +170,7 @@ export default function RearrangableTopics() {
     }
 
     setContentData(newData);
+    overwriteContentToEdit(db, newData);  // persist in ContentToEdit, IMPORTANT
   };
 
   function getContentById(data, id) {
@@ -213,7 +214,7 @@ export default function RearrangableTopics() {
     //   console.log("title", item.title)
     // });
     // console.log("*** end");
-    overwriteContentToEdit(db, newData);
+    overwriteContentToEdit(db, newData);  // persist in ContentToEdit, IMPORTANT
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
     // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},

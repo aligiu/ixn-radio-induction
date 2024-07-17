@@ -83,21 +83,6 @@ export default function AdminPanel() {
           </TouchableOpacity>
 
         </View>
-{/*         
-        <View style={{ flexDirection: "column", gap: 10 }}>
-          {contentData &&
-            contentData.map((item, index) => (
-              <NavBlock
-                key={index}
-                imageSource={require("assets/images/nhs-logo-square.png")}
-                title={item.title}
-                route={`/topics/${index}`}
-                description={item.description}
-                content={item.content}
-              />
-            ))}
-        </View> */}
-
 
         <TouchableOpacity onPress={() => {
           setDummyData(db)

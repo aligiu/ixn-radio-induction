@@ -68,10 +68,12 @@ export default function RearrangableTopics() {
     }, [])
   );
 
-  console.log("*** start")
-    contentData.forEach((item, i) => {
-      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}  (${item.title})`);
-    });
+  console.log("*** start");
+  contentData.forEach((item, i) => {
+    console.log(
+      `i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}  (${item.title})`
+    );
+  });
   console.log("*** end");
 
   const renderItem = ({ item, drag, isActive }) => {
@@ -134,7 +136,8 @@ export default function RearrangableTopics() {
             <TouchableOpacity
               onPress={() => {
                 setConfirmDeleteModalVisible(true);
-                setDeleteTargetId(item.id);
+                setDeleteTargetId(item["id"]);
+                console.log("item.id has been set as", item["id"]);
               }}
             >
               <Icon source="delete" color={theme.colors.primary} size={32} />
@@ -145,8 +148,58 @@ export default function RearrangableTopics() {
     );
   };
 
+  const handleDeleteById = (data, id) => {
+    console.log(`want to delete id ${id}`);
+    // Create a new copy of the data array to avoid mutating the original array
+    const newData = data.map((item) => ({ ...item }));
+
+    const curr = getContentById(newData, id);
+    const prev = getPrevContentById(newData, id);
+    const next = getNextContentById(newData, id);
+    if (prev !== null) {
+      prev.nextId = curr.nextId;
+    }
+    if (next !== null) {
+      next.prevId = curr.prevId;
+    }
+
+    // Remove the record with the matching id
+    const index = newData.findIndex((record) => record.id === id);
+    if (index !== -1) {
+      newData.splice(index, 1);
+    }
+
+    setContentData(newData);
+  };
+
+  function getContentById(data, id) {
+    console.log("data is: ", data);
+    for (let d of data) {
+      if (d.id === id) {
+        return d;
+      }
+    }
+    throw new Error(`No record with id = ${id}!`);
+  }
+
+  function getPrevContentById(data, id) {
+    const currentRecord = getContentById(data, id);
+    if (currentRecord.prevId === null) {
+      return null; // Return null if the record is the root
+    }
+    return getContentById(data, currentRecord.prevId);
+  }
+
+  function getNextContentById(data, id) {
+    const currentRecord = getContentById(data, id);
+    if (currentRecord.nextId === null) {
+      return null; // Return null if the record is the tail
+    }
+    return getContentById(data, currentRecord.nextId);
+  }
+
   const handleDragEnd = ({ data }) => {
-    console.log("*** start");
+    // console.log("*** start");
     const newData = data.map((item, index) => ({
       ...item,
       prevId: index === 0 ? null : data[index - 1].id,
@@ -159,7 +212,7 @@ export default function RearrangableTopics() {
     //   console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
     //   console.log("title", item.title)
     // });
-    console.log("*** end");
+    // console.log("*** end");
     overwriteContentToEdit(db, newData);
     // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
     // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
@@ -257,6 +310,8 @@ export default function RearrangableTopics() {
           setConfirmDeleteModalVisible(false);
         }}
         deleteTargetId={deleteTargetId}
+        data={contentData}
+        handleDeleteById={handleDeleteById}
       />
     </>
   );

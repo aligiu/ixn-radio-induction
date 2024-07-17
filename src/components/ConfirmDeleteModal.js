@@ -14,7 +14,13 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ConfirmDeleteModal = ({ visible, closeModal, deleteTargetId }) => {
+const ConfirmDeleteModal = ({
+  visible,
+  closeModal,
+  deleteTargetId,
+  data,
+  handleDeleteById,
+}) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -26,6 +32,11 @@ const ConfirmDeleteModal = ({ visible, closeModal, deleteTargetId }) => {
   };
 
   const navigation = useNavigation();
+
+  // console.log(`delete modal received data as:`)
+  // data.map((d) => {
+  //   console.log(d)
+  // })
 
   return (
     <Portal>
@@ -61,15 +72,17 @@ const ConfirmDeleteModal = ({ visible, closeModal, deleteTargetId }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ flex: 1 }}
-            onPress={() =>
-              // TODO: need to pass the id of the content to delete (linked list delete where need to handle next_id and prev_id)
-              console.log("Delete instruction confirmed")
-            }
-          >
-            <Button onPress={() => {
-              console.log("delete target id: ",deleteTargetId)
+            onPress={() => {
+              // console.log("data ^^^", data)
+              // console.log("deleteTargetId ^^^", deleteTargetId)
+              handleDeleteById(data, deleteTargetId);
+              console.log(
+                `Delete instruction executed for id: ${deleteTargetId}`
+              );
+              closeModal()
             }}
-            mode="contained">Yes</Button>
+          >
+            <Button mode="contained">Yes</Button>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -77,31 +90,6 @@ const ConfirmDeleteModal = ({ visible, closeModal, deleteTargetId }) => {
   );
 };
 
-const FileDownloadButton = ({ title, fileId }) => {
-  return (
-    <TouchableOpacity>
-      {/* fileId used as download link later */}
-      <View
-        flexDirection="row"
-        gap={10}
-        alignItems="center"
-        style={{ marginTop: 5, marginBottom: 5 }}
-      >
-        <Icon source="download" size={26} />
-        <TText
-          style={{
-            fontSize: fontSize.SMALL,
-            fontFamily: "InterRegular",
-            textDecorationLine: "underline",
-          }}
-        >
-          {" "}
-          {title !== "" ? title : "unnamed file"}{" "}
-        </TText>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 const styles = StyleSheet.create({
   modalHeaderContainer: {

@@ -14,6 +14,10 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { fetchWithJWT } from "../utils/auth";
+import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
+import { updateTimestamps } from "../utils/content";
+
 const ReviewModal = ({ visible, closeModal, data }) => {
   const containerStyle = {
     backgroundColor: "white",
@@ -61,9 +65,33 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           <TouchableOpacity
             style={{ flex: 1 }}
             onPress={() => {
-              console.log(`Confirm changes instruction received. Data:`);
-              console.log(data)
-              closeModal();
+              console.log(`Confirm changes instruction received. Payload:`);
+              const payload = JSON.stringify(
+                updateTimestamps(
+                  data
+                )
+              );  // set all timestamps to current (for versioning)
+              console.log(payload)
+              const route = "/content";
+              // include JWT in fetch because the /content route (POST method) is only accessible by admins
+              async function handleConfirm() {
+                console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`)
+                response = await fetchWithJWT(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: payload,
+                });
+                console.log(response.status)
+                console.log(response)
+                if (response.ok) {
+                  closeModal();
+                } else {
+                  console.log("cannot upload")
+                }
+              }
+              handleConfirm()
             }}
           >
             <Button mode="contained">Yes</Button>

@@ -7,6 +7,7 @@ import {
   IconButton,
   Icon,
   Button,
+  Snackbar,
 } from "react-native-paper";
 import { TText } from "../app/_layout";
 
@@ -29,7 +30,43 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     borderRadius: 10,
   };
 
+  const [snackbarVisible, setSnackbarVisible] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+
   const navigation = useNavigation();
+
+  const handleConfirm = async () => {
+    console.log(`Confirm changes instruction received. Payload:`);
+    const payload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
+    console.log(payload);
+    const route = "/content";
+    // include JWT in fetch because the /content route (POST method) is only accessible by admins
+    try {
+      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
+      const response = await fetchWithJWT(
+        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: payload,
+        }
+      );
+      console.log(response.status);
+      console.log(response);
+      if (response.ok) {
+        closeModal();
+        navigation.navigate(`index`);
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (error) {
+      console.log("cannot upload", error);
+      setSnackbarMessage("Upload failed. Please try again.");
+      setSnackbarVisible(true);
+    }
+  };
 
   return (
     <Portal>
@@ -55,49 +92,32 @@ const ReviewModal = ({ visible, closeModal, data }) => {
             marginBottom: 10,
           }}
         >
-          Your changes will be saved and broadcasted for other users.
+          Your changes will be saved and broadcasted for other users. If
+          successful, you will be redirected to the home screen.
         </TText>
 
         <View style={{ flexDirection: "row", gap: 10 }}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => closeModal()}>
             <Button mode="outlined">No</Button>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => {
-              console.log(`Confirm changes instruction received. Payload:`);
-              const payload = JSON.stringify(
-                updateTimestamps(
-                  data
-                )
-              );  // set all timestamps to current (for versioning)
-              console.log(payload)
-              const route = "/content";
-              // include JWT in fetch because the /content route (POST method) is only accessible by admins
-              async function handleConfirm() {
-                console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`)
-                response = await fetchWithJWT(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: payload,
-                });
-                console.log(response.status)
-                console.log(response)
-                if (response.ok) {
-                  closeModal();
-                } else {
-                  console.log("cannot upload")
-                }
-              }
-              handleConfirm()
-            }}
-          >
+          <TouchableOpacity style={{ flex: 1 }} onPress={handleConfirm}>
             <Button mode="contained">Yes</Button>
           </TouchableOpacity>
         </View>
       </Modal>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={10000}
+        action={{
+          label: "Dismiss",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </Portal>
   );
 };

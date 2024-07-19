@@ -25,6 +25,7 @@ import SearchbarContext from "../../context/SearchbarContext";
 import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
+import ReviewModal from "../../components/ReviewModal";
 
 import { overwriteContentToEdit } from "../../db/queries";
 
@@ -41,6 +42,7 @@ export default function RearrangableTopics() {
   const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] =
     React.useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [reviewModalVisible, setReviewModalVisible] = React.useState(false);
 
   // Fetch content data function
   const fetchContentData = async () => {
@@ -330,18 +332,25 @@ export default function RearrangableTopics() {
         <TouchableOpacity
           onPress={() => {
             console.log("add");
-            const smallestAbsentPositive = getSmallestAbsentPositive(contentData.map(d=>d.id))
-            const title="Untitled"
-            const description=""
-            const content = ""
-            appendToData(contentData, smallestAbsentPositive, title, description, content)
+            const smallestAbsentPositive = getSmallestAbsentPositive(
+              contentData.map((d) => d.id)
+            );
+            const title = "Untitled";
+            const description = "";
+            const content = "";
+            appendToData(
+              contentData,
+              smallestAbsentPositive,
+              title,
+              description,
+              content
+            );
             navigation.navigate(`admin/topicsWrite/[id]`, {
               id: smallestAbsentPositive,
               title: title,
               description: description,
               content: content,
             });
-
           }}
         >
           <View
@@ -371,7 +380,11 @@ export default function RearrangableTopics() {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
-          <TouchableOpacity>
+          <TouchableOpacity
+           onPress={() => {
+            setReviewModalVisible(true);
+          }}
+          >
             <Button mode="contained">Review</Button>
           </TouchableOpacity>
         </View>
@@ -388,6 +401,14 @@ export default function RearrangableTopics() {
           setConfirmDeleteModalVisible(false);
         }}
         deleteTargetId={deleteTargetId}
+        data={contentData}
+        handleDeleteById={handleDeleteById}
+      />
+      <ReviewModal
+        visible={reviewModalVisible}
+        closeModal={() => {
+          setReviewModalVisible(false);
+        }}
         data={contentData}
         handleDeleteById={handleDeleteById}
       />

@@ -18,6 +18,8 @@ import { useNavigation } from "@react-navigation/native";
 import { fetchWithJWT } from "../utils/auth";
 import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
 import { updateTimestamps } from "../utils/content";
+import { overwriteTargetWithSource } from "../db/queries";
+import { useSQLiteContext } from "expo-sqlite";
 
 const ReviewModal = ({ visible, closeModal, data }) => {
   const containerStyle = {
@@ -34,6 +36,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   const navigation = useNavigation();
+  const db = useSQLiteContext();
 
   const handleConfirm = async () => {
     console.log(`Confirm changes instruction received. Payload:`);
@@ -57,6 +60,8 @@ const ReviewModal = ({ visible, closeModal, data }) => {
       console.log(response);
       if (response.ok) {
         closeModal();
+        // Overwrite ContentToEdit to Content to save changes,
+        overwriteTargetWithSource(db, "Content", "ContentToEdit");
         navigation.navigate(`index`);
       } else {
         throw new Error("Upload failed");

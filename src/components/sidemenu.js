@@ -143,7 +143,7 @@ export default function SideMenu() {
                 <SideMenuButton
                   onPress={() => {
                     // Overwrite ContentToEdit before entering editing mode, 
-                    overwriteTargetWithSource(db, "ContentToEdit", "Content")  // TODO: can comment out for testing, leave uncommented for prod
+                    overwriteTargetWithSource(db, "ContentToEdit", "Content")
                     router.push("/admin/contentToEdit");
                     closeModal();
                   }}

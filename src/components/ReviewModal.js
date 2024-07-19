@@ -97,8 +97,17 @@ const ReviewModal = ({ visible, closeModal, data }) => {
             marginBottom: 10,
           }}
         >
-          Your changes will be saved and broadcasted for other users. If
-          successful, you will be redirected to the home screen.
+          Your changes will be saved and shared with everyone.
+        </TText>
+        <TText
+          style={{
+            fontSize: fontSize.SMALL,
+            fontFamily: "InterRegular",
+            marginBottom: 10,
+          }}
+        >
+          If everything works, you will be taken back to the home screen, where
+          you'll see the updates.
         </TText>
 
         <View style={{ flexDirection: "row", gap: 10 }}>

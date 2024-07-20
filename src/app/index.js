@@ -66,16 +66,19 @@ export default function RearrangableTopics() {
       overwriteContent(db, latestContent);
       setNumRefresh(numRefresh + 1);
     }
-
     updateContent();
   }, []);
 
   // Fetch data when screen comes into focus (re-fetch for admin after local edit)
   useFocusEffect(
     useCallback(() => {
-      fetchContentDataLocally();
+      if (numRefresh > 0) {
+        fetchContentDataLocally();
+      }
     }, [numRefresh])
   );
+
+  console.log("numRefresh", numRefresh);
 
   const renderItem = ({ item, drag, isActive }) => {
     return (

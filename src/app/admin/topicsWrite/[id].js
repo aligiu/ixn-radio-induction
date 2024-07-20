@@ -147,7 +147,8 @@ export default function Topic() {
           closeModal={() => {
             setSecretModalVisible(false);
           }}
-          secret={{con}}
+          secret={secret}
+          editable={true}
         />
         <FileModal
           visible={fileModalVisible}

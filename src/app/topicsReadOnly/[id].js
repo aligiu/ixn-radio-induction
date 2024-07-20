@@ -121,6 +121,7 @@ export default function Topic() {
           setSecretModalVisible(false);
         }}
         secret={secret}
+        editable={false}
       />
       <FileModal
         visible={fileModalVisible}

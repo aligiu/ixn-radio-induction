@@ -7,7 +7,7 @@ import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { fontSize } from "src/styles/fontConfig";
 
-const SecretModal = ({ visible, closeModal, secret }) => {
+const SecretModal = ({ visible, closeModal, secret, editable }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -19,7 +19,7 @@ const SecretModal = ({ visible, closeModal, secret }) => {
   };
 
   const editorSecret = useEditorBridge({
-    editable: false,
+    editable: editable ? true : false,
     autofocus: false,
     avoidIosKeyboard: true,
     initialContent: secret ? secret : "<p> No secret yet. </p>",

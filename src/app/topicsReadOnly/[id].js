@@ -63,7 +63,7 @@ export default function Topic() {
   const { id } = useLocalSearchParams();
 
   const route = useRoute();
-  const { content, title } = route.params;
+  const { content, title, secret } = route.params;
 
   const editor = useEditorBridge({
     editable: false,
@@ -120,6 +120,7 @@ export default function Topic() {
         closeModal={() => {
           setSecretModalVisible(false);
         }}
+        secret={secret}
       />
       <FileModal
         visible={fileModalVisible}

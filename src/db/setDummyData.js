@@ -12,8 +12,8 @@ export async function setDummyData(db) {
 
     // Insert data for Content (prepared statement can take parameters)
     const statement = await db.prepareAsync(`
-      INSERT INTO Content (id, title, description, content, nextId, prevId)
-      VALUES ($id, $title, $description, $content, $nextId, $prevId);
+      INSERT INTO Content (id, title, description, content, nextId, prevId, secret)
+      VALUES ($id, $title, $description, $content, $nextId, $prevId, $secret);
     `);
 
     await Promise.all(
@@ -25,6 +25,7 @@ export async function setDummyData(db) {
           $content: datapoint.content,
           $nextId: index !== mockedData.length - 1 ? index + 2 : null,
           $prevId: index !== 0 ? index : null,
+          $secret: datapoint.secret ? datapoint.secret : null,
         });
       })
     );
@@ -43,7 +44,7 @@ export async function setDummyData(db) {
           row.description
         }, Content: ${row.content}, Next ID: ${row.nextId}, Previous ID: ${
           row.prevId
-        }, Timestamp: ${row.timestamp}
+        }, Timestamp: ${row.timestamp}, Secret:${row.secret},
         `
       );
     }
@@ -52,20 +53,3 @@ export async function setDummyData(db) {
     console.error("Error setting dummy data: ", error);
   }
 }
-
-// Users should not be stored locally!!!
-
-// Create each table if not exists and insert initial data
-// await db.execAsync(`CREATE TABLE IF NOT EXISTS Users (
-//                   email TEXT PRIMARY KEY NOT NULL,
-//                   hashed_password TEXT NOT NULL,
-//                   is_admin BOOLEAN
-//   )`);
-
-// // Insert data for Users
-// await db.execAsync(`
-//               INSERT INTO Users
-//               VALUES ('user1@example.com', '111', 1),
-//                      ('user2@example.com', '222', 0),
-//                      ('user3@example.com', '333', 0);
-//           `);

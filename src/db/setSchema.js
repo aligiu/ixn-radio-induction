@@ -10,6 +10,7 @@ export async function setSchema(db) {
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,  -- New timestamp column
         nextId INTEGER UNIQUE,
         prevId INTEGER UNIQUE,
+        secret TEXT,
         FOREIGN KEY (nextId) REFERENCES Content(id),
         FOREIGN KEY (prevId) REFERENCES Content(id)
       );
@@ -29,6 +30,7 @@ export async function setSchema(db) {
         timestamp DATETIME,
         nextId INTEGER UNIQUE,
         prevId INTEGER UNIQUE,
+        secret TEXT,
         FOREIGN KEY (nextId) REFERENCES Content(id),
         FOREIGN KEY (prevId) REFERENCES Content(id)
       );

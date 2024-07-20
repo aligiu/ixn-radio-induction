@@ -7,13 +7,7 @@ import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { fontSize } from "src/styles/fontConfig";
 
-// fetch content from naviation, see index.js and topicsReadOnly/[id].js
-content = `<p> Username: user1</p>
-           <p> Password: password1</p>
-           <p> Username: user2</p>
-           <p> Password: password2</p>`;
-
-const SecretModal = ({ visible, closeModal }) => {
+const SecretModal = ({ visible, closeModal, secret }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -28,7 +22,7 @@ const SecretModal = ({ visible, closeModal }) => {
     editable: false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: content ? content : "<p> No secret yet. </p>",
+    initialContent: secret ? secret : "<p> No secret yet. </p>",
   });
 
   return (

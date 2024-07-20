@@ -54,12 +54,7 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   };
 
-  // // Fetch data on initial mount (disabled to not double fetch)
-  // useEffect(() => {
-  //   fetchContentData();
-  // }, []);
-
-  // Fetch data when screen comes into focus
+  // Fetch data when screen comes into focus (to refresh the layout after edits in topicsWrite/[id])
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {

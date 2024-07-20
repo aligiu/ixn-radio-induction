@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback, useContext, useEffect } from "react";
 import { Stack, useNavigation, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -40,6 +40,9 @@ import { SearchbarProvider } from "../context/SearchbarContext";
 import SearchbarContext from "../context/SearchbarContext";
 
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { fetchWithJWT } from "../utils/auth";
+
+import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -118,6 +121,32 @@ export default function Layout() {
   const [searchText, setSearchText] = useState("");
   const navigation = useNavigation();
   const currentPathName = usePathname();
+
+  // fetch data from content/latest -> login/ startup
+  // if fetch successful, replace content with latest
+  // also hide secrets anyway if user
+
+  useEffect(() => {
+    // TODO: fetch content from server (then show toast notification for whether success/fail)
+    console.log("This is executed once");
+    async function updateContent() {
+      const route = "/content/latest";
+      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`)
+      const response = await fetchWithJWT(
+        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const latestContent = await response.json();
+      console.log("latestContent ***", latestContent);
+    }
+
+    updateContent();
+  }, []);
 
   const [fontsLoaded, fontError] = useFonts({
     InterThin: require("assets/fonts/Inter-Thin.ttf"),

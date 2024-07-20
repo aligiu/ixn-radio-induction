@@ -37,12 +37,8 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   };
 
-  // // Fetch data on initial mount (disabled to not double fetch)
-  // useEffect(() => {
-  //   fetchContentData();
-  // }, []);
 
-  // Fetch data when screen comes into focus
+  // Fetch data when screen comes into focus (re-fetch for admin after local edit)
   useFocusEffect(
     React.useCallback(() => {
       fetchContentData();

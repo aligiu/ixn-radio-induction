@@ -49,29 +49,34 @@ export default function RearrangableTopics() {
   };
 
   useEffect(() => {
-    async function updateContent() {
-      const route = "/content/latest";
-      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
-      const response = await fetchWithJWT(
-        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const latestContent = await response.json();
-      console.log("latestContent ***", latestContent);
-      overwriteContent(db, latestContent);
-      setNumRefresh(numRefresh + 1);
-    }
+    const updateContent = async () => {
+      try {
+        const route = "/content/latest";
+        console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
+        const response = await fetchWithJWT(
+          `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const latestContent = await response.json();
+        console.log("latestContent ***", latestContent);
+        await overwriteContent(db, latestContent);
+        setNumRefresh((prev) => prev + 1); // Increment numRefresh
+      } catch (error) {
+        console.error("Error updating content:", error);
+      }
+    };
+
     updateContent();
   }, []);
 
-  // Fetch data when screen comes into focus (re-fetch for admin after local edit)
   useFocusEffect(
     useCallback(() => {
+      console.log("Focus effect triggered with numRefresh:", numRefresh);
       if (numRefresh > 0) {
         fetchContentDataLocally();
       }

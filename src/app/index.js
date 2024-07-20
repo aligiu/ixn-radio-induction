@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
@@ -17,18 +24,22 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import SearchbarContext from "../context/SearchbarContext";
 import { contentContainerStyles } from "../styles/contentContainer";
 
+import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
+import { fetchWithJWT } from "../utils/auth";
+import { overwriteContent } from "../db/queries";
 
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus } =
-  useContext(SearchbarContext); 
+    useContext(SearchbarContext);
 
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
   const db = useSQLiteContext();
   const theme = useTheme();
+  const [numRefresh, setNumRefresh] = useState(0);
 
   // Fetch content data function
-  const fetchContentData = async () => {
+  const fetchContentDataLocally = async () => {
     const sortedContent = await getAllContentSorted(db, "Content");
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
@@ -37,12 +48,33 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   };
 
+  useEffect(() => {
+    async function updateContent() {
+      const route = "/content/latest";
+      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
+      const response = await fetchWithJWT(
+        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const latestContent = await response.json();
+      console.log("latestContent ***", latestContent);
+      overwriteContent(db, latestContent);
+      setNumRefresh(numRefresh + 1);
+    }
+
+    updateContent();
+  }, []);
 
   // Fetch data when screen comes into focus (re-fetch for admin after local edit)
   useFocusEffect(
-    React.useCallback(() => {
-      fetchContentData();
-    }, [])
+    useCallback(() => {
+      fetchContentDataLocally();
+    }, [numRefresh])
   );
 
   const renderItem = ({ item, drag, isActive }) => {
@@ -129,38 +161,38 @@ export default function RearrangableTopics() {
   } else {
     return (
       <ScrollView
-      style={
-        contentContainerStyles.container
-        // {backgroundColor: theme.colors.background}
-      }
-      keyboardShouldPersistTaps="always"
-    >
-      <View
-        style={{
-          flexDirection: "column",
-          gap: 10, // gap must be placed in <View> not <ScrollView>
-        }}
+        style={
+          contentContainerStyles.container
+          // {backgroundColor: theme.colors.background}
+        }
+        keyboardShouldPersistTaps="always"
       >
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Educational Resources"}
-          section={"Login"}
-          routerLink={"topicsReadOnly/[id]"}
-          title={"Title for topic x"}  // title necessary if using topics route
-          content={"<p>Content of topic x</p>"}  // content necessary if using topics route
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
+        <View
+          style={{
+            flexDirection: "column",
+            gap: 10, // gap must be placed in <View> not <ScrollView>
+          }}
+        >
+          <SearchAutocompleteElement
+            autocompleteText={"Radiopaedia"}
+            topic={"Educational Resources"}
+            section={"Login"}
+            routerLink={"topicsReadOnly/[id]"}
+            title={"Title for topic x"} // title necessary if using topics route
+            content={"<p>Content of topic x</p>"} // content necessary if using topics route
+            setSearchbarInFocus={setSearchbarInFocus}
+          />
 
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Conferences"}
-          section={"Link"}
-          routerLink={"dummy"}
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-      </View>
-    </ScrollView>
-    )
+          <SearchAutocompleteElement
+            autocompleteText={"Radiopaedia"}
+            topic={"Conferences"}
+            section={"Link"}
+            routerLink={"dummy"}
+            setSearchbarInFocus={setSearchbarInFocus}
+          />
+        </View>
+      </ScrollView>
+    );
   }
 }
 

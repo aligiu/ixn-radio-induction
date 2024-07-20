@@ -45,7 +45,7 @@ export default function RearrangableTopics() {
   const [reviewModalVisible, setReviewModalVisible] = React.useState(false);
 
   // Fetch content data function
-  const fetchContentData = async () => {
+  const fetchContentDataLocally = async () => {
     const sortedContent = await getAllContentSorted(db, "ContentToEdit");
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
@@ -58,7 +58,7 @@ export default function RearrangableTopics() {
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
-        await fetchContentData();
+        await fetchContentDataLocally();
       };
 
       fetchData();

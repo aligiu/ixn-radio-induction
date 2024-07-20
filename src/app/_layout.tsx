@@ -44,6 +44,8 @@ import { fetchWithJWT } from "../utils/auth";
 
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
+import { overwriteContent } from "../db/queries";
+
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
@@ -128,24 +130,10 @@ export default function Layout() {
 
   useEffect(() => {
     // TODO: fetch content from server (then show toast notification for whether success/fail)
+    // Initialize schema
+    
     console.log("This is executed once");
-    async function updateContent() {
-      const route = "/content/latest";
-      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`)
-      const response = await fetchWithJWT(
-        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const latestContent = await response.json();
-      console.log("latestContent ***", latestContent);
-    }
-
-    updateContent();
+    
   }, []);
 
   const [fontsLoaded, fontError] = useFonts({

@@ -1,11 +1,14 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Modal, Portal, Text, IconButton } from "react-native-paper";
+import { useState, useEffect } from "react";
+import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Modal, Portal, Text, IconButton, Button } from "react-native-paper";
 import { TText } from "../app/_layout";
+import { useRouter } from "expo-router";
 
 import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { fontSize } from "src/styles/fontConfig";
+import { getToken } from "../utils/auth";
 
 const SecretModal = ({ visible, closeModal, secret, editable }) => {
   const containerStyle = {
@@ -18,11 +21,34 @@ const SecretModal = ({ visible, closeModal, secret, editable }) => {
     borderRadius: 10,
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function setIsLoggedInAsync() {
+      const token = await getToken();
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }
+    setIsLoggedInAsync();
+  }, []);
+
+  function getInitialContent() {
+    if (!isLoggedIn) {
+      return "<p> Please log in to view secrets </p>";
+    } else if (!secret) {
+      return "<p> No secret yet. </p>";
+    }
+    return secret;
+  }
+
   const editorSecret = useEditorBridge({
     editable: editable ? true : false,
     autofocus: false,
     avoidIosKeyboard: true,
-    initialContent: secret ? secret : "<p> No secret yet. </p>",
+    initialContent: getInitialContent(),
   });
 
   return (
@@ -69,6 +95,32 @@ const SecretModal = ({ visible, closeModal, secret, editable }) => {
             }}
           >
             <RichText editor={editorSecret} />
+            
+            {!isLoggedIn && 
+            
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/auth/login");
+                closeModal();
+              }}
+              style={{ width: "100%" }}
+            >
+              <Button
+                mode="contained"
+                style={{
+                  height: 50,
+                  borderRadius: 25,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: 10,
+                }}
+              >
+                <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE, color: "white" }}>
+                  Log In
+                </Text>
+              </Button>
+            </TouchableOpacity>
+            }
           </View>
         </Modal>
       </Portal>

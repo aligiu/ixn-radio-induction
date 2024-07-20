@@ -212,7 +212,6 @@ function SideMenuButton({ onPress, text }) {
           height: 50,
           borderRadius: 25,
           justifyContent: "center",
-          borderColor: "green",
           alignItems: "center",
         }}
       >

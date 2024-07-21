@@ -32,7 +32,7 @@ export async function getNextContent(db, table, curr_id) {
     SELECT *
     FROM ${table} 
     WHERE prevId IS ${curr_id};`);
-  if (nexts.length !== 1) {
+    if (nexts.length > 1) {
     throw new Error(
       "More than one record with prevId == id of current record!"
     );
@@ -45,7 +45,7 @@ export async function getPrevContent(db, table, curr_id) {
     SELECT *
     FROM ${table} 
     WHERE nextId IS ${curr_id};`);
-  if (prevs.length !== 1) {
+  if (prevs.length > 1) {
     throw new Error(
       "More than one record with nextId == id of current record!"
     );

@@ -24,9 +24,7 @@ const SecretModal = ({ visible, closeModal, secret, editable, id, setSecretState
     borderRadius: 10,
   };
   const db = useSQLiteContext();
-  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const router = useRouter();
 
   useEffect(() => {

@@ -95,6 +95,15 @@ export async function getAllContentSorted(db, table) {
   return allContent;
 }
 
+
+export async function getAllContent(db, table) {
+  await setSchema(db)
+  const content = await db.getAllAsync(`
+    SELECT *
+    FROM ${table}`);
+  return content; // there should only be one root
+}
+
 export async function overwriteTargetWithSource(db, target, source) {
   await setSchema(db)
   

@@ -179,7 +179,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
                 marginBottom: 10,
               }}
             >
-              {added.toString()}
+              {added.join(", ")}
             </TText>
           </>
         )}
@@ -202,7 +202,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
                 marginBottom: 10,
               }}
             >
-              {modified.toString()}
+              {modified.join(", ")}
             </TText>
           </>
         )}
@@ -225,7 +225,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
                 marginBottom: 10,
               }}
             >
-              {deleted.toString()}
+              {deleted.join(", ")}
             </TText>
           </>
         )}
@@ -248,7 +248,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
                 marginBottom: 10,
               }}
             >
-              {rearranged.toString()}
+              {rearranged.join(", ")}
             </TText>
           </>
         )}

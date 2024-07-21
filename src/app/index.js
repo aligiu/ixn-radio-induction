@@ -152,22 +152,24 @@ export default function RearrangableTopics() {
   if (!searchbarInFocus) {
     return (
       <>
-        <View style={styles.container}>
+        <View style={{...styles.container, paddingBottom: 0, position: "relative"}}>
           <RearrangableList />
+          <Snackbar
+          style={{position: "absolute", bottom: 0, left: 0, right: 0}}
+            visible={snackbarVisible}
+            onDismiss={() => setSnackbarVisible(false)}
+            duration={10000}
+            action={{
+              label: "Dismiss",
+              onPress: () => {
+
+                setSnackbarVisible(false);
+              },
+            }}
+          >
+            {snackbarMessage}
+          </Snackbar>
         </View>
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          duration={10000}
-          action={{
-            label: "Dismiss",
-            onPress: () => {
-              setSnackbarVisible(false);
-            },
-          }}
-        >
-          {snackbarMessage}
-        </Snackbar>
       </>
     );
   } else {

@@ -20,7 +20,6 @@ import AutoScrollView from "../components/AutoScrollView";
 import { useSQLiteContext } from "expo-sqlite";
 import { getAllContentSorted } from "../db/queries";
 
-import { setSchema } from "../db/setSchema";
 import { setDummyData } from "../db/setDummyData";
 
 import { useNavigation } from '@react-navigation/native';

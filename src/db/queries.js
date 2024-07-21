@@ -2,7 +2,10 @@
 // getAllContentUnsorted
 // sortContent
 
+import { setSchema } from "./setSchema";
+
 export async function getRootContent(db, table) {
+  await setSchema(db)
   const roots = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -17,6 +20,7 @@ export async function getRootContent(db, table) {
 }
 
 export async function getTailContent(db, table) {
+  await setSchema(db)
   const tails = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -28,6 +32,7 @@ export async function getTailContent(db, table) {
 }
 
 export async function getNextContent(db, table, curr_id) {
+  await setSchema(db)
   const nexts = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -41,6 +46,7 @@ export async function getNextContent(db, table, curr_id) {
 }
 
 export async function getPrevContent(db, table, curr_id) {
+  await setSchema(db)
   const prevs = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -66,6 +72,7 @@ export async function getAllContentSorted(db, table) {
     },
     ...
   ]`;
+  await setSchema(db)
   allContent = [];
   n = (await db.getFirstAsync(`SELECT COUNT(*) AS n FROM ${table}`))["n"];
   if (n === 0) {
@@ -89,6 +96,8 @@ export async function getAllContentSorted(db, table) {
 }
 
 export async function overwriteTargetWithSource(db, target, source) {
+  await setSchema(db)
+  
   // Clear the target
   await db.execAsync(`DELETE FROM ${target}`);
 
@@ -182,6 +191,9 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
 
 export async function overwriteContent(db, contentData) {
   try {
+    // set schema if not already existing
+    await setSchema(db)
+
     // Delete existing Content data for overwrite
     await db.execAsync(`DELETE FROM Content`);
 

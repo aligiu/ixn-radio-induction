@@ -13,7 +13,7 @@ const fileDAO = [
   { title: "timetable2.pdf", fileId: "436" },
 ];
 
-const FileModal = ({ visible, closeModal }) => {
+const FileModal = ({ visible, closeModal, id }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,

@@ -73,14 +73,13 @@ export async function getAllContentSorted(db, table) {
   }
   root = await getRootContent(db, table);
   allContent.push(root);
-  console.log("root", root)
-  console.log("rootNext", await getNextContent(db, "Content", root.id
-  ))
+  // console.log("root", root)
+  // console.log("rootNext", await getNextContent(db, "Content", root.id))
 
   while (allContent.length < n) {
     prev = allContent[allContent.length - 1];
     curr = await getNextContent(db, table, prev.id);
-    console.log("curr", curr)
+    // console.log("curr", curr)
     allContent.push(curr);
   }
 
@@ -129,7 +128,7 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
     console.log(`attempted updating ${id} ${field} to ${newValue}`)
 
     const newContent = await getAllContentSorted(db, "ContentToEdit");
-    // console.log("newContent ***", newContent);
+    console.log("newContent ***", newContent);
   } catch (error) {
     console.log(
       `Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`

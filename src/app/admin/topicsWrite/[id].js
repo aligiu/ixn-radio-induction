@@ -149,12 +149,14 @@ export default function Topic() {
           }}
           secret={secret}
           editable={true}
+          id={id}
         />
         <FileModal
           visible={fileModalVisible}
           closeModal={() => {
             setFileModalVisible(false);
           }}
+          id={id}
         />
       </View>
     </>

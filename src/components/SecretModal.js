@@ -10,7 +10,10 @@ import { RichText, useEditorBridge } from "@10play/tentap-editor";
 import { fontSize } from "src/styles/fontConfig";
 import { getToken } from "../utils/auth";
 
-const SecretModal = ({ visible, closeModal, secret, editable }) => {
+import { updateFieldById_ContentToEdit } from "../db/queries";
+import { useSQLiteContext } from "expo-sqlite";
+
+const SecretModal = ({ visible, closeModal, secret, editable, id }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -20,7 +23,8 @@ const SecretModal = ({ visible, closeModal, secret, editable }) => {
     height: "85%",
     borderRadius: 10,
   };
-
+  const db = useSQLiteContext();
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const router = useRouter();
@@ -49,6 +53,13 @@ const SecretModal = ({ visible, closeModal, secret, editable }) => {
     autofocus: false,
     avoidIosKeyboard: true,
     initialContent: getInitialContent(),
+    onChange: () => {
+      async function updateContent() {
+        const newSecret = await editorSecret.getHTML()
+        updateFieldById_ContentToEdit(db, id, "secret", newSecret)
+      }
+      updateContent()
+    }
   });
 
   return (

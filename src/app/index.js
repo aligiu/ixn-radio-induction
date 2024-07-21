@@ -26,6 +26,7 @@ import { contentContainerStyles } from "../styles/contentContainer";
 
 import { overwriteContentWithRemote } from "../utils/content";
 import { getToken } from "../utils/auth";
+import { setSchema } from "../db/setSchema";
 
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus } =
@@ -43,6 +44,7 @@ export default function RearrangableTopics() {
   // Fetch content data function
   const fetchContentDataLocally = async () => {
     const sortedContent = await getAllContentSorted(db, "Content");
+    console.log("sortedContent: ", sortedContent)
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
       key: index.toString(), // Ensure key is a string
@@ -71,7 +73,11 @@ export default function RearrangableTopics() {
     useCallback(() => {
       console.log("Focus effect triggered with numRefresh:", numRefresh);
       if (snackbarVisible || numRefresh > 0) {
-        fetchContentDataLocally();
+        async function initData() {
+          await setSchema(db);
+          await fetchContentDataLocally();
+        }
+        initData()
       }
     }, [numRefresh])
   );

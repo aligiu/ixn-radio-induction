@@ -46,6 +46,8 @@ import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
 import { overwriteContent } from "../db/queries";
 
+import { setSchema } from "../db/setSchema";
+
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();

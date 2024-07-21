@@ -73,10 +73,14 @@ export async function getAllContentSorted(db, table) {
   }
   root = await getRootContent(db, table);
   allContent.push(root);
+  console.log("root", root)
+  console.log("rootNext", await getNextContent(db, "Content", root.id
+  ))
 
   while (allContent.length < n) {
     prev = allContent[allContent.length - 1];
     curr = await getNextContent(db, table, prev.id);
+    console.log("curr", curr)
     allContent.push(curr);
   }
 

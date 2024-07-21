@@ -2,7 +2,7 @@ export async function setSchema(db) {
   try {
     // Initialize schema
     await db.execAsync(`
-      CREATE TABLE Content (
+      CREATE TABLE IF NOT EXISTS Content (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         description TEXT NOT NULL,
@@ -17,12 +17,12 @@ export async function setSchema(db) {
     `);
 
     await db.execAsync(`
-      CREATE INDEX idx_prevId ON Content(prevId);
-      CREATE INDEX idx_nextId ON Content(nextId);
+      CREATE INDEX IF NOT EXISTS idx_prevId ON Content(prevId);
+      CREATE INDEX IF NOT EXISTS idx_nextId ON Content(nextId);
     `);
 
     await db.execAsync(`
-      CREATE TABLE ContentToEdit (
+      CREATE TABLE IF NOT EXISTS ContentToEdit (
         id INTEGER PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT NOT NULL,

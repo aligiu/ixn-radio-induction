@@ -55,13 +55,16 @@ import { useRoute } from "@react-navigation/native";
 import FileModal from "../../../components/FileModal";
 import SecretModal from "../../../components/SecretModal";
 import { updateFieldById_ContentToEdit } from "../../../db/queries";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Topic() {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
 
   const route = useRoute();
+  const navigation = useNavigation();
   const { content, title, description, secret } = route.params;
+  const [secretState, setSecretState] = useState(secret);
 
   const editor = useEditorBridge({
     editable: true,
@@ -70,18 +73,17 @@ export default function Topic() {
     initialContent: content ? content : "",
     onChange: () => {
       async function updateContent() {
-        const newContent = await editor.getHTML()
-        updateFieldById_ContentToEdit(db, id, "content", newContent)
+        const newContent = await editor.getHTML();
+        updateFieldById_ContentToEdit(db, id, "content", newContent);
       }
-      updateContent()
-    }
+      updateContent();
+    },
   });
 
   const [secretModalVisible, setSecretModalVisible] = React.useState(false);
   const [fileModalVisible, setFileModalVisible] = React.useState(false);
   const [titleValue, setTitleValue] = React.useState(title);
   const [descriptionValue, setDescriptionValue] = React.useState(description);
-  
 
   return (
     <>
@@ -96,7 +98,7 @@ export default function Topic() {
             mode="outlined"
             onChangeText={(titleValue) => {
               setTitleValue(titleValue);
-              updateFieldById_ContentToEdit(db, id, "title", titleValue)
+              updateFieldById_ContentToEdit(db, id, "title", titleValue);
             }}
             value={titleValue}
           />
@@ -108,7 +110,12 @@ export default function Topic() {
             value={descriptionValue}
             onChangeText={(descriptionValue) => {
               setDescriptionValue(descriptionValue);
-              updateFieldById_ContentToEdit(db, id, "description", descriptionValue)
+              updateFieldById_ContentToEdit(
+                db,
+                id,
+                "description",
+                descriptionValue
+              );
             }}
           />
 
@@ -147,7 +154,8 @@ export default function Topic() {
           closeModal={() => {
             setSecretModalVisible(false);
           }}
-          secret={secret}
+          secret={secretState}
+          setSecretState={setSecretState}
           editable={true}
           id={id}
         />

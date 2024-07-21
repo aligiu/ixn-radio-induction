@@ -13,7 +13,7 @@ import { getToken } from "../utils/auth";
 import { updateFieldById_ContentToEdit } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
-const SecretModal = ({ visible, closeModal, secret, editable, id }) => {
+const SecretModal = ({ visible, closeModal, secret, editable, id, setSecretState }) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -56,7 +56,8 @@ const SecretModal = ({ visible, closeModal, secret, editable, id }) => {
     onChange: () => {
       async function updateContent() {
         const newSecret = await editorSecret.getHTML()
-        updateFieldById_ContentToEdit(db, id, "secret", newSecret)
+        updateFieldById_ContentToEdit(db, id, "secret", newSecret) // used to save the new secret in ContentToEdit table
+        setSecretState(newSecret) // used to trigger re-render
       }
       updateContent()
     }

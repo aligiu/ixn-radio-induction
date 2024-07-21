@@ -9,7 +9,7 @@ import * as SQLite from "expo-sqlite"; // Import SQLite from expo-sqlite (note t
 import { useSQLiteContext } from "expo-sqlite";
 
 import { setSchema } from "../db/setSchema";
-import { setDummyData } from "../db/setDummyData";
+// import { setDummyData } from "../db/setDummyData";
 import { getAllContentSorted } from "../db/queries";
 
 import { deleteFromTable, dropTable } from "../db/dropOrDelete";
@@ -28,9 +28,9 @@ export default function SQLTest() {
         <Button mode="contained" onPress={() => setSchema(db)}>
             Init Schema only
           </Button>
-          <Button mode="contained" onPress={() => setDummyData(db)}>
+          {/* <Button mode="contained" onPress={() => setDummyData(db)}>
             Init Schema and Dummy Data (Essential)
-          </Button>
+          </Button> */}
           <Button mode="contained" onPress={() => getAllContentSorted(db, "Content")}>
             Get all content (sorted)
           </Button>

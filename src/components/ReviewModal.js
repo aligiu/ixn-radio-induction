@@ -248,30 +248,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           </>
         )}
 
-        {rearranged.length > 0 && (
-          <>
-            <TText
-              style={{
-                fontSize: fontSize.SMALL,
-                fontFamily: "InterSemiBold",
-                marginBottom: 10,
-              }}
-            >
-              Rearranged:
-            </TText>
-            <TText
-              style={{
-                fontSize: fontSize.SMALL,
-                fontFamily: "InterRegular",
-                marginBottom: 10,
-              }}
-            >
-              {rearranged.toString()}
-            </TText>
-          </>
-        )}
-
-        {deleted.length > 0 && (
+{deleted.length > 0 && (
           <>
             <TText
               style={{
@@ -293,6 +270,31 @@ const ReviewModal = ({ visible, closeModal, data }) => {
             </TText>
           </>
         )}
+
+        {rearranged.length > 0 && (
+          <>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterSemiBold",
+                marginBottom: 10,
+              }}
+            >
+              Rearranged (adjacents):
+            </TText>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterRegular",
+                marginBottom: 10,
+              }}
+            >
+              {rearranged.toString()}
+            </TText>
+          </>
+        )}
+
+
 
         {noChanges && (
           <TText

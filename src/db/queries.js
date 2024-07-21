@@ -63,17 +63,18 @@ export async function getAllContentSorted(db, table) {
   `returns content as an array of objects
   [
     {
-      id: int pk of record,  
-      title: "Ashford and St Peter's",
-      description: "A comprehensive overview of services and specialties offered.",
-      content: "html string...",
+      id: int (pk),  
+      title: String,
+      description: String,
+      content: String,
       nextId: int,
       prevId: int,
+      secret: String;
     },
     ...
   ]`;
   await setSchema(db)
-  allContent = [];
+  const allContent = [];
   n = (await db.getFirstAsync(`SELECT COUNT(*) AS n FROM ${table}`))["n"];
   if (n === 0) {
     return [];
@@ -132,6 +133,9 @@ export async function overwriteTargetWithSource(db, target, source) {
 export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
   try {
 
+    console.log(`Modifying field ${field} to newValue of ${newValue}`)
+
+
     const statement = await db.prepareAsync(`
       UPDATE ContentToEdit
       SET ${field} = $newValue
@@ -165,8 +169,8 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
     // console.log("contentToEditJson", contentToEditJson)
 
     const insertStatement = await db.prepareAsync(`
-      INSERT INTO ContentToEdit (id, title, description, content, nextId, prevId)
-      VALUES ($id, $title, $description, $content, $nextId, $prevId)
+      INSERT INTO ContentToEdit (id, title, description, content, nextId, prevId, secret)
+      VALUES ($id, $title, $description, $content, $nextId, $prevId, $secret)
     `);
     
 

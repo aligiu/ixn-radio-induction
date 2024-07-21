@@ -20,7 +20,7 @@ import AutoScrollView from "../components/AutoScrollView";
 import { useSQLiteContext } from "expo-sqlite";
 import { getAllContentSorted } from "../db/queries";
 
-import { setDummyData } from "../db/setDummyData";
+// import { setDummyData } from "../db/setDummyData";
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -83,13 +83,13 @@ export default function AdminPanel() {
 
         </View>
 
-        <TouchableOpacity onPress={() => {
+        {/* <TouchableOpacity onPress={() => {
           setDummyData(db)
           }} style={{marginBottom: 20}}>
             <Button mode="elevated" style={{ marginTop: 15, backgroundColor: "red"}}>
               <TText>Init Schema and Dummy Data (Essential)</TText>
             </Button>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
       </AutoScrollView>
     </>

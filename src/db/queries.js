@@ -153,14 +153,15 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
     `);
     
 
-    await contentToEditJson.forEach(row => {
+    await contentToEditJson.forEach(datapoint => {
       insertStatement.executeAsync({
-        $id: row.id,
-        $title: row.title,
-        $description: row.description,
-        $content: row.content,
-        $nextId: row.nextId,
-        $prevId: row.prevId,
+        $id: datapoint.id,
+        $title: datapoint.title,
+        $description: datapoint.description,
+        $content: datapoint.content,
+        $nextId: datapoint.nextId,
+        $prevId: datapoint.prevId,
+        $secret: datapoint.secret ? datapoint.secret : null,
       });
     });
 
@@ -194,7 +195,7 @@ export async function overwriteContent(db, contentData) {
     await Promise.all(
       contentData.map((datapoint, index) => {
         statement.executeAsync({
-          $id: index + 1,
+          $id: datapoint.id,
           $title: datapoint.title,
           $description: datapoint.description,
           $content: datapoint.content,

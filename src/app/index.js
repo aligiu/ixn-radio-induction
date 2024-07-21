@@ -10,7 +10,7 @@ import {
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { useTheme } from "react-native-paper";
+import { useTheme, Snackbar } from "react-native-paper";
 
 import { getAllContentSorted } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -24,9 +24,7 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import SearchbarContext from "../context/SearchbarContext";
 import { contentContainerStyles } from "../styles/contentContainer";
 
-import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
-import { fetchWithJWT } from "../utils/auth";
-import { overwriteContent } from "../db/queries";
+import { overwriteContentWithRemote } from "../utils/content";
 
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus } =
@@ -37,6 +35,9 @@ export default function RearrangableTopics() {
   const db = useSQLiteContext();
   const theme = useTheme();
   const [numRefresh, setNumRefresh] = useState(0);
+
+  const [snackbarVisible, setSnackbarVisible] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   // Fetch content data function
   const fetchContentDataLocally = async () => {
@@ -49,37 +50,25 @@ export default function RearrangableTopics() {
   };
 
   useEffect(() => {
-    const updateContent = async () => {
+    async function updateContentAndRerender() {
+      // TODO show banner if overwriteContentWithRemote fails
       try {
-        const route = "/content/latest";
-        console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
-        const response = await fetchWithJWT(
-          `${PROTOCOL}://${SERVER_API_BASE}${route}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const latestContent = await response.json();
-        console.log("latestContent ***", latestContent);
-        await overwriteContent(db, latestContent);
+        await overwriteContentWithRemote(db);
         setNumRefresh((prev) => prev + 1); // Increment numRefresh
-      } catch (error) {
-        console.error("Error updating content:", error);
+      } catch {
+        setSnackbarMessage(
+          "Unable to fetch data from the server. Showing local data instead."
+        );
+        setSnackbarVisible(true);
       }
-    };
-
-    updateContent();
+    }
+    updateContentAndRerender();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       console.log("Focus effect triggered with numRefresh:", numRefresh);
-      if (numRefresh > 0) {
-        fetchContentDataLocally();
-      }
+      fetchContentDataLocally();
     }, [numRefresh])
   );
 
@@ -162,44 +151,61 @@ export default function RearrangableTopics() {
 
   if (!searchbarInFocus) {
     return (
-      <View style={styles.container}>
-        <RearrangableList />
-      </View>
+      <>
+        <View style={styles.container}>
+          <RearrangableList />
+        </View>
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={10000}
+          action={{
+            label: "Dismiss",
+            onPress: () => {
+              setSnackbarVisible(false);
+            },
+          }}
+        >
+          {snackbarMessage}
+        </Snackbar>
+      </>
     );
   } else {
     return (
-      <ScrollView
-        style={
-          contentContainerStyles.container
-          // {backgroundColor: theme.colors.background}
-        }
-        keyboardShouldPersistTaps="always"
-      >
-        <View
-          style={{
-            flexDirection: "column",
-            gap: 10, // gap must be placed in <View> not <ScrollView>
-          }}
+      <View>
+        <ScrollView
+          style={
+            contentContainerStyles.container
+            // {backgroundColor: theme.colors.background}
+          }
+          keyboardShouldPersistTaps="always"
         >
-          <SearchAutocompleteElement
-            autocompleteText={"Radiopaedia"}
-            topic={"Educational Resources"}
-            section={"Login"}
-            routerLink={"topicsReadOnly/[id]"}
-            title={"Title for topic x"} // title necessary if using topics route
-            content={"<p>Content of topic x</p>"} // content necessary if using topics route
-            setSearchbarInFocus={setSearchbarInFocus}
-          />
+          <View
+            style={{
+              flexDirection: "column",
+              gap: 10, // gap must be placed in <View> not <ScrollView>
+            }}
+          >
+            <SearchAutocompleteElement
+              autocompleteText={"Radiopaedia"}
+              topic={"Educational Resources"}
+              section={"Login"}
+              routerLink={"topicsReadOnly/[id]"}
+              title={"Title for topic x"} // title necessary if using topics route
+              content={"<p>Content of topic x</p>"} // content necessary if using topics route
+              setSearchbarInFocus={setSearchbarInFocus}
+            />
 
-          <SearchAutocompleteElement
-            autocompleteText={"Radiopaedia"}
-            topic={"Conferences"}
-            section={"Link"}
-            routerLink={"dummy"}
-            setSearchbarInFocus={setSearchbarInFocus}
-          />
-        </View>
-      </ScrollView>
+            <SearchAutocompleteElement
+              autocompleteText={"Radiopaedia"}
+              topic={"Conferences"}
+              section={"Link"}
+              routerLink={"dummy"}
+              setSearchbarInFocus={setSearchbarInFocus}
+            />
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }

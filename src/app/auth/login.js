@@ -14,10 +14,12 @@ import { useForm, Controller } from "react-hook-form";
 import { fontSize } from "src/styles/fontConfig";
 import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { getToken, storeToken, removeToken, getEmail, storeEmail, storeIsAdmin,
   getIsAdmin,  } from "../../utils/auth";
+
+
 
 export default function Login() {
   const { control, handleSubmit, focus, setValue } = useForm();
@@ -65,7 +67,15 @@ export default function Login() {
         setErrorMessage(" "); // set as 1 char space to prevent layout shift
         
         // Navigate to the home screen upon successful login
-        navigation.navigate("index");
+        // navigation.navigate("index"); 
+          // the above navigation is commented out and replaced with the following
+          // reset stack to reload pages after login
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'index' }],
+          })
+        );
       }
     } catch (error) {
       console.error("Login failed:", error);

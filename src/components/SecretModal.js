@@ -13,7 +13,14 @@ import { getToken } from "../utils/auth";
 import { updateFieldById_ContentToEdit } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
-const SecretModal = ({ visible, closeModal, secret, editable, id, setSecretState }) => {
+const SecretModal = ({
+  visible,
+  closeModal,
+  secret,
+  editable,
+  id,
+  setSecretState,
+}) => {
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -40,8 +47,6 @@ const SecretModal = ({ visible, closeModal, secret, editable, id, setSecretState
   function getInitialContent() {
     if (!isLoggedIn) {
       return "<p> Please log in to view secrets </p>";
-    } else if (!secret) {
-      return "<p> No secret yet. </p>";
     }
     return secret;
   }
@@ -106,32 +111,37 @@ const SecretModal = ({ visible, closeModal, secret, editable, id, setSecretState
             }}
           >
             <RichText editor={editorSecret} />
-            
-            {!isLoggedIn && 
-            
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/auth/login");
-                closeModal();
-              }}
-              style={{ width: "100%" }}
-            >
-              <Button
-                mode="contained"
-                style={{
-                  height: 50,
-                  borderRadius: 25,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginRight: 10,
+
+            {!isLoggedIn && (
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/auth/login");
+                  closeModal();
                 }}
+                style={{ width: "100%" }}
               >
-                <Text style={{ fontWeight: "600", fontSize: fontSize.LARGE, color: "white" }}>
-                  Log In
-                </Text>
-              </Button>
-            </TouchableOpacity>
-            }
+                <Button
+                  mode="contained"
+                  style={{
+                    height: 50,
+                    borderRadius: 25,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: "600",
+                      fontSize: fontSize.LARGE,
+                      color: "white",
+                    }}
+                  >
+                    Log In
+                  </Text>
+                </Button>
+              </TouchableOpacity>
+            )}
           </View>
         </Modal>
       </Portal>

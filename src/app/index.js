@@ -25,6 +25,7 @@ import SearchbarContext from "../context/SearchbarContext";
 import { contentContainerStyles } from "../styles/contentContainer";
 
 import { overwriteContentWithRemote } from "../utils/content";
+import { getToken } from "../utils/auth";
 
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus } =
@@ -36,8 +37,8 @@ export default function RearrangableTopics() {
   const theme = useTheme();
   const [numRefresh, setNumRefresh] = useState(0);
 
-  const [snackbarVisible, setSnackbarVisible] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   // Fetch content data function
   const fetchContentDataLocally = async () => {
@@ -59,6 +60,7 @@ export default function RearrangableTopics() {
         setSnackbarMessage(
           "Unable to fetch data from the server. Showing local data instead."
         );
+        console.log("gg")
         setSnackbarVisible(true);
       }
     }
@@ -68,7 +70,9 @@ export default function RearrangableTopics() {
   useFocusEffect(
     useCallback(() => {
       console.log("Focus effect triggered with numRefresh:", numRefresh);
-      fetchContentDataLocally();
+      if (snackbarVisible || numRefresh > 0) {
+        fetchContentDataLocally();
+      }
     }, [numRefresh])
   );
 
@@ -152,17 +156,22 @@ export default function RearrangableTopics() {
   if (!searchbarInFocus) {
     return (
       <>
-        <View style={{...styles.container, paddingBottom: 0, position: "relative"}}>
+        <View
+          style={{
+            ...styles.container,
+            paddingBottom: 0,
+            position: "relative",
+          }}
+        >
           <RearrangableList />
           <Snackbar
-          style={{position: "absolute", bottom: 0, left: 0, right: 0}}
+            style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
             visible={snackbarVisible}
             onDismiss={() => setSnackbarVisible(false)}
             duration={10000}
             action={{
               label: "Dismiss",
               onPress: () => {
-
                 setSnackbarVisible(false);
               },
             }}

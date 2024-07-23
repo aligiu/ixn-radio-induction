@@ -44,7 +44,7 @@ export default function RearrangableTopics() {
   // Fetch content data function
   const fetchContentDataLocally = async () => {
     const sortedContent = await getAllContentSorted(db, "Content");
-    console.log("sortedContent: ", sortedContent)
+    console.log("sortedContent: ", sortedContent);
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
       key: index.toString(), // Ensure key is a string
@@ -62,7 +62,7 @@ export default function RearrangableTopics() {
         setSnackbarMessage(
           "Unable to fetch data from the server. Showing local data instead."
         );
-        console.log("gg")
+        console.log("gg");
         setSnackbarVisible(true);
       }
     }
@@ -77,7 +77,7 @@ export default function RearrangableTopics() {
           await setSchema(db);
           await fetchContentDataLocally();
         }
-        initData()
+        initData();
       }
     }, [numRefresh])
   );
@@ -189,10 +189,10 @@ export default function RearrangableTopics() {
     );
   } else {
     return (
-      <View>
+      <View style={{ height: "100%" }}>
         <ScrollView
           style={
-            contentContainerStyles.container
+            { ...contentContainerStyles.container, flex: 1 }
             // {backgroundColor: theme.colors.background}
           }
           keyboardShouldPersistTaps="always"

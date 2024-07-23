@@ -7,10 +7,26 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
 
 const fileDAO = [
-  { title: "procedures.docx", fileId: "123" },
-  { title: "details.pdf", fileId: "222" },
-  { title: "timetable1.pdf", fileId: "331" },
-  { title: "timetable2.pdf", fileId: "436" },
+  {
+      "folderId": "1",
+      "fileName": "banana.webp",
+      "downloadRoute": "/api/files/download/1?fileName=banana.webp"
+  },
+  {
+      "folderId": "1",
+      "fileName": "monke.jpeg",
+      "downloadRoute": "/api/files/download/1?fileName=monke.jpeg"
+  },
+  {
+      "folderId": "2",
+      "fileName": "tree.jpg",
+      "downloadRoute": "/api/files/download/2?fileName=tree.jpg"
+  },
+  {
+      "folderId": "3",
+      "fileName": "tree.jpg",
+      "downloadRoute": "/api/files/download/3?fileName=tree.jpg"
+  }
 ];
 
 const FileModal = ({ visible, closeModal, id }) => {
@@ -61,8 +77,7 @@ const FileModal = ({ visible, closeModal, id }) => {
             fileDAO.map((file, index) => (
               <FileDownloadButton
                 key={index}
-                title={file.title}
-                fileId={file.fileId}
+                file={file}
               />
             ))}
           {fileDAO && fileDAO.length === 0 && (
@@ -83,10 +98,11 @@ const FileModal = ({ visible, closeModal, id }) => {
   );
 };
 
-const FileDownloadButton = ({ title, fileId }) => {
+const FileDownloadButton = ({ file }) => {
   return (
-    <TouchableOpacity>
-      {/* fileId used as download link later */}
+    <TouchableOpacity  onPress={() => {
+      console.log(`Detected ${file.fileName} download: downloadRoute is ${file.downloadRoute}`)
+    }}>
       <View
         flexDirection="row"
         gap={10}
@@ -102,7 +118,7 @@ const FileDownloadButton = ({ title, fileId }) => {
           }}
         >
           {" "}
-          {title !== "" ? title : "unnamed file"}{" "}
+          {file.fileName !== "" ? file.fileName : "unnamed file"}{" "}
         </TText>
       </View>
     </TouchableOpacity>

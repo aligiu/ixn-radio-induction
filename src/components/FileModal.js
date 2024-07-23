@@ -1,32 +1,37 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Modal, Portal, Text, IconButton, Icon } from "react-native-paper";
+import { ScrollView, StyleSheet, View, Alert } from "react-native";
+import { Modal, Portal, IconButton, Icon } from "react-native-paper";
 import { TText } from "../app/_layout";
 
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
 
+import * as FileSystem from "expo-file-system";
+import * as WebBrowser from "expo-web-browser";
+
+import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
+
 const fileDAO = [
   {
-      "folderId": "1",
-      "fileName": "banana.webp",
-      "downloadRoute": "/api/files/download/1?fileName=banana.webp"
+    folderId: "1",
+    fileName: "banana.webp",
+    downloadRoute: "/files/download/1?fileName=banana.webp",
   },
   {
-      "folderId": "1",
-      "fileName": "monke.jpeg",
-      "downloadRoute": "/api/files/download/1?fileName=monke.jpeg"
+    folderId: "1",
+    fileName: "monke.jpeg",
+    downloadRoute: "/files/download/1?fileName=monke.jpeg",
   },
   {
-      "folderId": "2",
-      "fileName": "tree.jpg",
-      "downloadRoute": "/api/files/download/2?fileName=tree.jpg"
+    folderId: "2",
+    fileName: "tree.jpg",
+    downloadRoute: "/files/download/2?fileName=tree.jpg",
   },
   {
-      "folderId": "3",
-      "fileName": "tree.jpg",
-      "downloadRoute": "/api/files/download/3?fileName=tree.jpg"
-  }
+    folderId: "3",
+    fileName: "tree.jpg",
+    downloadRoute: "/files/download/3?fileName=tree.jpg",
+  },
 ];
 
 const FileModal = ({ visible, closeModal, id }) => {
@@ -75,10 +80,7 @@ const FileModal = ({ visible, closeModal, id }) => {
         <ScrollView style={{ paddingRight: 10 }}>
           {fileDAO &&
             fileDAO.map((file, index) => (
-              <FileDownloadButton
-                key={index}
-                file={file}
-              />
+              <FileDownloadButton key={index} file={file} />
             ))}
           {fileDAO && fileDAO.length === 0 && (
             <View>
@@ -99,10 +101,45 @@ const FileModal = ({ visible, closeModal, id }) => {
 };
 
 const FileDownloadButton = ({ file }) => {
+  const handleDownloadAndOpen = async () => {
+    try {
+      const route = file.downloadRoute;
+      const url = `${PROTOCOL}://${SERVER_API_BASE}${route}`;
+      const fileName = file.fileName;
+      const downloadDest = FileSystem.documentDirectory + fileName;
+
+      console.log(`Downloading from: ${url}`);
+      console.log(`Saving to: ${downloadDest}`);
+
+      const { uri, status } = await FileSystem.downloadAsync(url, downloadDest);
+
+      if (status === 200) {
+        console.log(`File downloaded to: ${uri}`);
+        await WebBrowser.openBrowserAsync(uri);
+        console.log("File opened");
+      } else {
+        console.error(`Download failed with status: ${status}`);
+        Alert.alert("Error", "Download failed with status: " + status);
+      }
+    } catch (error) {
+      console.error("Error downloading or opening file:", error);
+      Alert.alert(
+        "Error",
+        "Error downloading or opening file: " + error.message
+      );
+    }
+  };
+
   return (
-    <TouchableOpacity  onPress={() => {
-      console.log(`Detected ${file.fileName} download: downloadRoute is ${file.downloadRoute}`)
-    }}>
+    <TouchableOpacity
+      onPress={() => {
+        console.log(
+          `Detected ${file.fileName} download: downloadURL (protocol+base+route) is:`
+        );
+        console.log(`${PROTOCOL}://${SERVER_API_BASE}${file.downloadRoute}`);
+        handleDownloadAndOpen();
+      }}
+    >
       <View
         flexDirection="row"
         gap={10}

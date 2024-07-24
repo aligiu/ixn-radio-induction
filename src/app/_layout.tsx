@@ -47,6 +47,7 @@ import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 import { overwriteContent } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
+import React from "react";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {

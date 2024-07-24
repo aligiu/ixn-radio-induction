@@ -1,7 +1,8 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, View, Alert, Platform } from "react-native";
 import { Modal, Portal, IconButton, Icon } from "react-native-paper";
 import { TText } from "../app/_layout";
+import { shareAsync } from 'expo-sharing';
 
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
@@ -10,6 +11,24 @@ import * as FileSystem from "expo-file-system";
 import * as WebBrowser from "expo-web-browser";
 
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
+
+const save = async (uri, filename, mimetype) => {
+  if (Platform.OS === "android") {
+    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    if (permissions.granted) {
+      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+      await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
+        .then(async (uri) => {
+          await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
+        })
+        .catch(e => console.log(e));
+    } else {
+      shareAsync(uri);
+    }
+  } else {
+    shareAsync(uri);
+  }
+};
 
 const fileDAO = [
   {
@@ -111,7 +130,12 @@ const FileDownloadButton = ({ file }) => {
       console.log(`Downloading from: ${url}`);
       console.log(`Saving to: ${downloadDest}`);
 
-      const { uri, status } = await FileSystem.downloadAsync(url, downloadDest);
+      const { uri, status, headers } = await FileSystem.downloadAsync(url, downloadDest);
+      
+      save(uri, fileName, headers["Content-Type"]);
+
+      console.log("uri:", uri)
+      console.log("status:", status)
 
       if (status === 200) {
         console.log(`File downloaded to: ${uri}`);

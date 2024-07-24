@@ -124,11 +124,12 @@ export default function Topic() {
         editable={false}
       />
       <FileModal
-        visible={fileModalVisible}
-        closeModal={() => {
-          setFileModalVisible(false);
-        }}
-      />
+          visible={fileModalVisible}
+          closeModal={() => {
+            setFileModalVisible(false);
+          }}
+          id={id}
+        />
       </View>
     </>
   );

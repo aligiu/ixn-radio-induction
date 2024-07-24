@@ -30,7 +30,7 @@ const save = async (uri, filename, mimetype) => {
   }
 };
 
-const fileDAO = [
+const filesAll = [
   {
     folderId: "1",
     fileName: "banana.webp",
@@ -53,6 +53,7 @@ const fileDAO = [
   },
 ];
 
+
 const FileModal = ({ visible, closeModal, id }) => {
   const containerStyle = {
     backgroundColor: "white",
@@ -63,6 +64,12 @@ const FileModal = ({ visible, closeModal, id }) => {
     height: "85%",
     borderRadius: 10,
   };
+
+  // filtered for the particular modal
+
+  console.log("id", id)
+  const files = filesAll.filter(file => file.folderId == id);
+  
 
   return (
     <Portal>
@@ -97,11 +104,11 @@ const FileModal = ({ visible, closeModal, id }) => {
           </View>
         </View>
         <ScrollView style={{ paddingRight: 10 }}>
-          {fileDAO &&
-            fileDAO.map((file, index) => (
+          {files &&
+            files.map((file, index) => (
               <FileDownloadButton key={index} file={file} />
             ))}
-          {fileDAO && fileDAO.length === 0 && (
+          {files && files.length === 0 && (
             <View>
               <TText
                 style={{

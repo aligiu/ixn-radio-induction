@@ -13,6 +13,8 @@ import * as WebBrowser from "expo-web-browser";
 
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
+import { useTheme } from "react-native-paper";
+
 const save = async (uri, filename, mimetype) => {
   if (Platform.OS === "android") {
     const permissions =
@@ -120,7 +122,19 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
           <ScrollView style={{ paddingRight: 10 }}>
             {fileData &&
               fileData.map((file, index) => (
-                <FileDownloadButton key={index} file={file} />
+                <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      marginBottom: 5,
+                    }}
+                  >
+                <FileDownloadButton file={file} />
+                </View>
               ))}
             {fileData && fileData.length === 0 && (
               <View>
@@ -156,6 +170,8 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
 };
 
 const FileDownloadButton = ({ file }) => {
+  const theme = useTheme();
+
   const handleDownloadAndOpen = async () => {
     try {
       const route = file.downloadRoute;
@@ -209,7 +225,7 @@ const FileDownloadButton = ({ file }) => {
         alignItems="center"
         style={{ marginTop: 5, marginBottom: 5 }}
       >
-        <Icon source="download" size={26} />
+        <Icon source="download" size={26} color={theme.colors.primary} />
         <TText
           style={{
             fontSize: fontSize.SMALL,

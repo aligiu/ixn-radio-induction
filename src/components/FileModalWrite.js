@@ -40,28 +40,6 @@ const save = async (uri, filename, mimetype) => {
   }
 };
 
-// const fileData = [
-//   {
-//     folderId: "1",
-//     fileName: "banana.webp",
-//     downloadRoute: "/files/download/1?fileName=banana.webp",
-//   },
-//   {
-//     folderId: "1",
-//     fileName: "monke.jpeg",
-//     downloadRoute: "/files/download/1?fileName=monke.jpeg",
-//   },
-//   {
-//     folderId: "2",
-//     fileName: "tree.jpg",
-//     downloadRoute: "/files/download/2?fileName=tree.jpg",
-//   },
-//   {
-//     folderId: "3",
-//     fileName: "tree.jpg",
-//     downloadRoute: "/files/download/3?fileName=tree.jpg",
-//   },
-// ];
 
 const FileModal = ({ visible, closeModal, id }) => {
   const containerStyle = {

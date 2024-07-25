@@ -43,15 +43,14 @@ import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
-import { Button, Portal } from "react-native-paper";
+import { Button } from "react-native-paper";
 
 import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
-import {
-  RichText,
-  useEditorBridge,
-} from "@10play/tentap-editor";
+import { PROTOCOL, SERVER_API_BASE } from "../../config/paths";
+
+import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { useRoute } from "@react-navigation/native";
 
@@ -61,6 +60,9 @@ import SecretModal from "../../components/SecretModal";
 export default function Topic() {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
+
+  const [secretModalVisible, setSecretModalVisible] = React.useState(false);
+  const [fileModalVisible, setFileModalVisible] = React.useState(false);
 
   const route = useRoute();
   const { content, title, secret } = route.params;
@@ -72,8 +74,7 @@ export default function Topic() {
     initialContent: content ? content : "<p> No content yet. </p>",
   });
 
-  const [secretModalVisible, setSecretModalVisible] = React.useState(false);
-  const [fileModalVisible, setFileModalVisible] = React.useState(false);
+
 
   return (
     <>
@@ -115,15 +116,15 @@ export default function Topic() {
         </View>
       </AutoScrollView>
       <View>
-      <SecretModal
-        visible={secretModalVisible}
-        closeModal={() => {
-          setSecretModalVisible(false);
-        }}
-        secret={secret}
-        editable={false}
-      />
-      <FileModal
+        <SecretModal
+          visible={secretModalVisible}
+          closeModal={() => {
+            setSecretModalVisible(false);
+          }}
+          secret={secret}
+          editable={false}
+        />
+        <FileModal
           visible={fileModalVisible}
           closeModal={() => {
             setFileModalVisible(false);
@@ -131,6 +132,7 @@ export default function Topic() {
           id={id}
         />
       </View>
+      
     </>
   );
 }

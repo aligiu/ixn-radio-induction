@@ -28,14 +28,11 @@ import { overwriteContentWithRemote } from "../utils/content";
 import { getToken } from "../utils/auth";
 import { setSchema } from "../db/setSchema";
 
-import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
-
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus } =
     useContext(SearchbarContext);
 
   const [contentData, setContentData] = useState([]);
-  const [fileData, setFileData] = useState([]);
   const navigation = useNavigation();
   const db = useSQLiteContext();
   const theme = useTheme();
@@ -55,20 +52,6 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   }
 
-  async function fetchFileDataRemotely() {
-    const route = "/files/list-all";
-    const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      const fetchedFiles = await response.json();
-      setFileData(fetchedFiles);
-    }
-  }
 
   useEffect(() => {
     async function updateContentAndRerender() {
@@ -80,7 +63,6 @@ export default function RearrangableTopics() {
         setSnackbarMessage(
           "Unable to fetch data from the server. Showing local data instead."
         );
-        console.log("gg");
         setSnackbarVisible(true);
       }
     }
@@ -94,7 +76,6 @@ export default function RearrangableTopics() {
         async function initData() {
           await setSchema(db);
           fetchContentDataLocally();
-          fetchFileDataRemotely();
         }
         initData();
       }

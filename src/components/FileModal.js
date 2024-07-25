@@ -1,8 +1,9 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View, Alert, Platform } from "react-native";
-import { Modal, Portal, IconButton, Icon } from "react-native-paper";
+import { Modal, Portal, IconButton, Icon, Snackbar } from "react-native-paper";
 import { TText } from "../app/_layout";
-import { shareAsync } from 'expo-sharing';
+import { shareAsync } from "expo-sharing";
 
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native";
@@ -14,14 +15,23 @@ import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
 const save = async (uri, filename, mimetype) => {
   if (Platform.OS === "android") {
-    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    const permissions =
+      await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (permissions.granted) {
-      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-      await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
+      const base64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      await FileSystem.StorageAccessFramework.createFileAsync(
+        permissions.directoryUri,
+        filename,
+        mimetype
+      )
         .then(async (uri) => {
-          await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
+          await FileSystem.writeAsStringAsync(uri, base64, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e));
     } else {
       shareAsync(uri);
     }
@@ -30,29 +40,28 @@ const save = async (uri, filename, mimetype) => {
   }
 };
 
-const fileData = [
-  {
-    folderId: "1",
-    fileName: "banana.webp",
-    downloadRoute: "/files/download/1?fileName=banana.webp",
-  },
-  {
-    folderId: "1",
-    fileName: "monke.jpeg",
-    downloadRoute: "/files/download/1?fileName=monke.jpeg",
-  },
-  {
-    folderId: "2",
-    fileName: "tree.jpg",
-    downloadRoute: "/files/download/2?fileName=tree.jpg",
-  },
-  {
-    folderId: "3",
-    fileName: "tree.jpg",
-    downloadRoute: "/files/download/3?fileName=tree.jpg",
-  },
-];
-
+// const fileData = [
+//   {
+//     folderId: "1",
+//     fileName: "banana.webp",
+//     downloadRoute: "/files/download/1?fileName=banana.webp",
+//   },
+//   {
+//     folderId: "1",
+//     fileName: "monke.jpeg",
+//     downloadRoute: "/files/download/1?fileName=monke.jpeg",
+//   },
+//   {
+//     folderId: "2",
+//     fileName: "tree.jpg",
+//     downloadRoute: "/files/download/2?fileName=tree.jpg",
+//   },
+//   {
+//     folderId: "3",
+//     fileName: "tree.jpg",
+//     downloadRoute: "/files/download/3?fileName=tree.jpg",
+//   },
+// ];
 
 const FileModal = ({ visible, closeModal, id }) => {
   const containerStyle = {
@@ -65,64 +74,107 @@ const FileModal = ({ visible, closeModal, id }) => {
     borderRadius: 10,
   };
 
-  // filtered for the particular modal
+  const [fileData, setFileData] = useState([]);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
-  console.log("id", id)
-  const files_match_id = fileData.filter(file => file.folderId == id);
-  
+  async function fetchFileDataRemotely() {
+    const route = `/files/list/${id}`;
+    const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  }
+
+  useEffect(() => {
+    async function setFileDataOrShowError() {
+      response = await fetchFileDataRemotely();
+      if (response.ok) {
+        const fetchedFilesOfId = await response.json();
+        console.log(fetchedFilesOfId);
+        setFileData(fetchedFilesOfId);
+      } else {
+        // Show error message if fetchFileDataRemotely fails
+        setSnackbarMessage(
+          "Unable to fetch files from the server. Text content and secrets are shown, but files cannot be downloaded."
+        );
+        setSnackbarVisible(true);
+      }
+    }
+    setFileDataOrShowError();
+  }, []);
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={closeModal}
-        contentContainerStyle={containerStyle}
-      >
-        <View style={{ ...styles.modalHeaderContainer, paddingRight: 10 }}>
-          <IconButton
-            icon="close"
-            size={26}
-            onPress={closeModal}
-            style={styles.iconButtonContent}
-          />
-          <View style={{ justifyContent: "center" }}>
-            <TText
-              style={{
-                fontSize: fontSize.MEDIUM,
-                fontFamily: "InterMedium",
-              }}
-            >
-              Files
-            </TText>
-          </View>
-
-          <View>
+    <>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={closeModal}
+          contentContainerStyle={containerStyle}
+        >
+          <View style={{ ...styles.modalHeaderContainer, paddingRight: 10 }}>
             <IconButton
+              icon="close"
               size={26}
-              style={{ ...styles.iconButtonContent, display: "none" }}
+              onPress={closeModal}
+              style={styles.iconButtonContent}
             />
-          </View>
-        </View>
-        <ScrollView style={{ paddingRight: 10 }}>
-          {files_match_id &&
-            files_match_id.map((file, index) => (
-              <FileDownloadButton key={index} file={file} />
-            ))}
-          {files_match_id && files_match_id.length === 0 && (
-            <View>
+            <View style={{ justifyContent: "center" }}>
               <TText
                 style={{
-                  fontSize: fontSize.SMALL,
-                  fontFamily: "InterRegular",
+                  fontSize: fontSize.MEDIUM,
+                  fontFamily: "InterMedium",
                 }}
               >
-                No files found
+                Files
               </TText>
             </View>
-          )}
-        </ScrollView>
-      </Modal>
-    </Portal>
+
+            <View>
+              <IconButton
+                size={26}
+                style={{ ...styles.iconButtonContent, display: "none" }}
+              />
+            </View>
+          </View>
+          <ScrollView style={{ paddingRight: 10 }}>
+            {fileData &&
+              fileData.map((file, index) => (
+                <FileDownloadButton key={index} file={file} />
+              ))}
+            {fileData && fileData.length === 0 && (
+              <View>
+                <TText
+                  style={{
+                    fontSize: fontSize.SMALL,
+                    fontFamily: "InterRegular",
+                  }}
+                >
+                  No files found
+                </TText>
+              </View>
+            )}
+          </ScrollView>
+        </Modal>
+      </Portal>
+      <Snackbar
+        style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={10000}
+        action={{
+          label: "Dismiss",
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </>
   );
 };
 
@@ -137,12 +189,15 @@ const FileDownloadButton = ({ file }) => {
       console.log(`Downloading from: ${url}`);
       console.log(`Saving to: ${downloadDest}`);
 
-      const { uri, status, headers } = await FileSystem.downloadAsync(url, downloadDest);
-      
+      const { uri, status, headers } = await FileSystem.downloadAsync(
+        url,
+        downloadDest
+      );
+
       save(uri, fileName, headers["Content-Type"]);
 
-      console.log("uri:", uri)
-      console.log("status:", status)
+      console.log("uri:", uri);
+      console.log("status:", status);
 
       if (status === 200) {
         console.log(`File downloaded to: ${uri}`);

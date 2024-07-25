@@ -41,7 +41,9 @@ const save = async (uri, filename, mimetype) => {
 };
 
 
-const FileModal = ({ visible, closeModal, id }) => {
+const FileModalWrite = ({ visible, closeModal, id }) => {
+
+  // const [toDelete, setToDelete] = useState([])
   const containerStyle = {
     backgroundColor: "white",
     margin: 10,
@@ -239,4 +241,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FileModal;
+export default FileModalWrite;

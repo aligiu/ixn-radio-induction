@@ -30,7 +30,7 @@ const save = async (uri, filename, mimetype) => {
   }
 };
 
-const filesAll = [
+const fileData = [
   {
     folderId: "1",
     fileName: "banana.webp",
@@ -68,7 +68,7 @@ const FileModal = ({ visible, closeModal, id }) => {
   // filtered for the particular modal
 
   console.log("id", id)
-  const files = filesAll.filter(file => file.folderId == id);
+  const files_match_id = fileData.filter(file => file.folderId == id);
   
 
   return (
@@ -104,11 +104,11 @@ const FileModal = ({ visible, closeModal, id }) => {
           </View>
         </View>
         <ScrollView style={{ paddingRight: 10 }}>
-          {files &&
-            files.map((file, index) => (
+          {files_match_id &&
+            files_match_id.map((file, index) => (
               <FileDownloadButton key={index} file={file} />
             ))}
-          {files && files.length === 0 && (
+          {files_match_id && files_match_id.length === 0 && (
             <View>
               <TText
                 style={{

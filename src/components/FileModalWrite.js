@@ -11,6 +11,8 @@ import { TouchableOpacity } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as WebBrowser from "expo-web-browser";
 
+import { useTheme } from "react-native-paper";
+
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 
 const save = async (uri, filename, mimetype) => {
@@ -40,9 +42,7 @@ const save = async (uri, filename, mimetype) => {
   }
 };
 
-
 const FileModalWrite = ({ visible, closeModal, id }) => {
-
   // const [toDelete, setToDelete] = useState([])
   const containerStyle = {
     backgroundColor: "white",
@@ -54,10 +54,11 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     borderRadius: 10,
   };
 
+  const theme = useTheme();
+
   const [fileData, setFileData] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
   async function fetchFileDataRemotely() {
     const route = `/files/list/${id}`;
     const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
@@ -121,23 +122,76 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             </View>
           </View>
           <ScrollView style={{ paddingRight: 10 }}>
-            {fileData &&
-              fileData.map((file, index) => (
-                <FileDownloadButton key={index} file={file} />
-              ))}
-            {fileData && fileData.length === 0 && (
-              <View>
-                <TText
-                  style={{
-                    fontSize: fontSize.SMALL,
-                    fontFamily: "InterRegular",
-                  }}
-                >
-                  No files found
-                </TText>
+            <View>
+              {fileData &&
+                fileData.map((file, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      marginBottom: 5,
+                    }}
+                  >
+                    <FileDownloadButton file={file} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log(`pressed delete ${file.fileName}`);
+                      }}
+                    >
+                      <Icon
+                        source="delete"
+                        color={theme.colors.primary}
+                        size={26}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+
+              {fileData && fileData.length === 0 && (
+                <View>
+                  <TText
+                    style={{
+                      fontSize: fontSize.SMALL,
+                      fontFamily: "InterRegular",
+                    }}
+                  >
+                    No files found
+                  </TText>
+                </View>
+              )}
+
+              <View
+                style={{
+                  alignItems: "flex-end",
+                  paddingLeft: 8,
+                  paddingRight: 8,
+                  marginTop: 20,
+                }}
+              >
+                <TouchableOpacity>
+                  <View
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: theme.colors.primary,
+                      flexDirection: "row",
+                      maxWidth: 30,
+                    }}
+                  >
+                    <Icon source="plus" color="white" size={30} />
+                  </View>
+                </TouchableOpacity>
               </View>
-            )}
+            </View>
           </ScrollView>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("add");
+            }}
+          ></TouchableOpacity>
         </Modal>
       </Portal>
       <Snackbar
@@ -195,6 +249,7 @@ const FileDownloadButton = ({ file }) => {
       );
     }
   };
+  const theme = useTheme();
 
   return (
     <TouchableOpacity
@@ -212,7 +267,7 @@ const FileDownloadButton = ({ file }) => {
         alignItems="center"
         style={{ marginTop: 5, marginBottom: 5 }}
       >
-        <Icon source="download" size={26} />
+        <Icon source="download" size={26} color={theme.colors.primary} />
         <TText
           style={{
             fontSize: fontSize.SMALL,

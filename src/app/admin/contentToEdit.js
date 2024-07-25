@@ -223,25 +223,14 @@ export default function RearrangableTopics() {
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
   };
 
-  // TODO: test
-  function getSmallestAbsentPositive(nums) {
-    // Finds the smallest missing positive number in an array of numbers
-
-    // Create set
-    const numSet = new Set();
+    // TODO: test
+  function getMaxNumPlusOne(nums) {
+    // Finds the max number + 1
+    let maxFound = 0;
     for (const num of nums) {
-      if (num <= 0) {
-        throw new Error(`Non-positive number ${num} detected in array`);
-      }
-      numSet.add(num);
+      maxFound = Math.max(maxFound, num)
     }
-
-    // Iterate through numbers starting from 1
-    let smallestAbsentPositive = 1;
-    while (numSet.has(smallestAbsentPositive)) {
-      smallestAbsentPositive++;
-    }
-    return smallestAbsentPositive;
+    return maxFound + 1;
   }
 
   // TODO: test
@@ -328,7 +317,7 @@ export default function RearrangableTopics() {
         <TouchableOpacity
           onPress={() => {
             console.log("add");
-            const smallestAbsentPositive = getSmallestAbsentPositive(
+            const maxNumPlusOne = getMaxNumPlusOne(
               contentData.map((d) => d.id)
             );
             const title = "Untitled";
@@ -336,13 +325,13 @@ export default function RearrangableTopics() {
             const content = "";
             appendToData(
               contentData,
-              smallestAbsentPositive,
+              maxNumPlusOne,
               title,
               description,
               content
             );
             navigation.navigate(`admin/topicsWrite/[id]`, {
-              id: smallestAbsentPositive,
+              id: maxNumPlusOne,
               title: title,
               description: description,
               content: content,

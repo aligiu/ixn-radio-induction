@@ -239,7 +239,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
                 marginBottom: 10,
               }}
             >
-              Rearranged (adjacents):
+              Rearranged (adjacently):
             </TText>
             <TText
               style={{

@@ -18,25 +18,25 @@ export function getModifiedContent(contentToEdit, content) {
     }
     const originalItem = contentMap.get(item.id);
     console.log(
-      "title *",
+      "title mod:",
       item.title,
       originalItem.title,
       item.title !== originalItem.title
     );
     console.log(
-      "description *",
+      "description mod:",
       item.description,
       originalItem.description,
       item.description !== originalItem.description
     );
     console.log(
-      "content *",
+      "content mod:",
       item.content,
       originalItem.content,
       item.content !== originalItem.content
     );
     console.log(
-      "secret *",
+      "secret mod:",
       item.secret,
       originalItem.secret,
       item.secret !== originalItem.secret

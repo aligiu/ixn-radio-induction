@@ -54,7 +54,7 @@ import { RichText, useEditorBridge } from "@10play/tentap-editor";
 
 import { useRoute } from "@react-navigation/native";
 
-import FileModal from "../../components/FileModal";
+import FileModalReadOnly from "../../components/FileModalReadOnly";
 import SecretModal from "../../components/SecretModal";
 
 export default function Topic() {
@@ -124,7 +124,7 @@ export default function Topic() {
           secret={secret}
           editable={false}
         />
-        <FileModal
+        <FileModalReadOnly
           visible={fileModalVisible}
           closeModal={() => {
             setFileModalVisible(false);

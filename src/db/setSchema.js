@@ -36,6 +36,15 @@ export async function setSchema(db) {
       );
     `);
 
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS FileOps (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        folderId INTEGER,
+        fileName TEXT,
+        operation TEXT,
+        uri TEXT
+      );
+    `);
 
     console.log(`Schema has been set in ${db.databaseName}`);
   } catch (error) {

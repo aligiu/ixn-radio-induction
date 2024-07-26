@@ -5,14 +5,14 @@
 import { setSchema } from "./setSchema";
 
 export async function getRootContent(db, table) {
-  await setSchema(db)
+  await setSchema(db);
   const roots = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
     WHERE prevId IS NULL;`);
-    if (roots.length === 0) {
-      throw new Error("No root found, as there are no records with NULL prevId!");
-    }
+  if (roots.length === 0) {
+    throw new Error("No root found, as there are no records with NULL prevId!");
+  }
   if (roots.length !== 1) {
     throw new Error("More than one record with NULL prevId found!");
   }
@@ -20,7 +20,7 @@ export async function getRootContent(db, table) {
 }
 
 export async function getTailContent(db, table) {
-  await setSchema(db)
+  await setSchema(db);
   const tails = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -32,12 +32,12 @@ export async function getTailContent(db, table) {
 }
 
 export async function getNextContent(db, table, curr_id) {
-  await setSchema(db)
+  await setSchema(db);
   const nexts = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
     WHERE prevId IS ${curr_id};`);
-    if (nexts.length > 1) {
+  if (nexts.length > 1) {
     throw new Error(
       "More than one record with prevId == id of current record!"
     );
@@ -46,7 +46,7 @@ export async function getNextContent(db, table, curr_id) {
 }
 
 export async function getPrevContent(db, table, curr_id) {
-  await setSchema(db)
+  await setSchema(db);
   const prevs = await db.getAllAsync(`
     SELECT *
     FROM ${table} 
@@ -73,7 +73,7 @@ export async function getAllContentSorted(db, table) {
     },
     ...
   ]`;
-  await setSchema(db)
+  await setSchema(db);
   const allContent = [];
   n = (await db.getFirstAsync(`SELECT COUNT(*) AS n FROM ${table}`))["n"];
   if (n === 0) {
@@ -96,9 +96,8 @@ export async function getAllContentSorted(db, table) {
   return allContent;
 }
 
-
 export async function getAllContent(db, table) {
-  await setSchema(db)
+  await setSchema(db);
   const content = await db.getAllAsync(`
     SELECT *
     FROM ${table}`);
@@ -106,8 +105,8 @@ export async function getAllContent(db, table) {
 }
 
 export async function overwriteTargetWithSource(db, target, source) {
-  await setSchema(db)
-  
+  await setSchema(db);
+
   // Clear the target
   await db.execAsync(`DELETE FROM ${target}`);
 
@@ -121,7 +120,6 @@ export async function overwriteTargetWithSource(db, target, source) {
   console.log("Content copied to ${target} successfully.");
 }
 
-
 // not working
 // const query = `
 //   UPDATE ContentToEdit
@@ -129,12 +127,10 @@ export async function overwriteTargetWithSource(db, target, source) {
 //   WHERE id = ?;
 // `;
 // await db.execAsync(query, [newValue, id]);
-  
+
 export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
   try {
-
-    console.log(`Modifying field ${field} to newValue of ${newValue}`)
-
+    console.log(`Modifying field ${field} to newValue of ${newValue}`);
 
     const statement = await db.prepareAsync(`
       UPDATE ContentToEdit
@@ -147,7 +143,7 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
       $newValue: newValue,
     });
 
-    console.log(`attempted updating ${id} ${field} to ${newValue}`)
+    console.log(`attempted updating ${id} ${field} to ${newValue}`);
 
     const newContent = await getAllContentSorted(db, "ContentToEdit");
     console.log("newContent ***", newContent);
@@ -159,12 +155,10 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
   }
 }
 
-
 export async function overwriteContentToEdit(db, contentToEditJson) {
   try {
     // Clear the ContentToEdit table
     await db.execAsync(`DELETE FROM ContentToEdit`);
-
 
     // console.log("contentToEditJson", contentToEditJson)
 
@@ -172,9 +166,8 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
       INSERT INTO ContentToEdit (id, title, description, content, nextId, prevId, secret)
       VALUES ($id, $title, $description, $content, $nextId, $prevId, $secret)
     `);
-    
 
-    await contentToEditJson.forEach(datapoint => {
+    await contentToEditJson.forEach((datapoint) => {
       insertStatement.executeAsync({
         $id: datapoint.id,
         $title: datapoint.title,
@@ -187,25 +180,24 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
     });
 
     console.log("ContentToEdit table overwritten successfully.");
-    console.log("*** ContentToEdit start")
-    const sortedContent = await getAllContentSorted(db, "ContentToEdit")
+    console.log("*** ContentToEdit start");
+    const sortedContent = await getAllContentSorted(db, "ContentToEdit");
     sortedContent.forEach((item, i) => {
-      console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}   (${item.title})`);
+      console.log(
+        `i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}   (${item.title})`
+      );
     });
-    console.log("*** ContentToEdit end")
-    
+    console.log("*** ContentToEdit end");
   } catch (error) {
     console.error("Error overwriting ContentToEdit table:", error);
     throw error;
   }
 }
 
-
-
 export async function overwriteContent(db, contentData) {
   try {
     // set schema if not already existing
-    await setSchema(db)
+    await setSchema(db);
 
     // Delete existing Content data for overwrite
     await db.execAsync(`DELETE FROM Content`);
@@ -253,3 +245,25 @@ export async function overwriteContent(db, contentData) {
     console.error("Error updating content data: ", error);
   }
 }
+
+export async function includeOpInFileOps(db, folderId, fileName, uri, operation) {
+  try {
+    await db.execAsync(`
+      DELETE FROM FileOps
+      WHERE folderId=${folderId} AND fileName='${fileName}';
+    `);
+
+    await db.execAsync(`
+      INSERT INTO FileOps (folderId, fileName, operation, uri)
+      VALUES (${folderId}, '${fileName}', ${operation}, '${uri}');
+    `);
+
+    console.log(
+      `Included ${operation} operation for ${fileName} in FileOps successfully.`
+    );
+  } catch (error) {
+    console.error(`Error including ${operation} operation for ${fileName} in FileOps.`, error);
+    throw error;
+  }
+}
+

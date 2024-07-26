@@ -14,6 +14,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useTheme } from "react-native-paper";
 
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
+import * as DocumentPicker from "expo-document-picker";
 
 const save = async (uri, filename, mimetype) => {
   if (Platform.OS === "android") {
@@ -57,6 +58,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   const theme = useTheme();
 
   const [fileData, setFileData] = useState([]);
+  const [fileOps, setFileOps] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   async function fetchFileDataRemotely() {
@@ -87,6 +89,38 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     }
     setFileDataOrShowError();
   }, []);
+
+  const handleDeleteFile = async (fileId) => {
+    try {
+      const response = await deleteFile(fileId);
+      if (response.ok) {
+        setFileData(fileData.filter((file) => file.id !== fileId));
+        setSnackbarMessage("File deleted successfully.");
+        setSnackbarVisible(true);
+      } else {
+        setSnackbarMessage("Failed to delete the file.");
+        setSnackbarVisible(true);
+      }
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      setSnackbarMessage("Error deleting file: " + error.message);
+      setSnackbarVisible(true);
+    }
+  };
+
+  const handleUploadFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({});
+      console.log("result:", result)
+      const op = {
+
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setSnackbarMessage("Error uploading file: " + error.message);
+      setSnackbarVisible(true);
+    }
+  };
 
   return (
     <>
@@ -172,7 +206,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                   marginTop: 20,
                 }}
               >
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleUploadFile}>
                   <View
                     style={{
                       borderRadius: 10,

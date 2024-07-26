@@ -303,3 +303,10 @@ export async function getFileOps(db) {
     `);
   return fileOps;
 }
+
+export async function deleteAllFileOps(db) {
+  await db.execAsync(`
+      DELETE FROM FileOps;
+    `);
+  return fileOps;
+}

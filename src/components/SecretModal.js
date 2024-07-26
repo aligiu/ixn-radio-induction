@@ -48,7 +48,7 @@ const SecretModal = ({
     if (!isLoggedIn) {
       return "<p> Please log in to view secrets </p>";
     }
-    if (!editable) {
+    if (!secret && !editable) {
       return "<p>No secrets yet</p>"
     }
     return secret;

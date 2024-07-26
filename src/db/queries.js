@@ -246,24 +246,60 @@ export async function overwriteContent(db, contentData) {
   }
 }
 
-export async function includeOpInFileOps(db, folderId, fileName, uri, operation) {
+export async function includeOpInFileOps(
+  db,
+  folderId,
+  fileName,
+  uri,
+  operation
+) {
+  `
+  uri points to local files for add operations and are not needed for delete operations
+  `;
   try {
-    await db.execAsync(`
+    const deleteStatement = await db.prepareAsync(`
       DELETE FROM FileOps
-      WHERE folderId=${folderId} AND fileName='${fileName}';
+      WHERE folderId=$folderId AND fileName=$fileName;
     `);
 
-    await db.execAsync(`
+    deleteStatement.executeAsync({
+      $folderId: folderId,
+      $fileName: fileName,
+    });
+
+    const insertStatement = await db.prepareAsync(`
       INSERT INTO FileOps (folderId, fileName, operation, uri)
-      VALUES (${folderId}, '${fileName}', ${operation}, '${uri}');
+      VALUES ($folderId, $fileName, $operation, $uri);
     `);
+
+    insertStatement.executeAsync({
+      $folderId: folderId,
+      $fileName: fileName,
+      $operation: operation,
+      $uri: uri,
+    });
+
+    const fileOps = await db.getAllAsync(`
+      SELECT * FROM FileOps;
+    `);
+
+    console.log("fileOps DB:", fileOps)
 
     console.log(
       `Included ${operation} operation for ${fileName} in FileOps successfully.`
     );
   } catch (error) {
-    console.error(`Error including ${operation} operation for ${fileName} in FileOps.`, error);
+    console.error(
+      `Error including ${operation} operation for ${fileName} in FileOps.`,
+      error
+    );
     throw error;
   }
 }
 
+export async function getFileOps(db) {
+  const fileOps = await db.getAllAsync(`
+      SELECT * FROM FileOps;
+    `);
+  return fileOps;
+}

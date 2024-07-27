@@ -142,14 +142,13 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   function handleFileDelete(folderId, fileName) {
     return async () => {
       try {
-        console.log(`deleting ${folderId} ${fileName}...`)
-        includeOpInFileOps(db, folderId, fileName, "", "delete");
+        console.log(`deleting ${folderId} ${fileName}...`);
+        await includeOpInFileOps(db, folderId, fileName, "", "delete");
+        setNumOps(numOps + 1);
       } catch (error) {
         console.error("Error deleting file:", error);
         setSnackbarMessage("Error deleting file: " + error.message);
         setSnackbarVisible(true);
-      } finally {
-        setNumOps(numOps + 1);
       }
     };
   }
@@ -275,7 +274,12 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                 fileData
                   .filter((f) => {
                     // remove files already associated with "add" or "delete" operations
-                    const addDelOpsFileNames = filterByFolderId(adds.concat(dels), id).map((op) => op.fileName)
+                    const addDelOpsFileNames = filterByFolderId(
+                      adds.concat(dels),
+                      id
+                    ).map((op) => op.fileName);
+                    console.log("xx adds.concat(dels)", adds.concat(dels));
+                    console.log("xx addDelOpsFileNames", addDelOpsFileNames);
                     return !addDelOpsFileNames.includes(f.fileName);
                   })
                   .map((file, index) => (
@@ -354,6 +358,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                   <TouchableOpacity
                     onPress={() => {
                       console.log(`pressed delete ${addedFile.fileName}`);
+                      handleFileDelete(id, addedFile.fileName)();
                     }}
                   >
                     <Icon

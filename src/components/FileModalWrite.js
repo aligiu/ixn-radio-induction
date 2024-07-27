@@ -311,38 +311,62 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
 
               {filterByFolderId(adds, id).map((addedFile, index) => (
                 <View
-                  key={index}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    marginBottom: 10,
-                    marginTop: 5,
+                key={index}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  marginBottom: 5,
+                }}
+              >
+                <FileUploadButton addedFile={addedFile} />
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(`pressed delete ${addedFile.fileName}`);
                   }}
                 >
-                  <TText
-                    style={{
-                      fontSize: fontSize.SMALL,
-                      fontFamily: "InterRegular",
-                      // textDecorationLine: "underline",
-                    }}
-                  >
-                    {addedFile.fileName}
-                  </TText>
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log(`pressed delete ${addedFile.fileName}`);
-                    }}
-                  >
-                    <Icon
-                      source="delete"
-                      color={theme.colors.primary}
-                      size={26}
-                    />
-                  </TouchableOpacity>
-                </View>
+                  <Icon
+                    source="delete"
+                    color={theme.colors.primary}
+                    size={26}
+                  />
+                </TouchableOpacity>
+              </View>
+                // <View
+                //   key={index}
+                //   style={{
+                //     flexDirection: "row",
+                //     alignItems: "center",
+                //     justifyContent: "space-between",
+                //     paddingLeft: 10,
+                //     paddingRight: 10,
+                //     marginBottom: 10,
+                //     marginTop: 5,
+                //   }}
+                // >
+                //   <TText
+                //     style={{
+                //       fontSize: fontSize.SMALL,
+                //       fontFamily: "InterRegular",
+                //       // textDecorationLine: "underline",
+                //     }}
+                //   >
+                //     {addedFile.fileName}
+                //   </TText>
+                //   <TouchableOpacity
+                //     onPress={() => {
+                //       console.log(`pressed delete ${addedFile.fileName}`);
+                //     }}
+                //   >
+                //     <Icon
+                //       source="delete"
+                //       color={theme.colors.primary}
+                //       size={26}
+                //     />
+                //   </TouchableOpacity>
+                // </View>
               ))}
 
               <View
@@ -390,6 +414,77 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
         {snackbarMessage}
       </Snackbar>
     </>
+  );
+};
+
+const FileUploadButton = ({ addedFile }) => {
+  // const handleDownloadAndOpen = async () => {
+  //   try {
+  //     const route = file.downloadRoute;
+  //     const url = `${PROTOCOL}://${SERVER_API_BASE}${route}`;
+  //     const fileName = file.fileName;
+  //     const downloadDest = FileSystem.documentDirectory + fileName;
+
+  //     console.log(`Downloading from: ${url}`);
+  //     console.log(`Saving to: ${downloadDest}`);
+
+  //     const { uri, status, headers } = await FileSystem.downloadAsync(
+  //       url,
+  //       downloadDest
+  //     );
+
+  //     save(uri, fileName, headers["Content-Type"]);
+
+  //     console.log("uri:", uri);
+  //     console.log("status:", status);
+
+  //     if (status === 200) {
+  //       console.log(`File downloaded to: ${uri}`);
+  //       await WebBrowser.openBrowserAsync(uri);
+  //       console.log("File opened");
+  //     } else {
+  //       console.error(`Download failed with status: ${status}`);
+  //       Alert.alert("Error", "Download failed with status: " + status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error downloading or opening file:", error);
+  //     Alert.alert(
+  //       "Error",
+  //       "Error downloading or opening file: " + error.message
+  //     );
+  //   }
+  // };
+  const theme = useTheme();
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        // console.log(
+        //   `Detected ${file.fileName} download: downloadURL (protocol+base+route) is:`
+        // );
+        // console.log(`${PROTOCOL}://${SERVER_API_BASE}${file.downloadRoute}`);
+        // handleDownloadAndOpen();
+      }}
+    >
+      <View
+        flexDirection="row"
+        gap={10}
+        alignItems="center"
+        style={{ marginTop: 5, marginBottom: 5 }}
+      >
+        <Icon source="upload" size={26} color={theme.colors.primary} />
+        <TText
+          style={{
+            fontSize: fontSize.SMALL,
+            fontFamily: "InterRegular",
+            textDecorationLine: "underline",
+          }}
+        >
+          {" "}
+          {addedFile.fileName !== "" ? addedFile.fileName : "unnamed file"}{" "}
+        </TText>
+      </View>
+    </TouchableOpacity>
   );
 };
 

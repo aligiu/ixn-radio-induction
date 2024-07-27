@@ -329,7 +329,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                 style={{
                   fontSize: fontSize.SMALL,
                   fontFamily: "InterSemiBold",
-                  paddingTop: 8,
+                  paddingTop: 16,
                   paddingBottom: 8,
                 }}
               >

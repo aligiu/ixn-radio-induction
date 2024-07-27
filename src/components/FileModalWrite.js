@@ -22,6 +22,7 @@ import {
   getFileOps,
   includeOpInFileOps,
   addOpAlreadyExists,
+  removeOpInFileOps,
 } from "../db/queries";
 
 import { useSQLiteContext } from "expo-sqlite";
@@ -96,10 +97,6 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   console.log("fileData:", fileData);
   const uploadedFileNames = fileData.map((file) => file.fileName);
   console.log("uploadedFileNames", uploadedFileNames);
-  console.log(
-    `uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")`,
-    uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")
-  );
 
   useEffect(() => {
     async function setFileDataOrShowError() {
@@ -156,8 +153,24 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             {
               text: "Delete",
               onPress: async () => {
-                await includeOpInFileOps(db, folderId, fileName, "", "delete");
-                setNumOps(numOps + 1);
+                console.log("yyy uploadedFileNames", uploadedFileNames)
+                console.log("yyy fileName", fileName)
+                console.log("uploadedFileNames.includes(fileName)", uploadedFileNames.includes(fileName))
+                if (uploadedFileNames.includes(fileName)) {
+                  // if file is in remote strage, then need to actually include the "delete" op from fileOps
+                  await includeOpInFileOps(
+                    db,
+                    folderId,
+                    fileName,
+                    "",
+                    "delete"
+                  );
+                  setNumOps(numOps + 1);
+                } else {
+                  // if file is not in remote storage, just remove existing "add" op from fileOps
+                  await removeOpInFileOps(db, folderId, fileName);
+                  setNumOps(numOps + 1);
+                }
               },
             },
           ]

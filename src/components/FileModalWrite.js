@@ -236,6 +236,16 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             </View>
           </View>
           <ScrollView style={{ paddingRight: 10 }}>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterSemiBold",
+                paddingTop: 8,
+                paddingBottom: 8,
+              }}
+            >
+              Uploaded
+            </TText>
             <View>
               {fileData &&
                 fileData.map((file, index) => (
@@ -287,11 +297,53 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                     </TText>
                   </View>
                 )}
-              <View>
-                {filterByFolderId(adds, id).map((addedFile, index) => (
-                  <TText>{addedFile.fileName}</TText>
-                ))}
-              </View>
+              <TText
+                style={{
+                  fontSize: fontSize.SMALL,
+                  fontFamily: "InterSemiBold",
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
+              >
+                To Upload
+              </TText>
+              <View style={{ paddingLeft: 10, paddingRight: 10 }}></View>
+
+              {filterByFolderId(adds, id).map((addedFile, index) => (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    marginBottom: 10,
+                    marginTop: 5,
+                  }}
+                >
+                  <TText
+                    style={{
+                      fontSize: fontSize.SMALL,
+                      fontFamily: "InterRegular",
+                      // textDecorationLine: "underline",
+                    }}
+                  >
+                    {addedFile.fileName}
+                  </TText>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log(`pressed delete ${addedFile.fileName}`);
+                    }}
+                  >
+                    <Icon
+                      source="delete"
+                      color={theme.colors.primary}
+                      size={26}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
 
               <View
                 style={{

@@ -19,7 +19,7 @@ import * as DocumentPicker from "expo-document-picker";
 import {
   getFileOps,
   includeOpInFileOps,
-  fileAlreadyExists,
+  addOpAlreadyExists,
 } from "../db/queries";
 
 import { useSQLiteContext } from "expo-sqlite";
@@ -139,7 +139,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       try {
         const file = await DocumentPicker.getDocumentAsync({});
         console.log("file:", file);
-        if (await fileAlreadyExists(db, folderId, file.assets[0].name)) {
+        if (await addOpAlreadyExists(db, folderId, file.assets[0].name)) {
           Alert.alert(
             `File already exists`,
             `Replacing "${file.assets[0].name}" will overwrite its contents`,

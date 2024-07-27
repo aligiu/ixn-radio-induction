@@ -342,10 +342,10 @@ export async function deleteAllFileOps(db) {
   return fileOps;
 }
 
-export async function fileAlreadyExists(db, folderId, fileName) {
+export async function addOpAlreadyExists(db, folderId, fileName) {
   const getCountStatement = await db.prepareAsync(`
     SELECT COUNT(*) AS n FROM FileOps 
-    WHERE folderId=$folderId AND fileName=$fileName;
+    WHERE folderId=$folderId AND fileName=$fileName AND operation='add';
   `);
 
   res = await getCountStatement.executeAsync({

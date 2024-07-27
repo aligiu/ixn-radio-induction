@@ -73,8 +73,6 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     return list.filter((item) => item.folderId == folderId);
   }
 
-  
-
   const [fileData, setFileData] = useState([]);
   const [adds, setAdds] = useState([]);
   const [dels, setDels] = useState([]);
@@ -94,9 +92,11 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
 
   console.log("fileData:", fileData);
   const uploadedFileNames = fileData.map((file) => file.fileName);
-  console.log("uploadedFileNames", uploadedFileNames)
-  console.log(`uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")`, uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf"))
-  
+  console.log("uploadedFileNames", uploadedFileNames);
+  console.log(
+    `uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")`,
+    uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")
+  );
 
   useEffect(() => {
     async function setFileDataOrShowError() {
@@ -176,7 +176,9 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
         if (
           file.canceled === false &&
           ((await addOpAlreadyExists(db, folderId, file.assets[0].name)) ||
-            uploadedFileNames.includes(file.assets[0].name)) // file already uploaded
+            // file already uploaded and not deleted
+            (uploadedFileNames.includes(file.assets[0].name) &&
+              !dels.map((d) => d.fileName).includes(file.assets[0].name)))
         ) {
           Alert.alert(
             `File already exists`,
@@ -191,8 +193,8 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
               {
                 text: "Replace",
                 onPress: async () => {
-                  await createFileAddHandler(db, id, file)()
-                  setNumOps(numOps + 1);  // Trigger re-render to show added files
+                  await createFileAddHandler(db, id, file)();
+                  setNumOps(numOps + 1); // Trigger re-render to show added files
                 },
               },
             ]
@@ -208,7 +210,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
           );
           const fileOps = await getFileOps(db);
           console.log("fileOps:", fileOps);
-          setNumOps(numOps + 1);  // Trigger re-render to show added files
+          setNumOps(numOps + 1); // Trigger re-render to show added files
         }
       } catch (error) {
         console.error("Error uploading file:", error);

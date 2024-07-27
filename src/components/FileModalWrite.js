@@ -11,7 +11,6 @@ import { TouchableOpacity } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as WebBrowser from "expo-web-browser";
 import * as IntentLauncher from "expo-intent-launcher";
-import * as Linking from "expo-linking";
 import * as Sharing from "expo-sharing";
 
 import { useTheme } from "react-native-paper";
@@ -74,6 +73,8 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     return list.filter((item) => item.folderId == folderId);
   }
 
+  
+
   const [fileData, setFileData] = useState([]);
   const [adds, setAdds] = useState([]);
   const [dels, setDels] = useState([]);
@@ -90,6 +91,12 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     });
     return response;
   }
+
+  console.log("fileData:", fileData);
+  const uploadedFileNames = fileData.map((file) => file.fileName);
+  console.log("uploadedFileNames", uploadedFileNames)
+  console.log(`uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")`, uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf"))
+  
 
   useEffect(() => {
     async function setFileDataOrShowError() {
@@ -154,6 +161,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
         "add"
       );
       const fileOps = await getFileOps(db);
+      setNumOps(numOps + 1);
       console.log("fileOps:", fileOps);
     };
   }
@@ -163,9 +171,12 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       try {
         const file = await DocumentPicker.getDocumentAsync({});
         console.log("file:", file);
+        console.log("uploadedFileNames:", uploadedFileNames);
+
         if (
           file.canceled === false &&
-          (await addOpAlreadyExists(db, folderId, file.assets[0].name))
+          ((await addOpAlreadyExists(db, folderId, file.assets[0].name)) ||
+            uploadedFileNames.includes(file.assets[0].name)) // file already uploaded
         ) {
           Alert.alert(
             `File already exists`,
@@ -179,7 +190,10 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
               },
               {
                 text: "Replace",
-                onPress: createFileAddHandler(db, id, file),
+                onPress: async () => {
+                  await createFileAddHandler(db, id, file)()
+                  setNumOps(numOps + 1);  // Trigger re-render to show added files
+                },
               },
             ]
           );
@@ -194,13 +208,12 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
           );
           const fileOps = await getFileOps(db);
           console.log("fileOps:", fileOps);
+          setNumOps(numOps + 1);  // Trigger re-render to show added files
         }
       } catch (error) {
         console.error("Error uploading file:", error);
         setSnackbarMessage("Error uploading file: " + error.message);
         setSnackbarVisible(true);
-      } finally {
-        setNumOps(numOps + 1);
       }
     };
   }
@@ -280,7 +293,6 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                 ))}
 
               {console.log("adds: ", adds)}
-              {console.log(id)}
               {console.log(
                 "filterByFolderId(adds, id):",
                 filterByFolderId(adds, id)

@@ -91,7 +91,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   }
 
   console.log("fileData:", fileData);
-  const uploadedFileNames = filterByFolderId(fileData).map((file) => file.fileName);
+  const uploadedFileNames = fileData.map((file) => file.fileName);
   console.log("uploadedFileNames", uploadedFileNames);
   console.log(
     `uploadedFileNames.includes("MScCS_Scheme_of_Award_02.pdf")`,
@@ -178,7 +178,9 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
           ((await addOpAlreadyExists(db, folderId, file.assets[0].name)) ||
             // file already uploaded and not deleted
             (uploadedFileNames.includes(file.assets[0].name) &&
-              !filterByFolderId(dels).map((d) => d.fileName).includes(file.assets[0].name)))
+              !filterByFolderId(dels, id)
+                .map((d) => d.fileName)
+                .includes(file.assets[0].name)))
         ) {
           Alert.alert(
             `File already exists`,
@@ -266,33 +268,39 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             </TText>
             <View>
               {fileData &&
-                fileData.map((file, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                    <FileDownloadButton file={file} />
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log(`pressed delete ${file.fileName}`);
-                        handleFileDelete(id, fileData.fileName)();
+                fileData
+                  .filter((f) => {
+                    // remove files already associated with "add" or "delete" operations
+                    const addDelOpsFileNames = filterByFolderId(adds.concat(dels), id).map((op) => op.fileName)
+                    return !addDelOpsFileNames.includes(f.fileName);
+                  })
+                  .map((file, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        marginBottom: 5,
                       }}
                     >
-                      <Icon
-                        source="delete"
-                        color={theme.colors.primary}
-                        size={26}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
+                      <FileDownloadButton file={file} />
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log(`pressed delete ${file.fileName}`);
+                          handleFileDelete(id, fileData.fileName)();
+                        }}
+                      >
+                        <Icon
+                          source="delete"
+                          color={theme.colors.primary}
+                          size={26}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
 
               {console.log("adds: ", adds)}
               {console.log(

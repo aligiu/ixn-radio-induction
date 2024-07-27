@@ -338,7 +338,6 @@ export async function deleteAllFileOps(db) {
   await db.execAsync(`
       DELETE FROM FileOps;
     `);
-  return fileOps;
 }
 
 export async function addOpAlreadyExists(db, folderId, fileName) {

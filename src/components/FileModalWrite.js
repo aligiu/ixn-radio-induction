@@ -67,6 +67,10 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
 
   const theme = useTheme();
 
+  function filterByFolderId(list, folderId) {
+    return list.filter(item => item.folderId == folderId);
+  }
+
   const [fileData, setFileData] = useState([]);
   const [adds, setAdds] = useState([]);
   const [dels, setDels] = useState([]);
@@ -102,14 +106,6 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     setFileDataOrShowError();
   }, [numOps]);
 
-  // useEffect(() => {
-  //   async function displayFileOps() {
-  //     fileOps = await getFileOps(db);
-  //     console.log("fileOps:", fileOps);
-  //   }
-  //   displayFileOps();
-  // }, []);
-
   useEffect(() => {
     async function setAddsAndDels() {
       const addsTemp = [];
@@ -128,7 +124,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       setDels(delsTemp)
     }
     setAddsAndDels();
-  }, []);
+  }, [numOps]);
 
   function handleFileDelete(folderId, fileName) {
     return async () => {
@@ -270,7 +266,11 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                   </View>
                 ))}
 
-              {fileData && fileData.length === 0 && (
+              {console.log("adds: ", adds)}
+              {console.log(id)}
+              {console.log("filterByFolderId(adds, id):", filterByFolderId(adds, id))}
+
+              {fileData && (fileData.length === 0) && (filterByFolderId(adds, id).length === 0) && (
                 <View>
                   <TText
                     style={{

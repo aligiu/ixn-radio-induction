@@ -134,31 +134,9 @@ export default function RearrangableTopics() {
           >
             <TouchableOpacity
               onPress={() => {
-                Alert.alert(
-                  `Confirm Delete Section?`,
-                  `Your deletion request will be saved but won't be carried out until you review and approve the changes.`,
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: async () => {
-                        console.log("Delete cancelled");
-                      },
-                    },
-                    {
-                      text: "Delete",
-                      onPress: async () => {
-                        console.log("Delete confirmed")                        
-                        handleDeleteById(contentData, item["id"]);
-                          console.log(
-                            `Delete instruction executed for id: ${item["id"]}`
-                          )
-                      },
-                    },
-                  ]
-                );
-                // setConfirmDeleteModalVisible(true);
-                // setDeleteTargetId(item["id"]);
-                // console.log("item.id has been set as", item["id"]);
+                setConfirmDeleteModalVisible(true);
+                setDeleteTargetId(item["id"]);
+                console.log("item.id has been set as", item["id"]);
               }}
             >
               <Icon source="delete" color={theme.colors.primary} size={32} />

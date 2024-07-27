@@ -143,8 +143,25 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     return async () => {
       try {
         console.log(`deleting ${folderId} ${fileName}...`);
-        await includeOpInFileOps(db, folderId, fileName, "", "delete");
-        setNumOps(numOps + 1);
+        Alert.alert(
+          `Confirm Delete File?`,
+          `Your deletion request will be saved but won't be carried out until you review and approve the changes.`,
+          [
+            {
+              text: "Cancel",
+              onPress: async () => {
+                console.log("Upload cancelled");
+              },
+            },
+            {
+              text: "Delete",
+              onPress: async () => {
+                await includeOpInFileOps(db, folderId, fileName, "", "delete");
+                setNumOps(numOps + 1);
+              },
+            },
+          ]
+        );
       } catch (error) {
         console.error("Error deleting file:", error);
         setSnackbarMessage("Error deleting file: " + error.message);

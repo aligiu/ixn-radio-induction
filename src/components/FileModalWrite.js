@@ -139,7 +139,10 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       try {
         const file = await DocumentPicker.getDocumentAsync({});
         console.log("file:", file);
-        if (await addOpAlreadyExists(db, folderId, file.assets[0].name)) {
+        if (
+          file.canceled === false &&
+          (await addOpAlreadyExists(db, folderId, file.assets[0].name))
+        ) {
           Alert.alert(
             `File already exists`,
             `Replacing "${file.assets[0].name}" will overwrite its contents`,
@@ -156,7 +159,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
               },
             ]
           );
-        } else {
+        } else if (file.canceled === false) {
           createFileAddHandler(db, id, file);
           await includeOpInFileOps(
             db,

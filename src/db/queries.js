@@ -285,7 +285,6 @@ export async function includeOpInFileOps(
   `;
   try {
 
-
     const deleteStatement = await db.prepareAsync(`
       DELETE FROM FileOps
       WHERE folderId=$folderId AND fileName=$fileName;

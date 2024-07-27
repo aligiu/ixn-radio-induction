@@ -142,6 +142,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   function handleFileDelete(folderId, fileName) {
     return async () => {
       try {
+        console.log(`deleting ${folderId} ${fileName}...`)
         includeOpInFileOps(db, folderId, fileName, "", "delete");
       } catch (error) {
         console.error("Error deleting file:", error);
@@ -293,7 +294,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                       <TouchableOpacity
                         onPress={() => {
                           console.log(`pressed delete ${file.fileName}`);
-                          handleFileDelete(id, fileData.fileName)();
+                          handleFileDelete(id, file.fileName)();
                         }}
                       >
                         <Icon

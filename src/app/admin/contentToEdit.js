@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
@@ -133,9 +134,31 @@ export default function RearrangableTopics() {
           >
             <TouchableOpacity
               onPress={() => {
-                setConfirmDeleteModalVisible(true);
-                setDeleteTargetId(item["id"]);
-                console.log("item.id has been set as", item["id"]);
+                Alert.alert(
+                  `Confirm Delete Section?`,
+                  `Your deletion request will be saved but won't be carried out until you review and approve the changes.`,
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: async () => {
+                        console.log("Delete cancelled");
+                      },
+                    },
+                    {
+                      text: "Delete",
+                      onPress: async () => {
+                        console.log("Delete confirmed")                        
+                        handleDeleteById(contentData, item["id"]);
+                          console.log(
+                            `Delete instruction executed for id: ${item["id"]}`
+                          )
+                      },
+                    },
+                  ]
+                );
+                // setConfirmDeleteModalVisible(true);
+                // setDeleteTargetId(item["id"]);
+                // console.log("item.id has been set as", item["id"]);
               }}
             >
               <Icon source="delete" color={theme.colors.primary} size={32} />

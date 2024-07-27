@@ -150,7 +150,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             {
               text: "Cancel",
               onPress: async () => {
-                console.log("Upload cancelled");
+                console.log("Delete cancelled");
               },
             },
             {

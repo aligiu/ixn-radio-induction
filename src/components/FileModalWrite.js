@@ -16,7 +16,11 @@ import { useTheme } from "react-native-paper";
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 import * as DocumentPicker from "expo-document-picker";
 
-import { getFileOps, includeOpInFileOps, fileAlreadyExists } from "../db/queries";
+import {
+  getFileOps,
+  includeOpInFileOps,
+  fileAlreadyExists,
+} from "../db/queries";
 
 import { useSQLiteContext } from "expo-sqlite";
 
@@ -135,7 +139,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       try {
         const file = await DocumentPicker.getDocumentAsync({});
         console.log("file:", file);
-        if (await fileAlreadyExists(db, file.assets[0].name)) {
+        if (await fileAlreadyExists(db, folderId, file.assets[0].name)) {
           Alert.alert(
             `File already exists`,
             `Replacing "${file.assets[0].name}" will overwrite its contents`,
@@ -153,7 +157,16 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             ]
           );
         } else {
-          await createFileAddHandler(db, id, file)
+          createFileAddHandler(db, id, file);
+          await includeOpInFileOps(
+            db,
+            folderId,
+            file.assets[0].name,
+            file.assets[0].uri,
+            "add"
+          );
+          const fileOps = await getFileOps(db);
+          console.log("fileOps:", fileOps);
         }
       } catch (error) {
         console.error("Error uploading file:", error);

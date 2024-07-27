@@ -2,6 +2,33 @@
 // getAllContentUnsorted
 // sortContent
 
+
+// CAUTION: sqlite can handle table names as parameters in ${} form
+// but not value parameters in ${} as they will be misunderstood as column names
+// Must use prepared statements for values
+
+// Eg 
+
+// The following will fail
+
+// n = await db.getFirstAsync(
+//   `SELECT COUNT(*) AS n FROM FileOps WHERE folderId=${folderId} AND fileName=${fileName}`
+// )
+
+// Instead, use prepared statements to handle value parameters:
+
+// const getCountStatement = await db.prepareAsync(`
+//   SELECT COUNT(*) AS n FROM FileOps 
+//   WHERE folderId=$folderId AND fileName=$fileName;
+// `);
+// res = await getCountStatement.executeAsync({
+//   $folderId: folderId,
+//   $fileName: fileName,
+// });
+// n = (await res.getFirstAsync())["n"];
+
+
+
 import { setSchema } from "./setSchema";
 
 export async function getRootContent(db, table) {
@@ -257,15 +284,18 @@ export async function includeOpInFileOps(
   uri points to local files for add operations and are not needed for delete operations
   `;
   try {
+
+
     const deleteStatement = await db.prepareAsync(`
       DELETE FROM FileOps
       WHERE folderId=$folderId AND fileName=$fileName;
     `);
-
+    
     deleteStatement.executeAsync({
       $folderId: folderId,
       $fileName: fileName,
     });
+
 
     const insertStatement = await db.prepareAsync(`
       INSERT INTO FileOps (folderId, fileName, operation, uri)
@@ -278,6 +308,7 @@ export async function includeOpInFileOps(
       $operation: operation,
       $uri: uri,
     });
+
 
     const fileOps = await db.getAllAsync(`
       SELECT * FROM FileOps;
@@ -311,12 +342,20 @@ export async function deleteAllFileOps(db) {
   return fileOps;
 }
 
-export async function fileAlreadyExists(db, fileName) {
-  // n = (
-  //   await db.getFirstAsync(
-  //     `SELECT COUNT(*) AS n FROM FileOps WHERE fileName=${fileName}`
-  //   )
-  // )["n"];
-  n=1
+export async function fileAlreadyExists(db, folderId, fileName) {
+  const getCountStatement = await db.prepareAsync(`
+    SELECT COUNT(*) AS n FROM FileOps 
+    WHERE folderId=$folderId AND fileName=$fileName;
+  `);
+
+  res = await getCountStatement.executeAsync({
+    $folderId: folderId,
+    $fileName: fileName,
+  });
+
+  n = (await res.getFirstAsync())["n"];
+
+  console.log("n: ", n)
+  
   return n > 0;
 }

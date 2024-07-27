@@ -153,15 +153,15 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     };
   }
 
-  function createFileAddHandler(db, folderId, file) {
-    return async function handleFileAdd() {
+  function createFileOpHandler(db, folderId, file, op) {
+    return async function handleFileOp() {
       console.log("replace");
       await includeOpInFileOps(
         db,
         folderId,
         file.assets[0].name,
         file.assets[0].uri,
-        "add"
+        op,
       );
       const fileOps = await getFileOps(db);
       setNumOps(numOps + 1);
@@ -198,14 +198,14 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
               {
                 text: "Replace",
                 onPress: async () => {
-                  await createFileAddHandler(db, id, file)();
+                  await createFileOpHandler(db, id, file, "add")();
                   setNumOps(numOps + 1); // Trigger re-render to show added files
                 },
               },
             ]
           );
         } else if (file.canceled === false) {
-          createFileAddHandler(db, id, file);
+          createFileOpHandler(db, id, file, "add");
           await includeOpInFileOps(
             db,
             folderId,
@@ -274,7 +274,10 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                 fileData
                   .filter((f) => {
                     // remove files already associated with "add" or "delete" operations
-                    const addDelOpsFileNames = filterByFolderId(adds.concat(dels), id).map((op) => op.fileName)
+                    const addDelOpsFileNames = filterByFolderId(
+                      adds.concat(dels),
+                      id
+                    ).map((op) => op.fileName);
                     return !addDelOpsFileNames.includes(f.fileName);
                   })
                   .map((file, index) => (
@@ -335,7 +338,6 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
               >
                 To Upload
               </TText>
-              <View style={{ paddingLeft: 10, paddingRight: 10 }}></View>
 
               {filterByFolderId(adds, id).map((addedFile, index) => (
                 <View

@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { fetchWithJWT } from "../utils/auth";
 import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
 import { updateTimestamps } from "../utils/content";
-import { getAllContent, overwriteTargetWithSource } from "../db/queries";
+import { getAllContent, getFileOps, overwriteTargetWithSource } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
 import {
@@ -62,6 +62,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     async function setChanges(db) {
       const contentDataCopy = await getAllContent(db, "Content");
       const contentToEditDataCopy = await getAllContent(db, "ContentToEdit");
+      fileOps = await getFileOps(db)
 
       const addedCopy = extractTitles(
         getAddedContent(contentToEditDataCopy, contentDataCopy)
@@ -70,7 +71,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         getDeletedContent(contentToEditDataCopy, contentDataCopy)
       );
       const modifiedCopy = extractTitles(
-        getModifiedContent(contentToEditDataCopy, contentDataCopy)
+        getModifiedContent(contentToEditDataCopy, contentDataCopy, fileOps)
       );
       const rearrangedCopy = extractTitles(
         getRearrangedContent(contentToEditDataCopy, contentDataCopy)

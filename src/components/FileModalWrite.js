@@ -10,6 +10,9 @@ import { TouchableOpacity } from "react-native";
 
 import * as FileSystem from "expo-file-system";
 import * as WebBrowser from "expo-web-browser";
+import * as IntentLauncher from "expo-intent-launcher";
+import * as Linking from "expo-linking";
+import * as Sharing from "expo-sharing";
 
 import { useTheme } from "react-native-paper";
 
@@ -384,6 +387,31 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   );
 };
 
+const openFile = async (uri) => {
+  try {
+    // Check if the file exists
+    const fileInfo = await FileSystem.getInfoAsync(uri);
+    if (!fileInfo.exists) {
+      Alert.alert("File does not exist");
+      return;
+    }
+
+    if (Platform.OS === "android") {
+      const cUri = await FileSystem.getContentUriAsync(uri);
+      IntentLauncher.startActivityAsync("android.intent.action.VIEW", {
+        data: cUri,
+        flags: 1,
+      });
+    } else if (Platform.OS === "ios") {
+      await Sharing.shareAsync(uri);
+    } else {
+      Alert.alert("Unsupported platform");
+    }
+  } catch (error) {
+    Alert.alert("Error opening file", error.message);
+  }
+};
+
 const FileUploadButton = ({ addedFile }) => {
   const theme = useTheme();
 
@@ -391,6 +419,7 @@ const FileUploadButton = ({ addedFile }) => {
     <TouchableOpacity
       onPress={() => {
         console.log(`addedFile ${addedFile.fileName} open button pressed`);
+        openFile(addedFile.uri);
       }}
     >
       <View

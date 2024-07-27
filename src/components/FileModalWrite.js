@@ -70,6 +70,9 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   const theme = useTheme();
 
   function filterByFolderId(list, folderId) {
+    if (folderId === undefined) {
+      throw new Error("folderId is required");
+    }
     return list.filter((item) => item.folderId == folderId);
   }
 

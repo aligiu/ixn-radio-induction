@@ -16,7 +16,7 @@ import { useTheme } from "react-native-paper";
 import { PROTOCOL, SERVER_API_BASE } from "../config/paths";
 import * as DocumentPicker from "expo-document-picker";
 
-import { getFileOps, includeOpInFileOps } from "../db/queries";
+import { getFileOps, includeOpInFileOps, fileAlreadyExists } from "../db/queries";
 
 import { useSQLiteContext } from "expo-sqlite";
 
@@ -115,20 +115,46 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
     };
   }
 
-  function handleFileAdd(folderId) {
+  function createFileAddHandler(db, folderId, file) {
+    return async function handleFileAdd() {
+      console.log("replace");
+      await includeOpInFileOps(
+        db,
+        folderId,
+        file.assets[0].name,
+        file.assets[0].uri,
+        "add"
+      );
+      const fileOps = await getFileOps(db);
+      console.log("fileOps:", fileOps);
+    };
+  }
+
+  function handleFileAddOrReplace(folderId) {
     return async () => {
       try {
         const file = await DocumentPicker.getDocumentAsync({});
         console.log("file:", file);
-        includeOpInFileOps(
-          db,
-          folderId,
-          file.assets[0].name,
-          file.assets[0].uri,
-          "add"
-        );
-        fileOps = await getFileOps(db);
-        console.log("fileOps:", fileOps);
+        if (await fileAlreadyExists(db, file.assets[0].name)) {
+          Alert.alert(
+            `File already exists`,
+            `Replacing "${file.assets[0].name}" will overwrite its contents`,
+            [
+              {
+                text: "Cancel",
+                onPress: async () => {
+                  console.log("Upload cancelled");
+                },
+              },
+              {
+                text: "Replace",
+                onPress: createFileAddHandler(db, id, file),
+              },
+            ]
+          );
+        } else {
+          await createFileAddHandler(db, id, file)
+        }
       } catch (error) {
         console.error("Error uploading file:", error);
         setSnackbarMessage("Error uploading file: " + error.message);
@@ -189,7 +215,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                     <TouchableOpacity
                       onPress={() => {
                         console.log(`pressed delete ${file.fileName}`);
-                        handleFileDelete(id, fileData.fileName)()
+                        handleFileDelete(id, fileData.fileName)();
                       }}
                     >
                       <Icon
@@ -222,9 +248,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                   marginTop: 20,
                 }}
               >
-                <TouchableOpacity
-                  onPress={handleFileAdd(id)}
-                >
+                <TouchableOpacity onPress={handleFileAddOrReplace(id)}>
                   <View
                     style={{
                       borderRadius: 10,

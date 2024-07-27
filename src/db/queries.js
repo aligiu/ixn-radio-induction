@@ -283,7 +283,7 @@ export async function includeOpInFileOps(
       SELECT * FROM FileOps;
     `);
 
-    console.log("fileOps DB:", fileOps)
+    console.log("fileOps DB:", fileOps);
 
     console.log(
       `Included ${operation} operation for ${fileName} in FileOps successfully.`
@@ -309,4 +309,14 @@ export async function deleteAllFileOps(db) {
       DELETE FROM FileOps;
     `);
   return fileOps;
+}
+
+export async function fileAlreadyExists(db, fileName) {
+  // n = (
+  //   await db.getFirstAsync(
+  //     `SELECT COUNT(*) AS n FROM FileOps WHERE fileName=${fileName}`
+  //   )
+  // )["n"];
+  n=1
+  return n > 0;
 }

@@ -68,6 +68,9 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   const theme = useTheme();
 
   const [fileData, setFileData] = useState([]);
+  const [adds, setAdds] = useState([]);
+  const [dels, setDels] = useState([]);
+  const [numOps, setNumOps] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   async function fetchFileDataRemotely() {
@@ -97,14 +100,34 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
       }
     }
     setFileDataOrShowError();
-  }, []);
+  }, [numOps]);
+
+  // useEffect(() => {
+  //   async function displayFileOps() {
+  //     fileOps = await getFileOps(db);
+  //     console.log("fileOps:", fileOps);
+  //   }
+  //   displayFileOps();
+  // }, []);
 
   useEffect(() => {
-    async function displayFileOps() {
-      fileOps = await getFileOps(db);
-      console.log("fileOps:", fileOps);
+    async function setAddsAndDels() {
+      const addsTemp = [];
+      const delsTemp = [];
+      const ops = await getFileOps(db);
+      for (const op of ops) {
+        if (op.operation === "add") {
+          addsTemp.push(op)
+        } else if (op.operation === "delete") {
+          delsTemp.push(op)
+        }
+      }
+      console.log("addsTemp:", addsTemp)
+      console.log("delsTemp:", delsTemp)
+      setAdds(addsTemp)
+      setDels(delsTemp)
     }
-    displayFileOps();
+    setAddsAndDels();
   }, []);
 
   function handleFileDelete(folderId, fileName) {
@@ -115,6 +138,8 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
         console.error("Error deleting file:", error);
         setSnackbarMessage("Error deleting file: " + error.message);
         setSnackbarVisible(true);
+      } finally {
+        setNumOps(numOps + 1);
       }
     };
   }
@@ -175,6 +200,8 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
         console.error("Error uploading file:", error);
         setSnackbarMessage("Error uploading file: " + error.message);
         setSnackbarVisible(true);
+      } finally {
+        setNumOps(numOps + 1);
       }
     };
   }

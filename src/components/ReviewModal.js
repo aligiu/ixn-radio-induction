@@ -104,6 +104,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
       const contentPayload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
       console.log(contentPayload);
       console.log(`${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`);
+
       // include JWT because the POST routes are only accessible by ADMIN role
       const contentResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`,
@@ -141,12 +142,14 @@ const ReviewModal = ({ visible, closeModal, data }) => {
 
         console.log("op.uri", op.uri);
 
-        const formData = new FormData();
-        formData.append("file", {
+        const uploadFileFormData = new FormData();
+        uploadFileFormData.append("file", {
           uri: op.uri,
           name: op.fileName,
         });
+        console.log("uploadFileFormData:", uploadFileFormData);
 
+        // include JWT because the POST routes are only accessible by ADMIN role
         const fileResponse = await fetchWithJWT(
           `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
           {
@@ -154,7 +157,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-            body: formData,
+            body: uploadFileFormData,
           }
         );
         console.log("fileResponse.status", fileResponse.status);
@@ -181,18 +184,23 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         const fileRoute = fileRoutePrefix + "/" + op.folderId;
         console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
-        const deleteFilePayload = JSON.stringify({ fileName: op.fileName });
-        console.log(deleteFilePayload);
+        const deleteFileFormData = new FormData();
+        deleteFileFormData.append("file", {
+          uri: op.uri,
+          fileName: op.fileName,
+        });
 
-        // include JWT because the POST routes are only accessible by ADMIN role
+        console.log("deleteFileFormData:", deleteFileFormData);
+
+        // include JWT because the DELETE routes are only accessible by ADMIN role
         const fileResponse = await fetchWithJWT(
           `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
           {
-            method: "POST",
+            method: "DELETE",
             headers: {
               "Content-Type": "multipart/form-data",
             },
-            body: deleteFilePayload,
+            body: deleteFileFormData,
           }
         );
         console.log("fileResponse.status", fileResponse.status);
@@ -212,8 +220,12 @@ const ReviewModal = ({ visible, closeModal, data }) => {
 
   const handleConfirm = async () => {
     try {
-      const [contentResponse, uploadFileResponses, deleteFileResponses] =
-        await Promise.all([uploadContent(), uploadFiles(), deleteFiles()]);
+      const [contentResponse, uploadFileResponses, 
+        // deleteFileResponses
+      ] =
+        await Promise.all([uploadContent(), uploadFiles(), 
+          // deleteFiles()
+        ]);
 
       if (contentResponse.ok) {
         console.log("Content uploaded successfully");
@@ -230,17 +242,17 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         throw new Error("One or more file uploads failed");
       }
 
-      const allFileDeletesOk = deleteFileResponses.every((res) => res.ok);
-      if (allFileDeletesOk) {
-        console.log("All files Deleted successfully");
-      } else {
-        throw new Error("One or more file Deletes failed");
-      }
+      // const allFileDeletesOk = deleteFileResponses.every((res) => res.ok);
+      // if (allFileDeletesOk) {
+      //   console.log("All files deleted successfully");
+      // } else {
+      //   throw new Error("One or more file deletes failed");
+      // }
 
       closeModal();
       navigation.navigate(`index`);
     } catch (error) {
-      console.error("Error uploading files:", error);
+      console.error("Error deleting files:", error);
     }
   };
   return (

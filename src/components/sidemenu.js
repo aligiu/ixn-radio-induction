@@ -130,7 +130,7 @@ export default function SideMenu() {
                 alignItems: "center",
               }}
             >
-              {isLoggedIn && isAdmin && 
+              {/* {isLoggedIn && isAdmin && 
                 <SideMenuButton
                   onPress={() => {
                     router.push("/adminControlPanel");
@@ -138,7 +138,7 @@ export default function SideMenu() {
                   }}
                   text={"Admin Control Panel"}
                 />
-              }
+              } */}
               {isLoggedIn && isAdmin && 
                 <SideMenuButton
                   onPress={() => {

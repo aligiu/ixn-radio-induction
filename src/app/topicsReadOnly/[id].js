@@ -1,57 +1,19 @@
-// Skip fetch for now, assume already have json data
-
-// // Define the URL of the JSON endpoint
-// const url = 'https://api.example.com/data';
-
-// // Use the fetch API to get data from the endpoint
-// fetch(url)
-//   .then(response => {
-//     // Check if the request was successful
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     // Parse the JSON from the response
-//     return response.json();
-//   })
-//   .then(data => {
-//     // Handle the parsed JSON data
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     // Handle any errors that occurred during the fetch
-//     console.error('There has been a problem with your fetch operation:', error);
-//   });
-
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
 import {
-  ScrollView,
-  Text,
   View,
-  Image,
   StyleSheet,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
-import { Link } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
 
 import { TText } from "../_layout";
 import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRouter } from "expo-router";
 import AutoScrollView from "../../components/AutoScrollView";
 import { Button } from "react-native-paper";
 
-import { getAllContentSorted } from "../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
-
-import { PROTOCOL, SERVER_API_BASE } from "../../config/paths";
-
 import { RichText, useEditorBridge } from "@10play/tentap-editor";
-
 import { useRoute } from "@react-navigation/native";
 
 import FileModalReadOnly from "../../components/FileModalReadOnly";
@@ -73,7 +35,6 @@ export default function Topic() {
     avoidIosKeyboard: true,
     initialContent: content ? content : "<p> No content yet. </p>",
   });
-
 
 
   return (

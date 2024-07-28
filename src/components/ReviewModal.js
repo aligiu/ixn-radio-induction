@@ -126,7 +126,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   const uploadFiles = async () => {
     const fileRoutePrefix = "/files/upload";
 
-    const uploadPromises = fileOps.filter(op=>op.operation==="add").map(async (op) => {
+    const uploadPromises = fileOps.filter(f=>f.operation==="add").map(async (op) => {
       const fileRoute = fileRoutePrefix + "/" + op.folderId;
       console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
@@ -137,10 +137,14 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         throw new Error("File does not exist");
       }
 
-      const deleteFilePayload = JSON.stringify({fileName: op.fileName});
-      console.log(deleteFilePayload);
+      console.log("op.uri", op.uri);
 
-      // include JWT because the POST routes are only accessible by ADMIN role
+      const formData = new FormData();
+      formData.append("file", {
+        uri: op.uri,
+        name: op.fileName,
+      });
+
       const fileResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
         {
@@ -148,7 +152,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          body: deleteFilePayload,
+          body: formData,
         }
       );
       console.log("fileResponse.status", fileResponse.status);
@@ -166,6 +170,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     }
   };
 
+
   const deleteFiles = async () => {
     const fileRoutePrefix = "/files/delete";
 
@@ -179,17 +184,18 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         name: op.fileName,
       });
 
-      // include JWT because the DELETE routes are only accessible by ADMIN role
+      // include JWT because the POST routes are only accessible by ADMIN role
       const fileResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
         {
-          method: "DELETE",
+          method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
-          body: formData,
+          body: deleteFilePayload,
         }
       );
+
       console.log("fileResponse.status", fileResponse.status);
       console.log("fileResponse", fileResponse);
       return fileResponse;

@@ -63,6 +63,7 @@ export default function RearrangableTopics() {
           "Unable to fetch data from the server. Showing local data instead."
         );
         setSnackbarVisible(true);
+        setNumRefresh((prev) => prev + 1); // Increment numRefresh
       }
     }
     updateContentAndRerender();
@@ -74,7 +75,7 @@ export default function RearrangableTopics() {
       if (snackbarVisible || numRefresh > 0) {
         async function initData() {
           await setSchema(db);
-          fetchContentDataLocally();
+          await fetchContentDataLocally();
         }
         initData();
       }

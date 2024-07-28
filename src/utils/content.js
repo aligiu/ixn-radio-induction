@@ -35,7 +35,7 @@ export async function overwriteContentWithRemote(db) {
       },
     }
   );
-  console.log("doneee");
+  console.log("done");
   if (!response.ok) {
     throw new Error("Error fetching remote content");
   }

@@ -34,6 +34,8 @@ import {
   extractTitles,
 } from "../utils/compareContent";
 
+import * as FileSystem from "expo-file-system";
+
 const ReviewModal = ({ visible, closeModal, data }) => {
   const containerStyle = {
     backgroundColor: "white",
@@ -122,27 +124,24 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   };
 
   const uploadFiles = async () => {
-    const fileOps = [
-      // your file operations array
-      { folderId: "123", filePayload: "..." },
-      { folderId: "456", filePayload: "..." },
-      // add more operations as needed
-    ];
-
-    const fileRoutePrefix = "/files/upload/";
+    const fileRoutePrefix = "/files/upload";
 
     const uploadPromises = fileOps.map(async (op) => {
       const fileRoute = fileRoutePrefix + "/" + op.folderId;
       console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
-      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      console.log();
+
+      const fileInfo = await FileSystem.getInfoAsync(op.uri);
       if (!fileInfo.exists) {
         throw new Error("File does not exist");
       }
 
-      const file = await FileSystem.readAsStringAsync(fileUri, {
+      const file = await FileSystem.readAsStringAsync(op.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
+
+      console.log("op.uri", op.uri);
 
       const filePayload = JSON.stringify({ file: file });
 
@@ -156,16 +155,18 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           body: filePayload,
         }
       );
-      console.log(fileResponse.status);
-      console.log(fileResponse);
+      console.log("fileResponse.status", fileResponse.status);
+      console.log("fileResponse", fileResponse);
       return fileResponse;
     });
 
     try {
       const responses = await Promise.all(uploadPromises);
       console.log("All files uploaded successfully", responses);
+      return responses; // Return the array of responses
     } catch (error) {
       console.error("Error uploading files", error);
+      throw error;
     }
   };
 
@@ -196,7 +197,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         throw new Error("One or more file uploads failed");
       }
     } catch (error) {
-      console.error("Error uploading:", error);
+      console.error("Error uploading files:", error);
     }
   };
   return (

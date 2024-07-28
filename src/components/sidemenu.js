@@ -118,9 +118,9 @@ export default function SideMenu() {
                     textAlign: "center",
                   }}
                 >
-                  Welcome, {email ? email : "Guest"} 
-                  {isLoggedIn && isAdmin && (" (admin)")}
-                  {isLoggedIn && !isAdmin && (" (normal user)")}
+                  Welcome, {email ? email : "Guest"}
+                  {isLoggedIn && isAdmin && " (admin)"}
+                  {isLoggedIn && !isAdmin && " (normal user)"}
                 </TText>
               </View>
             </View>
@@ -139,25 +139,39 @@ export default function SideMenu() {
                   text={"Admin Control Panel"}
                 />
               } */}
-              {isLoggedIn && isAdmin && 
+              {isLoggedIn && isAdmin && (
                 <SideMenuButton
                   onPress={() => {
-                    // Overwrite ContentToEdit before entering editing mode, 
-                    overwriteTargetWithSource(db, "ContentToEdit", "Content")
-                    deleteAllFileOps(db)
+                    // Overwrite ContentToEdit before entering editing mode,
+                    overwriteTargetWithSource(db, "ContentToEdit", "Content");
+                    deleteAllFileOps(db);
                     router.push("/admin/contentToEdit");
                     closeModal();
                   }}
                   text={"Edit Content"}
                 />
-              }
+              )}
+
+              <SideMenuButton
+                onPress={() => {
+                  router.push("/help/userManual");
+                  closeModal();
+                }}
+                text={"User Manual"}
+              />
+
+              <SideMenuButton
+                onPress={() => Linking.openURL("mailto:support@example.com")}
+                text={"Email Us"}
+              />
+
               {isLoggedIn && (
                 <SideMenuButton
                   onPress={() => {
                     console.log("log out button pressed");
                     removeToken();
                     setIsLoggedIn(false);
-                    removeIsAdmin(); 
+                    removeIsAdmin();
                     closeModal();
                     router.push("/auth/login");
                   }}
@@ -174,18 +188,6 @@ export default function SideMenu() {
                   text={"Log In"}
                 />
               )}
-
-              <SideMenuButton
-                onPress={() => {
-                  router.push("/help/userManual");
-                  closeModal();
-                }}
-                text={"User Manual"}
-              />
-              <SideMenuButton
-                onPress={() => Linking.openURL("mailto:support@example.com")}
-                text={"Email Us"}
-              />
             </View>
           </View>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={closeModal}>

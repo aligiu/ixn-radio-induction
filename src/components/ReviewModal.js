@@ -19,7 +19,11 @@ import { useNavigation } from "@react-navigation/native";
 import { fetchWithJWT } from "../utils/auth";
 import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
 import { updateTimestamps } from "../utils/content";
-import { getAllContent, getFileOps, overwriteTargetWithSource } from "../db/queries";
+import {
+  getAllContent,
+  getFileOps,
+  overwriteTargetWithSource,
+} from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
 import {
@@ -62,7 +66,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     async function setChanges(db) {
       const contentDataCopy = await getAllContent(db, "Content");
       const contentToEditDataCopy = await getAllContent(db, "ContentToEdit");
-      fileOps = await getFileOps(db)
+      fileOps = await getFileOps(db);
 
       const addedCopy = extractTitles(
         getAddedContent(contentToEditDataCopy, contentDataCopy)
@@ -90,14 +94,15 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     setChanges(db);
   }, [visible]);
 
-  const handleConfirm = async () => {
-    console.log(`Confirm changes instruction received. Payload:`);
-    const contentPayload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
-    console.log(contentPayload);
+  const uploadContent = async () => {
     const contentRoute = "/content";
-    // include JWT in fetch because the /content contentRoute (POST method) is only accessible by admins
+
     try {
+      console.log(`Confirm changes instruction received. Payload:`);
+      const contentPayload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
+      console.log(contentPayload);
       console.log(`${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`);
+      // include JWT because the POST routes are only accessible by ADMIN role
       const contentResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`,
         {
@@ -108,16 +113,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           body: contentPayload,
         }
       );
-      console.log(contentResponse.status);
-      console.log(contentResponse);
-      if (contentResponse.ok) {
-        closeModal();
-        // Overwrite ContentToEdit to Content to save changes,
-        overwriteTargetWithSource(db, "Content", "ContentToEdit");
-        navigation.navigate(`index`);
-      } else {
-        throw new Error("Upload failed");
-      }
+      return contentResponse;
     } catch (error) {
       console.log("cannot upload", error);
       setSnackbarMessage("Upload failed. Please try again.");
@@ -125,6 +121,84 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     }
   };
 
+  const uploadFiles = async () => {
+    const fileOps = [
+      // your file operations array
+      { folderId: "123", filePayload: "..." },
+      { folderId: "456", filePayload: "..." },
+      // add more operations as needed
+    ];
+
+    const fileRoutePrefix = "/files/upload/";
+
+    const uploadPromises = fileOps.map(async (op) => {
+      const fileRoute = fileRoutePrefix + "/" + op.folderId;
+      console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
+
+      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      if (!fileInfo.exists) {
+        throw new Error("File does not exist");
+      }
+
+      const file = await FileSystem.readAsStringAsync(fileUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const filePayload = JSON.stringify({ file: file });
+
+      const fileResponse = await fetchWithJWT(
+        `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: filePayload,
+        }
+      );
+      console.log(fileResponse.status);
+      console.log(fileResponse);
+      return fileResponse;
+    });
+
+    try {
+      const responses = await Promise.all(uploadPromises);
+      console.log("All files uploaded successfully", responses);
+    } catch (error) {
+      console.error("Error uploading files", error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const [contentResponse, filesResponses] = await Promise.all([
+        uploadContent(),
+        uploadFiles(),
+      ]);
+
+      if (contentResponse.ok) {
+        console.log("Content uploaded successfully");
+        // Handle content response
+        // closeModal();
+        // overwriteTargetWithSource(db, "Content", "ContentToEdit");
+        // navigation.navigate(`index`);
+      } else {
+        throw new Error("Content upload failed");
+      }
+
+      const allFilesOk = filesResponses.every(
+        (fileResponse) => fileResponse.ok
+      );
+      if (allFilesOk) {
+        console.log("All files uploaded successfully");
+        // Handle files responses
+      } else {
+        throw new Error("One or more file uploads failed");
+      }
+    } catch (error) {
+      console.error("Error uploading:", error);
+    }
+  };
   return (
     <Portal>
       <Modal

@@ -181,16 +181,10 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     const deletePromises = fileOps
       .filter((op) => op.operation === "delete")
       .map(async (op) => {
-        const fileRoute = fileRoutePrefix + "/" + op.folderId;
+        const fileRoute = `${fileRoutePrefix}/${
+          op.folderId
+        }?fileName=${encodeURIComponent(op.fileName)}`;
         console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
-
-        const deleteFileFormData = new FormData();
-        deleteFileFormData.append("file", {
-          uri: op.uri,
-          fileName: op.fileName,
-        });
-
-        console.log("deleteFileFormData:", deleteFileFormData);
 
         // include JWT because the DELETE routes are only accessible by ADMIN role
         const fileResponse = await fetchWithJWT(
@@ -198,9 +192,8 @@ const ReviewModal = ({ visible, closeModal, data }) => {
           {
             method: "DELETE",
             headers: {
-              "Content-Type": "multipart/form-data",
+              // No need for Content-Type header since there's no body
             },
-            body: deleteFileFormData,
           }
         );
         console.log("fileResponse.status", fileResponse.status);
@@ -220,12 +213,8 @@ const ReviewModal = ({ visible, closeModal, data }) => {
 
   const handleConfirm = async () => {
     try {
-      const [contentResponse, uploadFileResponses, 
-        // deleteFileResponses
-      ] =
-        await Promise.all([uploadContent(), uploadFiles(), 
-          // deleteFiles()
-        ]);
+      const [contentResponse, uploadFileResponses, deleteFileResponses] =
+        await Promise.all([uploadContent(), uploadFiles(), deleteFiles()]);
 
       if (contentResponse.ok) {
         console.log("Content uploaded successfully");

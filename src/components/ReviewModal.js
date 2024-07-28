@@ -92,25 +92,25 @@ const ReviewModal = ({ visible, closeModal, data }) => {
 
   const handleConfirm = async () => {
     console.log(`Confirm changes instruction received. Payload:`);
-    const payload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
-    console.log(payload);
-    const route = "/content";
-    // include JWT in fetch because the /content route (POST method) is only accessible by admins
+    const contentPayload = JSON.stringify(updateTimestamps(data)); // set all timestamps to current (for versioning)
+    console.log(contentPayload);
+    const contentRoute = "/content";
+    // include JWT in fetch because the /content contentRoute (POST method) is only accessible by admins
     try {
-      console.log(`${PROTOCOL}://${SERVER_API_BASE}${route}`);
-      const response = await fetchWithJWT(
-        `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+      console.log(`${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`);
+      const contentResponse = await fetchWithJWT(
+        `${PROTOCOL}://${SERVER_API_BASE}${contentRoute}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: payload,
+          body: contentPayload,
         }
       );
-      console.log(response.status);
-      console.log(response);
-      if (response.ok) {
+      console.log(contentResponse.status);
+      console.log(contentResponse);
+      if (contentResponse.ok) {
         closeModal();
         // Overwrite ContentToEdit to Content to save changes,
         overwriteTargetWithSource(db, "Content", "ContentToEdit");

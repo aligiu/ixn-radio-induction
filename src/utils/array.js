@@ -13,8 +13,6 @@
 // arrayOrdering is used for rendering, since using .map()
 // nextId, prevId is used for storage, since SQL record storage should not depend on order
 
-// TODO: refactor to only use nextId and prevId, and have dedicated sort method to get the linked list into array format
-
 // splice https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
 
 function getArrayIndexById(array, id) {

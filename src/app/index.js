@@ -52,7 +52,6 @@ export default function RearrangableTopics() {
     setContentData(sortedContentWithKey);
   }
 
-
   useEffect(() => {
     async function updateContentAndRerender() {
       try {
@@ -98,12 +97,8 @@ export default function RearrangableTopics() {
         >
           <TouchableOpacity
             onLongPress={() => {
-              const userIsAdmin = true; // TODO
-              const isEditing = true; // TODO
-              if (userIsAdmin && isEditing) {
-                console.log("long press");
-                // drag();  // commented out to disable dragging (since this is homepage)
-              }
+              console.log("long press");
+              // drag();  // commented out to disable dragging (since this is homepage)
             }}
             onPress={() => {
               console.log("short press");

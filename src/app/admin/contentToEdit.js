@@ -90,12 +90,8 @@ export default function RearrangableTopics() {
         >
           <TouchableOpacity
             onLongPress={() => {
-              const userIsAdmin = true; // TODO
-              const isEditing = true; // TODO
-              if (userIsAdmin && isEditing) {
-                console.log("long press");
-                drag();
-              }
+              console.log("long press");
+              drag();
             }}
             onPress={() => {
               console.log("short press");
@@ -224,12 +220,12 @@ export default function RearrangableTopics() {
     // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
   };
 
-    // TODO: test
+  // TODO: test
   function getMaxNumPlusOne(nums) {
     // Finds the max number + 1
     let maxFound = 0;
     for (const num of nums) {
-      maxFound = Math.max(maxFound, num)
+      maxFound = Math.max(maxFound, num);
     }
     return maxFound + 1;
   }
@@ -367,9 +363,9 @@ export default function RearrangableTopics() {
         </View>
         <View style={{ flex: 1 }}>
           <TouchableOpacity
-           onPress={() => {
-            setReviewModalVisible(true);
-          }}
+            onPress={() => {
+              setReviewModalVisible(true);
+            }}
           >
             <Button mode="contained">Review</Button>
           </TouchableOpacity>

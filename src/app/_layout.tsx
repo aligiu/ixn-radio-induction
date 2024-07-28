@@ -131,14 +131,6 @@ export default function Layout() {
   // if fetch successful, replace content with latest
   // also hide secrets anyway if user
 
-  useEffect(() => {
-    // TODO: fetch content from server (then show toast notification for whether success/fail)
-    // Initialize schema
-    
-    console.log("This is executed once");
-    
-  }, []);
-
   const [fontsLoaded, fontError] = useFonts({
     InterThin: require("assets/fonts/Inter-Thin.ttf"),
     InterExtraLight: require("assets/fonts/Inter-ExtraLight.ttf"),

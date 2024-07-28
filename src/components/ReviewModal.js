@@ -126,39 +126,41 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   const uploadFiles = async () => {
     const fileRoutePrefix = "/files/upload";
 
-    const uploadPromises = fileOps.filter(f=>f.operation==="add").map(async (op) => {
-      const fileRoute = fileRoutePrefix + "/" + op.folderId;
-      console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
+    const uploadPromises = fileOps
+      .filter((op) => op.operation === "add")
+      .map(async (op) => {
+        const fileRoute = fileRoutePrefix + "/" + op.folderId;
+        console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
-      console.log();
+        console.log();
 
-      const fileInfo = await FileSystem.getInfoAsync(op.uri);
-      if (!fileInfo.exists) {
-        throw new Error("File does not exist");
-      }
-
-      console.log("op.uri", op.uri);
-
-      const formData = new FormData();
-      formData.append("file", {
-        uri: op.uri,
-        name: op.fileName,
-      });
-
-      const fileResponse = await fetchWithJWT(
-        `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData,
+        const fileInfo = await FileSystem.getInfoAsync(op.uri);
+        if (!fileInfo.exists) {
+          throw new Error("File does not exist");
         }
-      );
-      console.log("fileResponse.status", fileResponse.status);
-      console.log("fileResponse", fileResponse);
-      return fileResponse;
-    });
+
+        console.log("op.uri", op.uri);
+
+        const formData = new FormData();
+        formData.append("file", {
+          uri: op.uri,
+          name: op.fileName,
+        });
+
+        const fileResponse = await fetchWithJWT(
+          `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: formData,
+          }
+        );
+        console.log("fileResponse.status", fileResponse.status);
+        console.log("fileResponse", fileResponse);
+        return fileResponse;
+      });
 
     try {
       const responses = await Promise.all(uploadPromises);
@@ -170,53 +172,48 @@ const ReviewModal = ({ visible, closeModal, data }) => {
     }
   };
 
-
   const deleteFiles = async () => {
     const fileRoutePrefix = "/files/delete";
 
-    const uploadPromises = fileOps.filter(op=>op.operation==="delete").map(async (op) => {
-      const fileRoute = fileRoutePrefix + "/" + op.folderId;
-      console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
+    const deletePromises = fileOps
+      .filter((op) => op.operation === "delete")
+      .map(async (op) => {
+        const fileRoute = fileRoutePrefix + "/" + op.folderId;
+        console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
-      const formData = new FormData();
-      formData.append("file", {
-        uri: op.uri,
-        name: op.fileName,
+        const deleteFilePayload = JSON.stringify({ fileName: op.fileName });
+        console.log(deleteFilePayload);
+
+        // include JWT because the POST routes are only accessible by ADMIN role
+        const fileResponse = await fetchWithJWT(
+          `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: deleteFilePayload,
+          }
+        );
+        console.log("fileResponse.status", fileResponse.status);
+        console.log("fileResponse", fileResponse);
+        return fileResponse;
       });
 
-      // include JWT because the POST routes are only accessible by ADMIN role
-      const fileResponse = await fetchWithJWT(
-        `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          body: deleteFilePayload,
-        }
-      );
-
-      console.log("fileResponse.status", fileResponse.status);
-      console.log("fileResponse", fileResponse);
-      return fileResponse;
-    });
-
     try {
-      const responses = await Promise.all(uploadPromises);
+      const responses = await Promise.all(deletePromises);
       console.log("All files deleted successfully", responses);
       return responses; // Return the array of responses
     } catch (error) {
-      console.error("Error deletinging files", error);
+      console.error("Error deleting files", error);
       throw error;
     }
   };
 
   const handleConfirm = async () => {
     try {
-      const [contentResponse, filesResponses] = await Promise.all([
-        uploadContent(),
-        uploadFiles(),
-      ]);
+      const [contentResponse, uploadFileResponses, deleteFileResponses] =
+        await Promise.all([uploadContent(), uploadFiles(), deleteFiles()]);
 
       if (contentResponse.ok) {
         console.log("Content uploaded successfully");
@@ -226,13 +223,18 @@ const ReviewModal = ({ visible, closeModal, data }) => {
         throw new Error("Content upload failed");
       }
 
-      const allFilesOk = filesResponses.every(
-        (fileResponse) => fileResponse.ok
-      );
-      if (allFilesOk) {
+      const allFileUploadsOk = uploadFileResponses.every((res) => res.ok);
+      if (allFileUploadsOk) {
         console.log("All files uploaded successfully");
       } else {
         throw new Error("One or more file uploads failed");
+      }
+
+      const allFileDeletesOk = deleteFileResponses.every((res) => res.ok);
+      if (allFileDeletesOk) {
+        console.log("All files Deleted successfully");
+      } else {
+        throw new Error("One or more file Deletes failed");
       }
 
       closeModal();

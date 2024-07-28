@@ -126,7 +126,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   const uploadFiles = async () => {
     const fileRoutePrefix = "/files/upload";
 
-    const uploadPromises = fileOps.map(async (op) => {
+    const uploadPromises = fileOps.filter(f=>f.operation==="add").map(async (op) => {
       const fileRoute = fileRoutePrefix + "/" + op.folderId;
       console.log(`${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`);
 
@@ -144,10 +144,10 @@ const ReviewModal = ({ visible, closeModal, data }) => {
       console.log("op.uri", op.uri);
 
       const formData = new FormData();
-        formData.append('file', {
-          uri: op.uri,
-          name: op.fileName,
-        });
+      formData.append("file", {
+        uri: op.uri,
+        name: op.fileName,
+      });
 
       const fileResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
@@ -184,9 +184,7 @@ const ReviewModal = ({ visible, closeModal, data }) => {
       if (contentResponse.ok) {
         console.log("Content uploaded successfully");
         // Handle content response
-        // closeModal();
-        // overwriteTargetWithSource(db, "Content", "ContentToEdit");
-        // navigation.navigate(`index`);
+        overwriteTargetWithSource(db, "Content", "ContentToEdit");
       } else {
         throw new Error("Content upload failed");
       }
@@ -196,10 +194,12 @@ const ReviewModal = ({ visible, closeModal, data }) => {
       );
       if (allFilesOk) {
         console.log("All files uploaded successfully");
-        // Handle files responses
       } else {
         throw new Error("One or more file uploads failed");
       }
+
+      closeModal();
+      navigation.navigate(`index`);
     } catch (error) {
       console.error("Error uploading files:", error);
     }

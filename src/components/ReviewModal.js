@@ -143,16 +143,20 @@ const ReviewModal = ({ visible, closeModal, data }) => {
 
       console.log("op.uri", op.uri);
 
-      const filePayload = JSON.stringify({ file: file });
+      const formData = new FormData();
+        formData.append('file', {
+          uri: op.uri,
+          name: op.fileName,
+        });
 
       const fileResponse = await fetchWithJWT(
         `${PROTOCOL}://${SERVER_API_BASE}${fileRoute}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
-          body: filePayload,
+          body: formData,
         }
       );
       console.log("fileResponse.status", fileResponse.status);

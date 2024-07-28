@@ -59,19 +59,23 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
 
   async function fetchFileDataRemotely() {
     const route = `/files/list/${id}`;
-    const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response;
+    try {
+      const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response;
+    } catch (error) {
+      console.log("Unable to fetch files:", error);
+    }
   }
 
   useEffect(() => {
     async function setFileDataOrShowError() {
       response = await fetchFileDataRemotely();
-      if (response.ok) {
+      if (response && response.ok) {
         const fetchedFilesOfId = await response.json();
         console.log(fetchedFilesOfId);
         setFileData(fetchedFilesOfId);
@@ -123,17 +127,17 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
             {fileData &&
               fileData.map((file, index) => (
                 <View
-                    key={index}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                <FileDownloadButton file={file} />
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    marginBottom: 5,
+                  }}
+                >
+                  <FileDownloadButton file={file} />
                 </View>
               ))}
             {fileData && fileData.length === 0 && (

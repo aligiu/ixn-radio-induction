@@ -186,7 +186,11 @@ export default function RearrangableTopics() {
   } else {
     return (
       <>
-        <SearchAutocompleteContainer contentData={contentData} searchbarText={searchbarText} setSearchbarInFocus={setSearchbarInFocus} />
+        <SearchAutocompleteContainer
+          contentData={contentData}
+          searchbarText={searchbarText}
+          setSearchbarInFocus={setSearchbarInFocus}
+        />
         {/* <Text>bruh</Text> */}
       </>
     );

@@ -4,8 +4,6 @@ import { View, ScrollView } from "react-native";
 import AutoScrollView from "../components/AutoScrollView";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
-import { TText } from "../app/_layout";
-import SearchbarContext from "../context/SearchbarContext";
 
 import Fuse from "fuse.js";
 

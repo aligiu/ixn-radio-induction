@@ -1,8 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  StyleSheet,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
 
@@ -35,7 +32,6 @@ export default function Topic() {
     avoidIosKeyboard: true,
     initialContent: content ? content : "<p> No content yet. </p>",
   });
-
 
   return (
     <>
@@ -93,7 +89,6 @@ export default function Topic() {
           id={id}
         />
       </View>
-      
     </>
   );
 }

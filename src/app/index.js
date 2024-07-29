@@ -185,14 +185,11 @@ export default function RearrangableTopics() {
     );
   } else {
     return (
-      <>
-        <SearchAutocompleteContainer
-          contentData={contentData}
-          searchbarText={searchbarText}
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-        {/* <Text>bruh</Text> */}
-      </>
+      <SearchAutocompleteContainer
+        contentData={contentData}
+        searchbarText={searchbarText}
+        setSearchbarInFocus={setSearchbarInFocus}
+      />
     );
   }
 }

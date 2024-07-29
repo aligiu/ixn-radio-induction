@@ -13,7 +13,6 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import { useTheme, Snackbar } from "react-native-paper";
-import Fuse from "fuse.js";
 
 import { getAllContentSorted } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -21,23 +20,17 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { TText } from "./_layout";
 import { fontSize } from "src/styles/fontConfig";
-import AutoScrollView from "../components/AutoScrollView";
 
-import SearchAutocompleteElement from "../components/searchAutocompleteElement";
+import SearchAutocompleteContainer from "../components/SearchAutocompleteContainer";
 import SearchbarContext from "../context/SearchbarContext";
-import { contentContainerStyles } from "../styles/contentContainer";
 
 import { overwriteContentWithRemote } from "../utils/content";
 import { getToken } from "../utils/auth";
 import { setSchema } from "../db/setSchema";
 
 export default function RearrangableTopics() {
-  const {
-    searchbarInFocus,
-    setSearchbarInFocus,
-    searchbarText,
-    setSearchbarText,
-  } = useContext(SearchbarContext);
+  const { searchbarInFocus, setSearchbarInFocus, searchbarText } =
+    useContext(SearchbarContext);
 
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
@@ -162,29 +155,6 @@ export default function RearrangableTopics() {
     />
   );
 
-  // Initialize Fuse.js
-  const options = {
-    keys: ["description", "content", "secret", "title"],
-    includeScore: true,
-    threshold: 0.3, // Sensitivity Threshold
-  };
-  const fuse = new Fuse(contentData, options);
-
-  // Function to search and rank contentData
-  function search(query) {
-    const unsortedResult = fuse.search(query);
-    const sortedResult = rankByScore(unsortedResult);
-    return sortedResult;
-  }
-
-  function rankByScore(items) {
-    return items.sort((a, b) => b.score - a.score); // higher score first
-  }
-
-  const query = searchbarText;
-  const contentDataSearchRanked = search(query);
-  console.log("contentDataSearchRanked", contentDataSearchRanked);
-
   if (!searchbarInFocus) {
     return (
       <>
@@ -215,45 +185,10 @@ export default function RearrangableTopics() {
     );
   } else {
     return (
-      <View style={{ height: "100%" }}>
-        <ScrollView
-          style={
-            { ...contentContainerStyles.container, flex: 1 }
-            // {backgroundColor: theme.colors.background}
-          }
-          keyboardShouldPersistTaps="always"
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              gap: 10, // gap must be placed in <View> not <ScrollView>
-            }}
-          >
-            {contentDataSearchRanked.map((c) => (
-              <SearchAutocompleteElement
-                autocompleteText={searchbarText}
-                topic={c.item.title}
-                section={c.item.description} // change to nearest header
-                routerLink={"topicsReadOnly/[id]"}
-                title={c.title} // title necessary if using topics route
-                content={c.content} // content necessary if using topics route
-                setSearchbarInFocus={setSearchbarInFocus}
-              />
-            ))}
-            <SearchAutocompleteElement
-              autocompleteText={
-                searchbarText ? searchbarText : "SEARCHBAR_TEXT"
-              }
-              topic={"Educational Resources"}
-              section={"Login"}
-              routerLink={"topicsReadOnly/[id]"}
-              title={"Title for topic x"} // title necessary if using topics route
-              content={"<p>Content of topic x</p>"} // content necessary if using topics route
-              setSearchbarInFocus={setSearchbarInFocus}
-            />
-          </View>
-        </ScrollView>
-      </View>
+      <>
+        <SearchAutocompleteContainer contentData={contentData} searchbarText={searchbarText} setSearchbarInFocus={setSearchbarInFocus} />
+        {/* <Text>bruh</Text> */}
+      </>
     );
   }
 }

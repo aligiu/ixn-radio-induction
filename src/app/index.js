@@ -32,8 +32,12 @@ import { getToken } from "../utils/auth";
 import { setSchema } from "../db/setSchema";
 
 export default function RearrangableTopics() {
-  const { searchbarInFocus, setSearchbarInFocus } =
-    useContext(SearchbarContext);
+  const {
+    searchbarInFocus,
+    setSearchbarInFocus,
+    searchbarText,
+    setSearchbarText,
+  } = useContext(SearchbarContext);
 
   const [contentData, setContentData] = useState([]);
   const navigation = useNavigation();
@@ -217,8 +221,17 @@ export default function RearrangableTopics() {
               gap: 10, // gap must be placed in <View> not <ScrollView>
             }}
           >
-            <FuzzySearch />
-            {/* <SearchAutocompleteElement
+            
+            <SearchAutocompleteElement
+              autocompleteText={searchbarText ? searchbarText : "SEARCHBAR_TEXT"}
+              topic={"Educational Resources"}
+              section={"Login"}
+              routerLink={"topicsReadOnly/[id]"}
+              title={"Title for topic x"} // title necessary if using topics route
+              content={"<p>Content of topic x</p>"} // content necessary if using topics route
+              setSearchbarInFocus={setSearchbarInFocus}
+            />
+            <SearchAutocompleteElement
               autocompleteText={"Radiopaedia"}
               topic={"Educational Resources"}
               section={"Login"}
@@ -234,7 +247,7 @@ export default function RearrangableTopics() {
               section={"Link"}
               routerLink={"dummy"}
               setSearchbarInFocus={setSearchbarInFocus}
-            /> */}
+            />
           </View>
         </ScrollView>
       </View>

@@ -6,13 +6,13 @@ import { useTheme } from "react-native-paper";
 
 import { contentContainerStyles } from "src/styles/contentContainer";
 
-import SearchAutocompleteElement from "../components/searchAutocompleteElement";
+import SearchAutocompleteContainer from "./SearchAutocompleteContainer";
 import SearchbarContext from "../context/SearchbarContext";
 
-export default function AutoScrollView({ children }) {
+export default function AutoScrollView({ children, contentData }) {
   const theme = useTheme();
-  const { searchbarInFocus, setSearchbarInFocus } =
-    useContext(SearchbarContext); 
+  const { searchbarInFocus, setSearchbarInFocus, searchbarText } =
+    useContext(SearchbarContext);
 
   // If search bar is not in focus, then display children normally
   // Otherwise, display the search bar results
@@ -26,39 +26,13 @@ export default function AutoScrollView({ children }) {
         {children}
       </ScrollView>
     );
+  } else {
+    return (
+      <SearchAutocompleteContainer
+        contentData={contentData}
+        searchbarText={searchbarText}
+        setSearchbarInFocus={setSearchbarInFocus}
+      />
+    );
   }
-  return (
-    <ScrollView
-      style={
-        contentContainerStyles.container
-        // {backgroundColor: theme.colors.background}
-      }
-      keyboardShouldPersistTaps="always"
-    >
-      <View
-        style={{
-          flexDirection: "column",
-          gap: 10, // gap must be placed in <View> not <ScrollView>
-        }}
-      >
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Educational Resources"}
-          section={"Login"}
-          routerLink={"topicsReadOnly/[id]"}
-          title={"Title for topic x"}  // title necessary if using topics route
-          content={"<p>Content of topic x</p>"}  // content necessary if using topics route
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-
-        <SearchAutocompleteElement
-          autocompleteText={"Radiopaedia"}
-          topic={"Conferences"}
-          section={"Link"}
-          routerLink={"dummy"}
-          setSearchbarInFocus={setSearchbarInFocus}
-        />
-      </View>
-    </ScrollView>
-  );
 }

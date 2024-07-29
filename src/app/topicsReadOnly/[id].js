@@ -24,7 +24,7 @@ export default function Topic() {
   const [fileModalVisible, setFileModalVisible] = React.useState(false);
 
   const route = useRoute();
-  const { content, title, secret } = route.params;
+  const { content, title, secret, contentData } = route.params;
 
   const editor = useEditorBridge({
     editable: false,
@@ -38,6 +38,7 @@ export default function Topic() {
       <AutoScrollView
         keyboardDismissMode="on-drag"
         style={contentContainerStyles.container}
+        contentData={contentData}
       >
         {/* Scroll view needed to dismiss search bar */}
         <View style={{ flex: 1 }}>

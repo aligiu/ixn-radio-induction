@@ -108,6 +108,7 @@ export default function RearrangableTopics() {
                 content: item.content,
                 title: item.title,
                 secret: item.secret,
+                contentData: contentData,
               });
               // pass parameters to pages https://reactnavigation.org/docs/params/#what-should-be-in-params
             }}

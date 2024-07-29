@@ -63,7 +63,7 @@ export default function Topic() {
 
   const route = useRoute();
   const navigation = useNavigation();
-  const { content, title, description, secret } = route.params;
+  const { content, title, description, secret, contentData } = route.params;
   const [secretState, setSecretState] = useState(secret);
 
   const editor = useEditorBridge({

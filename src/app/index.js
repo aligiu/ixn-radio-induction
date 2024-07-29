@@ -166,16 +166,24 @@ export default function RearrangableTopics() {
   const options = {
     keys: ["description", "content", "secret", "title"],
     includeScore: true,
-    threshold: 0.3, // sensitivity threshold
+    threshold: 0.3, // Sensitivity Threshold
   };
-
   const fuse = new Fuse(contentData, options);
 
-  const FuzzySearch = () => {
-    const [query, setQuery] = useState("");
-    const [results, setResults] = useState([]);
+  // Function to search and rank contentData
+  function search(query) {
+    const unsortedResult = fuse.search(query);
+    const sortedResult = rankByScore(unsortedResult);
+    return sortedResult;
+  }
 
-  };
+  function rankByScore(items) {
+    return items.sort((a, b) => b.score - a.score); // higher score first
+  }
+
+  const query = searchbarText;
+  const contentDataSearchRanked = search(query);
+  console.log("contentDataSearchRanked", contentDataSearchRanked);
 
   if (!searchbarInFocus) {
     return (
@@ -221,31 +229,26 @@ export default function RearrangableTopics() {
               gap: 10, // gap must be placed in <View> not <ScrollView>
             }}
           >
-            
+            {contentDataSearchRanked.map((c) => (
+              <SearchAutocompleteElement
+                autocompleteText={searchbarText}
+                topic={c.item.title}
+                section={c.item.description} // change to nearest header
+                routerLink={"topicsReadOnly/[id]"}
+                title={c.title} // title necessary if using topics route
+                content={c.content} // content necessary if using topics route
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
+            ))}
             <SearchAutocompleteElement
-              autocompleteText={searchbarText ? searchbarText : "SEARCHBAR_TEXT"}
+              autocompleteText={
+                searchbarText ? searchbarText : "SEARCHBAR_TEXT"
+              }
               topic={"Educational Resources"}
               section={"Login"}
               routerLink={"topicsReadOnly/[id]"}
               title={"Title for topic x"} // title necessary if using topics route
               content={"<p>Content of topic x</p>"} // content necessary if using topics route
-              setSearchbarInFocus={setSearchbarInFocus}
-            />
-            <SearchAutocompleteElement
-              autocompleteText={"Radiopaedia"}
-              topic={"Educational Resources"}
-              section={"Login"}
-              routerLink={"topicsReadOnly/[id]"}
-              title={"Title for topic x"} // title necessary if using topics route
-              content={"<p>Content of topic x</p>"} // content necessary if using topics route
-              setSearchbarInFocus={setSearchbarInFocus}
-            />
-
-            <SearchAutocompleteElement
-              autocompleteText={"Radiopaedia"}
-              topic={"Conferences"}
-              section={"Link"}
-              routerLink={"dummy"}
               setSearchbarInFocus={setSearchbarInFocus}
             />
           </View>

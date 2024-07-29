@@ -121,9 +121,7 @@ const PanGestureHandler = ({ children }) => {
 export default function Layout() {
   // SideMenu: use require instead of import to avoid circular dependency
   const SideMenu = require("../components/sidemenu").default;
-
-  const colorScheme = useColorScheme();
-  const [searchText, setSearchText] = useState("");
+  
   const navigation = useNavigation();
   const currentPathName = usePathname();
 
@@ -242,17 +240,24 @@ export default function Layout() {
   }
 
   function renderHeaderRight() {
-    const { searchbarInFocus, setSearchbarInFocus } =
-      useContext(SearchbarContext);
+    const {
+      searchbarInFocus,
+      setSearchbarInFocus,
+      searchbarText,
+      setSearchbarText,
+    } = useContext(SearchbarContext);
 
     // setSearchbarInFocus
     return (
       <View style={[styles.headerRightContainer]}>
         <Searchbar
           placeholder=""
-          onChangeText={(text) => setSearchText(text)}
+          onChangeText={(text) => {
+            setSearchbarText(text);
+            console.log(text);
+          }}
           style={styles.searchBar}
-          value={searchText}
+          value={searchbarText}
           inputStyle={styles.searchBarInput}
           onFocus={() => {
             setSearchbarInFocus(true);

@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  TextInput,
+  FlatList,
 } from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import { useTheme, Snackbar } from "react-native-paper";
+import Fuse from "fuse.js";
 
 import { getAllContentSorted } from "../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
@@ -155,6 +158,21 @@ export default function RearrangableTopics() {
     />
   );
 
+  // Initialize Fuse.js
+  const options = {
+    keys: ["description", "content", "secret", "title"],
+    includeScore: true,
+    threshold: 0.3, // sensitivity threshold
+  };
+
+  const fuse = new Fuse(contentData, options);
+
+  const FuzzySearch = () => {
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState([]);
+
+  };
+
   if (!searchbarInFocus) {
     return (
       <>
@@ -199,7 +217,8 @@ export default function RearrangableTopics() {
               gap: 10, // gap must be placed in <View> not <ScrollView>
             }}
           >
-            <SearchAutocompleteElement
+            <FuzzySearch />
+            {/* <SearchAutocompleteElement
               autocompleteText={"Radiopaedia"}
               topic={"Educational Resources"}
               section={"Login"}
@@ -215,7 +234,7 @@ export default function RearrangableTopics() {
               section={"Link"}
               routerLink={"dummy"}
               setSearchbarInFocus={setSearchbarInFocus}
-            />
+            /> */}
           </View>
         </ScrollView>
       </View>

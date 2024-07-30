@@ -51,7 +51,7 @@ const SearchAutocompleteContainer = ({
           match.indices.forEach((indexPair) => {
             const explodedResult = {
               ...result,
-              matches: [{ ...match, indices: [indexPair] }],
+              matches: [{ ...match, indices: indexPair }],
             };
             explodedResults.push(explodedResult);
           });
@@ -68,7 +68,7 @@ const SearchAutocompleteContainer = ({
   const contentDataSearchRanked = search(query);
   contentDataSearchRanked.map((c) => {
     console.log("contentDataSearchRanked", c.matches);
-    console.log(c.matches[0].indices);
+    console.log("***", c.matches[0].indices);
   });
 
   const keyboardHeight = useKeyboardHeight();

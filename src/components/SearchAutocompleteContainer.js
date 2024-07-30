@@ -20,48 +20,24 @@ const SearchAutocompleteContainer = ({
     keys: ["description", "content", "secret", "title"],
     includeScore: true,
     includeMatches: true,
+    shouldSort: true,
     threshold: 0.2, // Sensitivity Threshold (0.0 = perfect match; 1.0 = match anything)
   };
 
   const fuse = new Fuse(contentData, options);
 
-  // TODO: test
-  function rankByScore(items) {
-    return items.sort((a, b) => b.score - a.score); // higher score first
-  }
-
   // Function to search and rank contentData
   function search(query) {
-    const unsortedResult = fuse.search(query);
-    const sortedResult = rankByScore(unsortedResult);
-    const explodedResult = explodeIndices(sortedResult);
-    return explodedResult;
+    const searchResults = fuse.search(query);
+    console.log("searchResults", searchResults);
+    return searchResults;
   }
 
-  // TODO: test
-  function explodeIndices(results) {
-    // explode all the pairs of indices
-    // eg [[1, 1], [4, 4], [8, 9], [17, 17], [21, 23]] is 5 pairs
-    // explodeIndices produces 5 copies, each with 1 pair
-    const explodedResults = [];
-
-    results.forEach((result) => {
-      if (result.matches) {
-        result.matches.forEach((match) => {
-          match.indices.forEach((indexPair) => {
-            const explodedResult = {
-              ...result,
-              matches: [{ ...match, indices: indexPair }],
-            };
-            explodedResults.push(explodedResult);
-          });
-        });
-      } else {
-        explodedResults.push(result);
-      }
-    });
-
-    return explodedResults;
+  function getLastIndexPair(searchResult) {
+    const indices = searchResult["matches"][0]["indices"];
+    const numPairs = indices.length;
+    const lastIndexPair = indices[numPairs - 1];
+    return lastIndexPair;
   }
 
   const query = searchbarText;
@@ -103,15 +79,20 @@ const SearchAutocompleteContainer = ({
                 title={c.item.title} // title necessary if using topics route
                 secret={c.item.secret}
                 contentData={contentData}
-                // Index is (${c.matches[0].indices[0]}, ${c.matches[0].indices[1]})
                 // beforeMatch={c.matches[0].value.slice(
                 //   getMatchStart(c) - 4,
                 //   getMatchStart(c)
                 // )}
-                match={c.matches[0].value.slice(
-                  getMatchStart(c),
-                  getMatchEnd(c) + 1
-                )}
+                match={`
+                  ${c.matches[0].value}
+                  ${getMatchStart(c)}
+                  ${getMatchEnd(c)}
+                  ${getLastIndexPair(c)}
+                  `}
+                // match={c.matches[0].value.slice(
+                //   getMatchStart(c),
+                //   getMatchEnd(c) + 1
+                // )}
                 // afterMatch={c.matches[0].value.slice(
                 //   getMatchEnd(c),
                 //   getMatchEnd(c) + 1 + 4

@@ -25,6 +25,7 @@ const SearchAutocompleteContainer = ({
 
   const fuse = new Fuse(contentData, options);
 
+  // TODO: test
   function rankByScore(items) {
     return items.sort((a, b) => b.score - a.score); // higher score first
   }
@@ -37,7 +38,11 @@ const SearchAutocompleteContainer = ({
     return explodedResult;
   }
 
+  // TODO: test
   function explodeIndices(results) {
+    // explode all the pairs of indices
+    // eg [[1, 1], [4, 4], [8, 9], [17, 17], [21, 23]] is 5 pairs
+    // explodeIndices produces 5 copies, each with 1 pair
     const explodedResults = [];
 
     results.forEach((result) => {

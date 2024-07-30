@@ -19,6 +19,7 @@ const SearchAutocompleteContainer = ({
   const options = {
     keys: ["description", "content", "secret", "title"],
     includeScore: true,
+    includeMatches: true,
     threshold: 0.3, // Sensitivity Threshold
   };
 
@@ -32,17 +33,38 @@ const SearchAutocompleteContainer = ({
   function search(query) {
     const unsortedResult = fuse.search(query);
     const sortedResult = rankByScore(unsortedResult);
-    return sortedResult;
+    const explodedResult = explodeIndices(sortedResult);
+    return explodedResult;
+  }
+
+  function explodeIndices(results) {
+    const explodedResults = [];
+
+    results.forEach((result) => {
+      if (result.matches) {
+        result.matches.forEach((match) => {
+          match.indices.forEach((indexPair) => {
+            const explodedResult = {
+              ...result,
+              matches: [{ ...match, indices: [indexPair] }],
+            };
+            explodedResults.push(explodedResult);
+          });
+        });
+      } else {
+        explodedResults.push(result);
+      }
+    });
+
+    return explodedResults;
   }
 
   const query = searchbarText;
-  // console.log("searchbarText:", searchbarText);
-  // console.log("searchbarText===null:", searchbarText === null);
-  // console.log("searchbarText===undefined:", searchbarText === undefined);
-  // console.log("contentData", contentData);
-
   const contentDataSearchRanked = search(query);
-  // console.log("contentDataSearchRanked", contentDataSearchRanked);
+  contentDataSearchRanked.map((c) => {
+    console.log("contentDataSearchRanked", c.matches);
+    console.log(c.matches[0].indices);
+  });
 
   const keyboardHeight = useKeyboardHeight();
 

@@ -18,7 +18,9 @@ import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
 
 export default function SearchAutocompleteElement({
-  autocompleteText,
+  beforeMatch = "",
+  match,
+  afterMatch = "",
   id,
   section,
   routerLink,
@@ -98,14 +100,32 @@ export default function SearchAutocompleteElement({
             flex: 1,
           }}
         >
-          <TText
-            style={{
-              fontSize: fontSize.MEDIUM,
-              fontFamily: "InterRegular",
-            }}
-          >
-            {autocompleteText}
-          </TText>
+          <View>
+            <TText
+              style={{
+                fontSize: fontSize.MEDIUM,
+                fontFamily: "InterRegular",
+              }}
+            >
+              {beforeMatch}
+            </TText>
+            <TText
+              style={{
+                fontSize: fontSize.MEDIUM,
+                fontFamily: "InterRegular",
+              }}
+            >
+              {match}
+            </TText>
+            <TText
+              style={{
+                fontSize: fontSize.MEDIUM,
+                fontFamily: "InterRegular",
+              }}
+            >
+              {afterMatch}
+            </TText>
+          </View>
           <TText
             style={{
               fontSize: fontSize.SMALL,

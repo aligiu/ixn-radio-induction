@@ -20,7 +20,7 @@ const SearchAutocompleteContainer = ({
     keys: ["description", "content", "secret", "title"],
     includeScore: true,
     includeMatches: true,
-    threshold: 0.9, // Sensitivity Threshold
+    threshold: 0.2, // Sensitivity Threshold (0.0 = perfect match; 1.0 = match anything)
   };
 
   const fuse = new Fuse(contentData, options);
@@ -104,18 +104,18 @@ const SearchAutocompleteContainer = ({
                 secret={c.item.secret}
                 contentData={contentData}
                 // Index is (${c.matches[0].indices[0]}, ${c.matches[0].indices[1]})
-                beforeMatch={c.matches[0].value.slice(
-                  getMatchStart(c) - 4,
-                  getMatchStart(c)
-                )}
+                // beforeMatch={c.matches[0].value.slice(
+                //   getMatchStart(c) - 4,
+                //   getMatchStart(c)
+                // )}
                 match={c.matches[0].value.slice(
                   getMatchStart(c),
                   getMatchEnd(c) + 1
                 )}
-                afterMatch={c.matches[0].value.slice(
-                  getMatchEnd(c),
-                  getMatchEnd(c) + 1 + 4
-                )}
+                // afterMatch={c.matches[0].value.slice(
+                //   getMatchEnd(c),
+                //   getMatchEnd(c) + 1 + 4
+                // )}
                 section={c.matches[0].key} // change to nearest header
                 routerLink={"topicsReadOnly/[id]"}
                 setSearchbarInFocus={setSearchbarInFocus}

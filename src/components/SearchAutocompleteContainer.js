@@ -7,6 +7,8 @@ import { contentContainerStyles } from "../styles/contentContainer";
 import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 
 import Fuse from "fuse.js";
+import { TText } from "../app/_layout";
+import { fontSize } from "src/styles/fontConfig";
 
 const SearchAutocompleteContainer = ({
   contentData,
@@ -46,9 +48,7 @@ const SearchAutocompleteContainer = ({
   const keyboardHeight = useKeyboardHeight();
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, marginBottom: keyboardHeight }}
-    >
+    <KeyboardAvoidingView style={{ flex: 1, marginBottom: keyboardHeight }}>
       <ScrollView
         style={{ ...contentContainerStyles.container, flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
@@ -60,18 +60,43 @@ const SearchAutocompleteContainer = ({
             gap: 10, // gap must be placed in <View> not <ScrollView>
           }}
         >
-          {contentDataSearchRanked.map((c, index) => (
-            <SearchAutocompleteElement
-              key={index}
-              autocompleteText={searchbarText}
-              topic={c.item.title}
-              section={c.item.description} // change to nearest header
-              routerLink={"topicsReadOnly/[id]"}
-              title={c.title} // title necessary if using topics route
-              content={c.content} // content necessary if using topics route
-              setSearchbarInFocus={setSearchbarInFocus}
-            />
-          ))}
+          {contentDataSearchRanked.length > 0 &&
+            contentDataSearchRanked.map((c, index) => (
+              <SearchAutocompleteElement
+                key={index}
+                autocompleteText={searchbarText}
+                topic={c.item.title}
+                section={c.item.description} // change to nearest header
+                routerLink={"topicsReadOnly/[id]"}
+                title={c.title} // title necessary if using topics route
+                content={c.content} // content necessary if using topics route
+                setSearchbarInFocus={setSearchbarInFocus}
+              />
+            ))}
+          {!searchbarText && contentDataSearchRanked.length === 0 && (
+            <View style={{ alignItems: "center" }}>
+              <TText
+                style={{
+                  fontSize: fontSize.SMALL,
+                  fontFamily: "InterRegular",
+                }}
+              >
+                Please enter your search
+              </TText>
+            </View>
+          )}
+          {searchbarText && contentDataSearchRanked.length === 0 && (
+            <View style={{ alignItems: "center" }}>
+              <TText
+                style={{
+                  fontSize: fontSize.SMALL,
+                  fontFamily: "InterRegular",
+                }}
+              >
+                No results found
+              </TText>
+            </View>
+          )}
         </View>
         <View style={{ minHeight: 20 }}>{/* spacer */}</View>
       </ScrollView>

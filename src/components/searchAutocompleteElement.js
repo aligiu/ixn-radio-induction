@@ -1,4 +1,10 @@
-import { Text, View, TouchableOpacity, Keyboard, useColorScheme } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Keyboard,
+  useColorScheme,
+} from "react-native";
 import { Icon, MD3LightTheme, MD3DarkTheme } from "react-native-paper";
 
 import { fontSize } from "../styles/fontConfig";
@@ -17,8 +23,8 @@ export default function SearchAutocompleteElement({
   section,
   routerLink,
   setSearchbarInFocus,
-  content="",
-  title="",
+  content = "",
+  title = "",
 }) {
   const theme = useTheme();
   const router = useRouter();
@@ -40,7 +46,7 @@ export default function SearchAutocompleteElement({
     );
   };
 
-  const navigation = useNavigation();    
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
@@ -57,18 +63,23 @@ export default function SearchAutocompleteElement({
           borderRadius: 20,
           padding: 10,
           flexDirection: "row",
+          gap: 5,
         }}
       >
         <View
           style={{
             flexDirection: "column",
             justifyContent: "center",
-            padding: 10,
+            flex: 0,
           }}
         >
           <Icon source="magnify" color={theme.colors.primary} size={26} />
         </View>
-        <View>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
           <TText
             style={{
               fontSize: fontSize.MEDIUM,

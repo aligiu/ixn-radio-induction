@@ -95,8 +95,15 @@ const SearchAutocompleteContainer = ({
                 title={c.item.title} // title necessary if using topics route
                 secret={c.item.secret}
                 contentData={contentData}
-                autocompleteText={searchbarText}
-                section={c.item.description} // change to nearest header
+                autocompleteText={
+                  `
+                  Index: (${c.matches[0].indices[0]}, ${c.matches[0].indices[1]})
+                  Prior: ${c.matches[0].value.slice(c.matches[0].indices[0] - 4, c.matches[0].indices[0])}
+                  Match: ${c.matches[0].value.slice(c.matches[0].indices[0], c.matches[0].indices[1] + 1)}
+                  Posterior: ${c.matches[0].value.slice(c.matches[0].indices[1], c.matches[0].indices[1] + 4)}
+                  `
+                }
+                section={c.matches[0].key} // change to nearest header
                 routerLink={"topicsReadOnly/[id]"}
                 setSearchbarInFocus={setSearchbarInFocus}
               />

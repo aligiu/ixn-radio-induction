@@ -48,7 +48,6 @@ const SearchAutocompleteContainer = ({
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, marginBottom: keyboardHeight }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         style={{ ...contentContainerStyles.container, flex: 1 }}

@@ -121,7 +121,7 @@ const PanGestureHandler = ({ children }) => {
 export default function Layout() {
   // SideMenu: use require instead of import to avoid circular dependency
   const SideMenu = require("../components/sidemenu").default;
-  
+
   const navigation = useNavigation();
   const currentPathName = usePathname();
 
@@ -253,7 +253,7 @@ export default function Layout() {
         <Searchbar
           placeholder=""
           onChangeText={(text) => {
-            setSearchbarText(text);
+            setSearchbarText(text.trim());
             console.log(text);
           }}
           style={styles.searchBar}

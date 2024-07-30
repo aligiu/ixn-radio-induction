@@ -81,7 +81,7 @@ const SearchAutocompleteContainer = ({
                   fontFamily: "InterRegular",
                 }}
               >
-                Please enter your search
+                Please enter a search query
               </TText>
             </View>
           )}

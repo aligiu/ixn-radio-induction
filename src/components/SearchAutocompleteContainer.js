@@ -79,25 +79,18 @@ const SearchAutocompleteContainer = ({
                 title={c.item.title} // title necessary if using topics route
                 secret={c.item.secret}
                 contentData={contentData}
-                // beforeMatch={c.matches[0].value.slice(
-                //   getMatchStart(c) - 4,
-                //   getMatchStart(c)
-                // )}
-                match={`
-                  ${c.matches[0].value}
-                  ${c.matches[0].value.slice(
-                    getMatchStart(c),
-                    getMatchEnd(c),
-                  )}
-                  `}
-                // match={c.matches[0].value.slice(
-                //   getMatchStart(c),
-                //   getMatchEnd(c) + 1
-                // )}
-                // afterMatch={c.matches[0].value.slice(
-                //   getMatchEnd(c),
-                //   getMatchEnd(c) + 1 + 4
-                // )}
+                beforeMatch={c.matches[0].value.slice(
+                  Math.max(0, getMatchStart(c) - 10),
+                  getMatchStart(c)
+                )}
+                match={c.matches[0].value.slice(
+                  getMatchStart(c),
+                  getMatchEnd(c)
+                )}
+                afterMatch={c.matches[0].value.slice(
+                  getMatchEnd(c),
+                  getMatchEnd(c) + 10
+                )}
                 section={c.matches[0].key} // change to nearest header
                 routerLink={"topicsReadOnly/[id]"}
                 setSearchbarInFocus={setSearchbarInFocus}

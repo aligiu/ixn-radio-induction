@@ -19,12 +19,14 @@ import { customDarkColors } from "../theme/colors";
 
 export default function SearchAutocompleteElement({
   autocompleteText,
-  topic,
+  id,
   section,
   routerLink,
   setSearchbarInFocus,
   content = "",
   title = "",
+  secret,
+  contentData,
 }) {
   const theme = useTheme();
   const router = useRouter();
@@ -48,12 +50,28 @@ export default function SearchAutocompleteElement({
 
   const navigation = useNavigation();
 
+  console.log("SearchAutocompleteElement");
+  console.log({
+    id: id,
+    content: content,
+    title: title,
+    secret: secret,
+    // contentData: contentData,
+  });
+  console.log();
+
   return (
     <TouchableOpacity
       onPress={() => {
         Keyboard.dismiss();
         setSearchbarInFocus(false);
-        navigation.navigate(routerLink, { content: content, title: title });
+        navigation.navigate(routerLink, {
+          id: id,
+          content: content,
+          title: title,
+          secret: secret,
+          contentData: contentData,
+        });
       }}
     >
       <View
@@ -94,7 +112,7 @@ export default function SearchAutocompleteElement({
               fontFamily: "InterRegular",
             }}
           >
-            {topic} - {section}
+            {title} - {section}
           </TText>
         </View>
       </View>

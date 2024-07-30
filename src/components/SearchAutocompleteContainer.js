@@ -36,14 +36,13 @@ const SearchAutocompleteContainer = ({
   }
 
   const query = searchbarText;
-  console.log("searchbarText:", searchbarText);
-  console.log("searchbarText===null:", searchbarText === null);
-  console.log("searchbarText===undefined:", searchbarText === undefined);
-
-  console.log("contentData", contentData);
+  // console.log("searchbarText:", searchbarText);
+  // console.log("searchbarText===null:", searchbarText === null);
+  // console.log("searchbarText===undefined:", searchbarText === undefined);
+  // console.log("contentData", contentData);
 
   const contentDataSearchRanked = search(query);
-  console.log("contentDataSearchRanked", contentDataSearchRanked);
+  // console.log("contentDataSearchRanked", contentDataSearchRanked);
 
   const keyboardHeight = useKeyboardHeight();
 
@@ -64,12 +63,14 @@ const SearchAutocompleteContainer = ({
             contentDataSearchRanked.map((c, index) => (
               <SearchAutocompleteElement
                 key={index}
+                id={c.item.id}
+                content={c.item.content} // content necessary if using topics route
+                title={c.item.title} // title necessary if using topics route
+                secret={c.item.secret}
+                contentData={contentData}
                 autocompleteText={searchbarText}
-                topic={c.item.title}
                 section={c.item.description} // change to nearest header
                 routerLink={"topicsReadOnly/[id]"}
-                title={c.title} // title necessary if using topics route
-                content={c.content} // content necessary if using topics route
                 setSearchbarInFocus={setSearchbarInFocus}
               />
             ))}

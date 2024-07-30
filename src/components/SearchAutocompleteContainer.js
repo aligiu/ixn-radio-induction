@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import AutoScrollView from "../components/AutoScrollView";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
+import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 
 import Fuse from "fuse.js";
 
@@ -42,11 +43,17 @@ const SearchAutocompleteContainer = ({
   const contentDataSearchRanked = search(query);
   console.log("contentDataSearchRanked", contentDataSearchRanked);
 
+  const keyboardHeight = useKeyboardHeight();
+
   return (
-    <View style={{ height: "100%" }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1, marginBottom: keyboardHeight }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <ScrollView
         style={{ ...contentContainerStyles.container, flex: 1 }}
-        keyboardShouldPersistTaps="always"
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
       >
         <View
           style={{
@@ -67,8 +74,9 @@ const SearchAutocompleteContainer = ({
             />
           ))}
         </View>
+        <View style={{ minHeight: 20 }}>{/* spacer */}</View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

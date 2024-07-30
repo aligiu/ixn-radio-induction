@@ -21,7 +21,7 @@ const SearchAutocompleteContainer = ({
     includeScore: true,
     includeMatches: true,
     shouldSort: true,
-    threshold: 0.2, // Sensitivity Threshold (0.0 = perfect match; 1.0 = match anything)
+    threshold: 0.3, // Sensitivity Threshold (0.0 = perfect match; 1.0 = match anything)
   };
 
   const fuse = new Fuse(contentData, options);
@@ -33,7 +33,7 @@ const SearchAutocompleteContainer = ({
     return searchResults;
   }
 
-  function getLastIndexPair(searchResult) {
+  function getMatchStartEndIndices(searchResult) {
     const indices = searchResult["matches"][0]["indices"];
     const numPairs = indices.length;
     const lastIndexPair = indices[numPairs - 1];
@@ -49,12 +49,12 @@ const SearchAutocompleteContainer = ({
 
   const keyboardHeight = useKeyboardHeight();
 
-  function getMatchStart(contentDataElement) {
-    return contentDataElement.matches[0].indices[0];
+  function getMatchStart(c) {
+    return getMatchStartEndIndices(c)[0];
   }
 
-  function getMatchEnd(contentDataElement) {
-    return contentDataElement.matches[0].indices[0];
+  function getMatchEnd(c) {
+    return getMatchStartEndIndices(c)[1] + 1;
   }
 
   return (
@@ -85,9 +85,10 @@ const SearchAutocompleteContainer = ({
                 // )}
                 match={`
                   ${c.matches[0].value}
-                  ${getMatchStart(c)}
-                  ${getMatchEnd(c)}
-                  ${getLastIndexPair(c)}
+                  ${c.matches[0].value.slice(
+                    getMatchStart(c),
+                    getMatchEnd(c),
+                  )}
                   `}
                 // match={c.matches[0].value.slice(
                 //   getMatchStart(c),

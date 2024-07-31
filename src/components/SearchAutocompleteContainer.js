@@ -50,12 +50,17 @@ const SearchAutocompleteContainer = ({
     });
   });
 
-  // Perform a search
+  // Sort search results by match score in descending order
+  function sortSearchResults(results) {
+    return results.sort((a, b) => b.score - a.score);
+  }
+
   const results = idx.search(query);
+  const sortedResults = sortSearchResults(results);
 
   // Log the results
-  console.log("Search results:", results);
-  results.forEach((result) => {
+  console.log("sortedResults:", sortedResults);
+  sortedResults.forEach((result) => {
     console.log(result.matchData.metadata);
   });
 

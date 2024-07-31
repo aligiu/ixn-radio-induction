@@ -43,18 +43,41 @@ const SearchAutocompleteContainer = ({
   function search(query) {
     const searchResults = fuse.search(query);
     console.log("searchResults", searchResults);
-    return searchResults;
+    // return searchResults;
+    explodedResults = explode(searchResults)
+    console.log("explodedResults", explodedResults);
+    return explodedResults
   }
 
   function getMatchStartEndIndices(searchResult) {
-    const indices = searchResult["matches"][0]["indices"];
-    const numPairs = indices.length;
-    const lastIndexPair = indices[numPairs - 1];
-    return lastIndexPair;
+    const indices = searchResult["matches"][0]["indices"][0];
+    return indices[0]
   }
 
+// Function to explode results into individual matches
+function explode(searchResults) {
+  const explodedResults = [];
 
+  searchResults.forEach(result => {
+    result.matches.forEach(match => {
+      match.indices.forEach(indexPair => {
+        console.log("indexPair: ", indexPair)
+        explodedResults.push({
+          ...result,
+          match: {
+            ...match,
+            indices: indexPair, // Keep only the current index pair
+          },
+        });
+      });
+    });
+  });
 
+  // // Sort exploded results by score
+  // explodedResults.sort((a, b) => a.score - b.score);
+
+  return explodedResults;
+}
 
 
   const query = searchbarText;

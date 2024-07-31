@@ -253,7 +253,7 @@ export default function Layout() {
         <Searchbar
           placeholder=""
           onChangeText={(text) => {
-            setSearchbarText(text.trim());
+            setSearchbarText(text);
             console.log(text);
           }}
           style={styles.searchBar}

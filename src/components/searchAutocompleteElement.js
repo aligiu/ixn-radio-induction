@@ -19,7 +19,7 @@ import { customDarkColors } from "../theme/colors";
 
 export default function SearchAutocompleteElement({
   beforeMatch = "",
-  match,
+  match = "",
   afterMatch = "",
   id,
   section,

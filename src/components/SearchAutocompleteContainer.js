@@ -30,10 +30,6 @@ const SearchAutocompleteContainer = ({
   setSearchbarInFocus,
 }) => {
   const query = searchbarText;
-  // const contentDataSearchRanked = search(query);
-
-  // console.log("query ->", query);
-  // console.log("contentDataSearchRanked ->", String(contentDataSearchRanked));
 
   // Prepare data for Lunr.js
   const docs = addTagFreeContent(contentData);
@@ -64,39 +60,6 @@ const SearchAutocompleteContainer = ({
   });
 
   const keyboardHeight = useKeyboardHeight();
-
-  // var fakeDocs = [
-  //   {
-  //     name: "Lunr",
-  //     text: "Like Solr, but much smaller, and not as bright.",
-  //   },
-  //   {
-  //     name: "React",
-  //     text: "A JavaScript library for building user interfaces.",
-  //   },
-  //   {
-  //     name: "Lodash",
-  //     text: "A modern JavaScript utility library delivering modularity, performance & extras.",
-  //   },
-  // ];
-  // // Create Lunr index
-  // const idx = lunr(function () {
-  //   this.ref("name"); // Document unique identifier
-  //   this.field("text"); // Index and search within the 'text' field
-
-  //   fakeDocs.forEach((doc) => {
-  //     this.add(doc);
-  //   });
-  // });
-
-  // // Perform a search
-  // const results = idx.search("javascript");
-
-  // // Log the results
-  // console.log("Search results:", results);
-  // results.forEach((result) => {
-  //   console.log(result.matchData.metadata)
-  // });
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, marginBottom: keyboardHeight }}>

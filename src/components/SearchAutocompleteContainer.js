@@ -10,6 +10,19 @@ import Fuse from "fuse.js";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
+
+function stripHtmlTags(html) {
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
+}
+
+// Function to add tagFreeContent field to each item in contentData
+function addTagFreeContent(contentData) {
+  return contentData.map(item => ({
+    ...item,
+    tagFreeContent: stripHtmlTags(item.content),
+  }));
+}
+
 const SearchAutocompleteContainer = ({
   contentData,
   searchbarText,
@@ -17,14 +30,14 @@ const SearchAutocompleteContainer = ({
 }) => {
   // Initialize Fuse.js
   const options = {
-    keys: ["description", "content", "secret", "title"],
+    keys: ["description", "tagFreeContent", "secret", "title"],
     includeScore: true,
     includeMatches: true,
     shouldSort: true,
     threshold: 0.3, // Sensitivity Threshold (0.0 = perfect match; 1.0 = match anything)
   };
 
-  const fuse = new Fuse(contentData, options);
+  const fuse = new Fuse(addTagFreeContent(contentData), options);
 
   // Function to search and rank contentData
   function search(query) {
@@ -39,6 +52,10 @@ const SearchAutocompleteContainer = ({
     const lastIndexPair = indices[numPairs - 1];
     return lastIndexPair;
   }
+
+
+
+
 
   const query = searchbarText;
   const contentDataSearchRanked = search(query);

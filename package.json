@@ -28,6 +28,7 @@
     "expo-web-browser": "~13.0.3",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
+    "lunr": "^2.3.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.5",
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/lunr": "^2.3.7",
     "babel-plugin-module-resolver": "^5.0.2"
   },
   "private": true

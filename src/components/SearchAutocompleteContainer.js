@@ -62,6 +62,11 @@ const SearchAutocompleteContainer = ({
   const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
 
+  sortedResults.forEach((s) => {
+    console.log("Document Ref:", s.ref);
+    console.log("Metadata:", s.matchData.metadata);
+  });
+
   // Log the results
   console.log("sortedResults:", sortedResults);
   sortedResults.forEach((s) => {
@@ -116,7 +121,13 @@ const SearchAutocompleteContainer = ({
             sortedResults.map((s, index) => {
               c = getContentDataById(s.ref, contentData);
               const key = getNestedKey(s.matchData.metadata);
-              const section = key === "tagFreeContent" ? "Content" : key;
+              const keyToSection = {
+                title: "Title",
+                description: "Description",
+                tagFreeContent: "Content",
+                secret: "Secret",
+              };
+              const section = keyToSection[key];
 
               return (
                 <SearchAutocompleteElement
@@ -125,6 +136,7 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
+                  description={c.description}
                   contentData={contentData}
                   section={section} // TODO: change to matching field
                   routerLink={"topicsReadOnly/[id]"}

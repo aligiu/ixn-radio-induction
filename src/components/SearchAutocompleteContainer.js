@@ -36,12 +36,12 @@ const SearchAutocompleteContainer = ({
   // Remove tags in content for better search results
   const tagfreeContentData = addTagFreeContent(contentData);
 
-  console.log(tagfreeContentData);
+  // console.log(tagfreeContentData);
 
   const indexingMeta = searcher.indexEntities(
     tagfreeContentData,
     (c) => c.id,
-    (c) => [c.content, c.description, c.secret, c.title]
+    (c) => [c.tagFreeContent, c.description, c.secret, c.title]
   );
   console.dir(indexingMeta);
 
@@ -50,11 +50,11 @@ const SearchAutocompleteContainer = ({
     return results.sort((a, b) => b.score - a.score);
   }
 
-  const result = searcher.getMatches(new fuzzySearch.Query(query));
-  console.dir("result:", result);
+  const result = searcher.getMatches(
+    new fuzzySearch.Query((string = query), Infinity, 0.1)
+  );
+  console.log("result:", result);
   // const sortedResults = sortSearchResults(results);
-
-  
 
   const keyboardHeight = useKeyboardHeight();
 

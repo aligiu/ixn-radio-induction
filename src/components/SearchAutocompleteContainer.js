@@ -55,14 +55,34 @@ const SearchAutocompleteContainer = ({
     return results.sort((a, b) => b.score - a.score);
   }
 
+  function getContentDataById(id, listOfContent) {
+    return listOfContent.find((content) => content.id == id);
+  }
+
   const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
 
   // Log the results
   console.log("sortedResults:", sortedResults);
-  sortedResults.forEach((result) => {
-    console.log(result.matchData.metadata);
+  sortedResults.forEach((s) => {
+    console.log("metadata", s.matchData.metadata);
+    c = getContentDataById(s.ref, contentData);
+    console.log("c", c);
   });
+
+  function getNestedKey(obj) {
+    // Iterate over the top-level keys of the object
+    for (let topLevelKey in obj) {
+      // Iterate over the nested keys
+      for (let nestedKey in obj[topLevelKey]) {
+        return nestedKey;
+      }
+    }
+    // Return null if no such key is found
+    return null;
+  }
+
+  // console.log("getNestedKey", getNestedKey({"ashford": {"title": {}}}))
 
   const keyboardHeight = useKeyboardHeight();
 
@@ -79,21 +99,7 @@ const SearchAutocompleteContainer = ({
             gap: 10, // gap must be placed in <View> not <ScrollView>
           }}
         >
-          {/* {contentDataSearchRanked.length > 0 &&
-            contentDataSearchRanked.map((c, index) => (
-              <SearchAutocompleteElement
-                key={index}
-                id={c.item.id}
-                content={c.item.content} // content necessary if using topics route
-                title={c.item.title} // title necessary if using topics route
-                secret={c.item.secret}
-                contentData={contentData}
-                section={c.item.title} // TODO: change to matching field
-                routerLink={"topicsReadOnly/[id]"}
-                setSearchbarInFocus={setSearchbarInFocus}
-              />
-            ))}
-          {!searchbarText && contentDataSearchRanked.length === 0 && (
+          {!searchbarText && (
             <View style={{ alignItems: "center" }}>
               <TText
                 style={{
@@ -105,18 +111,47 @@ const SearchAutocompleteContainer = ({
               </TText>
             </View>
           )}
-          {searchbarText && contentDataSearchRanked.length === 0 && (
-            <View style={{ alignItems: "center" }}>
+          {searchbarText &&
+            sortedResults.length > 0 &&
+            sortedResults.map((s, index) => {
+              c = getContentDataById(s.ref, contentData);
+              return (
+                <SearchAutocompleteElement
+                  key={index}
+                  id={c.id}
+                  content={c.content} // content necessary if using topics route
+                  title={c.title} // title necessary if using topics route
+                  secret={c.secret}
+                  contentData={contentData}
+                  section={getNestedKey(s.matchData.metadata)} // TODO: change to matching field
+                  routerLink={"topicsReadOnly/[id]"}
+                  setSearchbarInFocus={setSearchbarInFocus}
+                />
+              );
+            })}
+          {searchbarText && sortedResults.length === 0 && (
+            <View style={{ alignItems: "center", gap: 8}}>
               <TText
                 style={{
                   fontSize: fontSize.SMALL,
                   fontFamily: "InterRegular",
+                  textAlign: "center"
                 }}
               >
-                No results found
+                {`No matching results.`}
+              </TText>
+              <TText
+                style={{
+                  fontSize: fontSize.SMALL,
+                  fontFamily: "InterRegular",
+                  textAlign: "center"
+                }}
+              >
+                {`Continue typing or try a different query.`}
               </TText>
             </View>
-          )} */}
+            
+          )}
         </View>
         <View style={{ minHeight: 20 }}>{/* spacer */}</View>
       </ScrollView>

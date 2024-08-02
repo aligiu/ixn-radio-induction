@@ -141,7 +141,7 @@ export async function overwriteTargetWithSource(db, target, source) {
     FROM ${source}
   `);
 
-  console.log("Content copied to ${target} successfully.");
+  console.log(`Content copied to ${target} successfully.`);
 }
 
 // not working
@@ -169,8 +169,8 @@ export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
 
     console.log(`attempted updating ${id} ${field} to ${newValue}`);
 
-    const newContent = await getAllContentSorted(db, "ContentToEdit");
-    console.log("newContent ***", newContent);
+    // const newContent = await getAllContentSorted(db, "ContentToEdit");
+    // console.log("newContent ***", newContent);
   } catch (error) {
     console.log(
       `Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`

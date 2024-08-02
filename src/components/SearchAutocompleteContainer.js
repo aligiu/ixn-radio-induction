@@ -6,7 +6,7 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
 import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 
-import lunr from "lunr";
+import * as fuzzySearch from "@m31coding/fuzzy-search";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
@@ -24,6 +24,8 @@ function addTagFreeContent(contentData) {
   }));
 }
 
+const searcher = fuzzySearch.SearcherFactory.createDefaultSearcher();
+
 const SearchAutocompleteContainer = ({
   contentData,
   searchbarText,
@@ -31,38 +33,28 @@ const SearchAutocompleteContainer = ({
 }) => {
   const query = searchbarText;
 
-  // Prepare data for Lunr.js
-  const docs = addTagFreeContent(contentData);
+  // Remove tags in content for better search results
+  const tagfreeContentData = addTagFreeContent(contentData);
 
-  // console.log("docs:", docs.map((c) => {c.tagFreeContent}))
-  console.log(docs);
+  console.log(tagfreeContentData);
 
-  // Create Lunr index
-  const idx = lunr(function () {
-    this.ref("id"); // Document unique identifier
-    this.field("title");
-    this.field("description");
-    this.field("tagFreeContent");
-    this.field("secret");
-
-    docs.forEach((doc) => {
-      this.add(doc);
-    });
-  });
+  const indexingMeta = searcher.indexEntities(
+    tagfreeContentData,
+    (c) => c.id,
+    (c) => [c.content, c.description, c.secret, c.title]
+  );
+  console.dir(indexingMeta);
 
   // Sort search results by match score in descending order
   function sortSearchResults(results) {
     return results.sort((a, b) => b.score - a.score);
   }
 
-  const results = idx.search(query);
-  const sortedResults = sortSearchResults(results);
+  const result = searcher.getMatches(new fuzzySearch.Query(query));
+  console.dir("result:", result);
+  // const sortedResults = sortSearchResults(results);
 
-  // Log the results
-  console.log("sortedResults:", sortedResults);
-  sortedResults.forEach((result) => {
-    console.log(result.matchData.metadata);
-  });
+  
 
   const keyboardHeight = useKeyboardHeight();
 

@@ -44,7 +44,7 @@ export default function RearrangableTopics() {
   // Fetch content data function
   async function fetchContentDataLocally() {
     const sortedContent = await getAllContentSorted(db, "Content");
-    console.log("sortedContent: ", sortedContent);
+    // console.log("sortedContent: ", sortedContent);
     const sortedContentWithKey = sortedContent.map((obj, index) => ({
       ...obj,
       key: index.toString(), // Ensure key is a string

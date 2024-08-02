@@ -115,6 +115,9 @@ const SearchAutocompleteContainer = ({
             sortedResults.length > 0 &&
             sortedResults.map((s, index) => {
               c = getContentDataById(s.ref, contentData);
+              const key = getNestedKey(s.matchData.metadata);
+              const section = key === "tagFreeContent" ? "Content" : key;
+
               return (
                 <SearchAutocompleteElement
                   key={index}
@@ -123,19 +126,19 @@ const SearchAutocompleteContainer = ({
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
                   contentData={contentData}
-                  section={getNestedKey(s.matchData.metadata)} // TODO: change to matching field
+                  section={section} // TODO: change to matching field
                   routerLink={"topicsReadOnly/[id]"}
                   setSearchbarInFocus={setSearchbarInFocus}
                 />
               );
             })}
           {searchbarText && sortedResults.length === 0 && (
-            <View style={{ alignItems: "center", gap: 8}}>
+            <View style={{ alignItems: "center", gap: 8 }}>
               <TText
                 style={{
                   fontSize: fontSize.SMALL,
                   fontFamily: "InterRegular",
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 {`No matching results.`}
@@ -144,13 +147,12 @@ const SearchAutocompleteContainer = ({
                 style={{
                   fontSize: fontSize.SMALL,
                   fontFamily: "InterRegular",
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 {`Continue typing or try a different query.`}
               </TText>
             </View>
-            
           )}
         </View>
         <View style={{ minHeight: 20 }}>{/* spacer */}</View>

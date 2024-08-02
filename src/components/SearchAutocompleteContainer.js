@@ -10,12 +10,14 @@ import lunr from "lunr";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
+// TODO: test
 function stripHtmlTags(html) {
   const noTags = html.replace(/<\/?[^>]+(>|$)/g, " ");
   const noTagsAndTrim = noTags.replace(/ +/g, " ").trim(); // convert multiple spaces to one space and trim start and ends
   return noTagsAndTrim;
 }
 
+// TODO: test
 // Function to add tagFreeContent field to each item in contentData
 function addTagFreeContent(contentData) {
   return contentData.map((item) => ({

@@ -18,15 +18,15 @@ import { customLightColors } from "../theme/colors";
 import { customDarkColors } from "../theme/colors";
 
 export default function SearchAutocompleteElement({
-  description = "",
   id,
   section,
   routerLink,
   setSearchbarInFocus,
   content = "",
   title = "",
-  secret,
+  secret = "",
   contentData,
+  matchingString = "",
 }) {
   const theme = useTheme();
   const router = useRouter();
@@ -121,7 +121,7 @@ export default function SearchAutocompleteElement({
               fontFamily: "InterRegular",
             }}
           >
-            {description}
+            {matchingString}
           </TText>
         </View>
       </View>

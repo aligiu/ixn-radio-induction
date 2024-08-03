@@ -50,15 +50,15 @@ export default function SearchAutocompleteElement({
 
   const navigation = useNavigation();
 
-  console.log("SearchAutocompleteElement");
-  console.log({
-    id: id,
-    content: content,
-    title: title,
-    secret: secret,
-    // contentData: contentData,
-  });
-  console.log();
+  // console.log("SearchAutocompleteElement");
+  // console.log({
+  //   id: id,
+  //   content: content,
+  //   title: title,
+  //   secret: secret,
+  //   // contentData: contentData,
+  // });
+  // console.log();
 
   return (
     <TouchableOpacity

@@ -37,7 +37,7 @@ const SearchAutocompleteContainer = ({
   const docs = addTagFreeContent(contentData);
 
   // console.log("docs:", docs.map((c) => {c.tagFreeContent}))
-  console.log(docs);
+  // console.log(docs);
 
   // Create Lunr index
   const idx = lunr(function () {
@@ -64,18 +64,18 @@ const SearchAutocompleteContainer = ({
   const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
 
-  sortedResults.forEach((s) => {
-    console.log("Document Ref:", s.ref);
-    console.log("Metadata:", s.matchData.metadata);
-  });
+  // sortedResults.forEach((s) => {
+  //   console.log("Document Ref:", s.ref);
+  //   console.log("Metadata:", s.matchData.metadata);
+  // });
 
-  // Log the results
-  console.log("sortedResults:", sortedResults);
-  sortedResults.forEach((s) => {
-    console.log("metadata", s.matchData.metadata);
-    c = getContentDataById(s.ref, contentData);
-    console.log("c", c);
-  });
+  // // Log the results
+  // console.log("sortedResults:", sortedResults);
+  // sortedResults.forEach((s) => {
+  //   console.log("metadata", s.matchData.metadata);
+  //   c = getContentDataById(s.ref, contentData);
+  //   console.log("c", c);
+  // });
 
   function getNestedKey(obj) {
     // Iterate over the top-level keys of the object

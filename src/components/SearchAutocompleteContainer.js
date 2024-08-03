@@ -22,6 +22,9 @@ import fuzzysort from "fuzzysort";
 
 // TODO: test
 function stripHtmlTags(html) {
+  if (!html) {
+    return html
+  }
   const noTags = html.replace(/<\/?[^>]+(>|$)/g, " ");
   const noTagsAndTrim = noTags.replace(/ +/g, " ").trim(); // convert multiple spaces to one space and trim start and ends
   return noTagsAndTrim;
@@ -29,10 +32,11 @@ function stripHtmlTags(html) {
 
 // TODO: test
 // Function to add tagFreeContent field to each item in contentData
-function addTagFreeContent(contentData) {
+function addTagFreeContentAndSecret(contentData) {
   return contentData.map((item) => ({
     ...item,
     tagFreeContent: stripHtmlTags(item.content),
+    tagFreeSecret: stripHtmlTags(item.secret),
   }));
 }
 
@@ -87,9 +91,9 @@ const SearchAutocompleteContainer = ({
 }) => {
   const query = searchbarText;
 
-  // contentDataX is an extension of contentData with one more field: tagFreeContent
-  // tagFreeContent improves search accuracy for lunr
-  const contentDataX = addTagFreeContent(contentData);
+  // contentDataX is an extension of contentData with two more fields: tagFreeContent, tagFreeSecret
+  // removing tags improves search accuracy for lunr
+  const contentDataX = addTagFreeContentAndSecret(contentData);
 
   // console.log("contentDataX:", contentDataX.map((c) => {c.tagFreeContent}))
   // console.log(contentDataX);
@@ -100,7 +104,7 @@ const SearchAutocompleteContainer = ({
     this.field("title");
     this.field("description");
     this.field("tagFreeContent");
-    this.field("secret");
+    this.field("tagFreeSecret");
 
     contentDataX.forEach((doc) => {
       this.add(doc);
@@ -187,7 +191,7 @@ const SearchAutocompleteContainer = ({
                 title: "Title",
                 description: "Description",
                 tagFreeContent: "Content",
-                secret: "Secret",
+                tagFreeSecret: "Secret",
               };
               const section = keyToSection[matchKey];
 
@@ -202,9 +206,8 @@ const SearchAutocompleteContainer = ({
 
               console.log("surroundingText", surroundingText);
               function removeWhitespace(str) {
-                return str.replace(/\s+/g, ' ');
-            }
-            
+                return str.replace(/\s+/g, " ");
+              }
 
               return (
                 <SearchAutocompleteElement

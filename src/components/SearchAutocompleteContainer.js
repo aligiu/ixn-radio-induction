@@ -6,7 +6,7 @@ import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
 import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 
-import lunr from "lunr";
+import fuzzysort from "fuzzysort";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
@@ -33,24 +33,17 @@ const SearchAutocompleteContainer = ({
 }) => {
   const query = searchbarText;
 
-  // Prepare data for Lunr.js
+  // Prepare data
   const docs = addTagFreeContent(contentData);
 
   // console.log("docs:", docs.map((c) => {c.tagFreeContent}))
-  console.log(docs);
+  // console.log(docs);
 
-  // Create Lunr index
-  const idx = lunr(function () {
-    this.ref("id"); // Document unique identifier
-    this.field("title");
-    this.field("description");
-    this.field("tagFreeContent");
-    this.field("secret");
-
-    docs.forEach((doc) => {
-      this.add(doc);
-    });
+  const results = fuzzysort.go(query, contentData, {
+    keys: ["title", "description", "tagFreeContent", "secret"],
   });
+
+  console.log(results)
 
   // Sort search results by match score in descending order
   function sortSearchResults(results) {
@@ -61,21 +54,20 @@ const SearchAutocompleteContainer = ({
     return listOfContent.find((content) => content.id == id);
   }
 
-  const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
 
-  sortedResults.forEach((s) => {
-    console.log("Document Ref:", s.ref);
-    console.log("Metadata:", s.matchData.metadata);
-  });
+  // sortedResults.forEach((s) => {
+  //   console.log("Document Ref:", s.ref);
+  //   console.log("Metadata:", s.matchData.metadata);
+  // });
 
-  // Log the results
-  console.log("sortedResults:", sortedResults);
-  sortedResults.forEach((s) => {
-    console.log("metadata", s.matchData.metadata);
-    c = getContentDataById(s.ref, contentData);
-    console.log("c", c);
-  });
+  // // Log the results
+  // console.log("sortedResults:", sortedResults);
+  // sortedResults.forEach((s) => {
+  //   console.log("metadata", s.matchData.metadata);
+  //   c = getContentDataById(s.ref, contentData);
+  //   console.log("c", c);
+  // });
 
   function getNestedKey(obj) {
     // Iterate over the top-level keys of the object
@@ -106,7 +98,7 @@ const SearchAutocompleteContainer = ({
             gap: 10, // gap must be placed in <View> not <ScrollView>
           }}
         >
-          {!searchbarText.trim() && (
+          {/* {!searchbarText.trim() && (
             <View style={{ alignItems: "center" }}>
               <TText
                 style={{
@@ -122,7 +114,7 @@ const SearchAutocompleteContainer = ({
             sortedResults.length > 0 &&
             sortedResults.map((s, index) => {
               c = getContentDataById(s.ref, contentData);
-              const key = getNestedKey(s.matchData.metadata);
+              // const key = getNestedKey(s.matchData.metadata);
               const keyToSection = {
                 title: "Title",
                 description: "Description",
@@ -167,7 +159,7 @@ const SearchAutocompleteContainer = ({
                 {`Continue typing or try a different query.`}
               </TText>
             </View>
-          )}
+          )} */}
         </View>
         <View style={{ minHeight: 20 }}>{/* spacer */}</View>
       </ScrollView>

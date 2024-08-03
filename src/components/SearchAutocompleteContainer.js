@@ -40,20 +40,45 @@ const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
   // Perform the fuzzy search using fuzzysort
   const result = fuzzysort.single(query, longString);
 
-  console.log("result", result);
-
   // Extract the best match index
   const matchIndices = result._indexes;
-  console.log("matchIndices", matchIndices);
   const queryLength = query.length;
 
-  // Calculate the surrounding text
+  // Calculate the surrounding text of the first pattern match
   const start = Math.min(...matchIndices) - boundaryWindowSize;
-  const end = Math.max(...matchIndices) + boundaryWindowSize;
+  const end =
+    findLastConsecutive(matchIndices, Math.min(...matchIndices)) +
+    1 +
+    boundaryWindowSize;
 
   const surroundingText = longString.substring(start, end);
   return { surroundingText, start, end };
 };
+
+function findLastConsecutive(array, start) {
+  if (!Array.isArray(array)) {
+    throw new TypeError("Input must be an array");
+  }
+  // Find the index of the starting point
+  const startIndex = array.indexOf(start);
+
+  // If the starting point is not found, return null
+  if (startIndex === -1) return null;
+
+  // Traverse the array from the startIndex
+  let lastConsecutive = start;
+  for (let i = startIndex + 1; i < array.length; i++) {
+    // Check if the current element is consecutive to the lastConsecutive
+    if (array[i] === lastConsecutive + 1) {
+      lastConsecutive = array[i];
+    } else {
+      // Break the loop if the sequence is broken
+      break;
+    }
+  }
+
+  return lastConsecutive;
+}
 
 const SearchAutocompleteContainer = ({
   contentData,
@@ -175,7 +200,7 @@ const SearchAutocompleteContainer = ({
                 query
               );
 
-              console.log("surroundingText", surroundingText);
+              // console.log("surroundingText", surroundingText);
 
               return (
                 <SearchAutocompleteElement

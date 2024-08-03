@@ -40,13 +40,17 @@ function addTagFreeContentAndSecret(contentData) {
   }));
 }
 
-const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
-  // Perform the fuzzy search using fuzzysort
-  const result = fuzzysort.single(query, longString);
+function removeNonAlphanumeric(str) {
+  return str.replace(/[^a-zA-Z0-9]/g, '');
+}
 
-  // Extract the best match index
+// TODO: test
+const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
+  const cleanQuery = removeNonAlphanumeric(query)
+
+  // Perform the fuzzy search using fuzzysort
+  const result = fuzzysort.single(cleanQuery, longString);
   const matchIndices = result._indexes;
-  const queryLength = query.length;
 
   // Calculate the surrounding text of the first pattern match
   const matchStart = Math.min(...matchIndices)

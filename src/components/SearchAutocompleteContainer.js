@@ -200,7 +200,11 @@ const SearchAutocompleteContainer = ({
                 query
               );
 
-              // console.log("surroundingText", surroundingText);
+              console.log("surroundingText", surroundingText);
+              function removeWhitespace(str) {
+                return str.replace(/\s+/g, ' ');
+            }
+            
 
               return (
                 <SearchAutocompleteElement
@@ -209,7 +213,7 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  matchingString={surroundingText} // TODO: matching string -> c[matchKey]
+                  matchingString={removeWhitespace(surroundingText)}
                   contentData={contentData}
                   section={section} // section is one of: Title/Description/Content/Secret
                   routerLink={"topicsReadOnly/[id]"}

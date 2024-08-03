@@ -26,7 +26,9 @@ export default function SearchAutocompleteElement({
   title = "",
   secret = "",
   contentData,
-  matchingString = "",
+  surroundingText = "",
+  prefix = "",
+  suffix = "",
 }) {
   const theme = useTheme();
   const router = useRouter();
@@ -49,16 +51,6 @@ export default function SearchAutocompleteElement({
   };
 
   const navigation = useNavigation();
-
-  // console.log("SearchAutocompleteElement");
-  // console.log({
-  //   id: id,
-  //   content: content,
-  //   title: title,
-  //   secret: secret,
-  //   // contentData: contentData,
-  // });
-  // console.log();
 
   return (
     <TouchableOpacity
@@ -96,7 +88,7 @@ export default function SearchAutocompleteElement({
         <View
           style={{
             flex: 1,
-            gap: 5
+            gap: 5,
           }}
         >
           <TText
@@ -115,14 +107,32 @@ export default function SearchAutocompleteElement({
           >
             {section}
           </TText>
-          <TText
-            style={{
-              fontSize: fontSize.SMALL,
-              fontFamily: "InterRegular",
-            }}
-          >
-            {matchingString}
-          </TText>
+          <View style={{ flexDirection: "row" }}>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterRegular",
+              }}
+            >
+              {prefix}
+            </TText>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterSemiBold",
+              }}
+            >
+              {surroundingText}
+            </TText>
+            <TText
+              style={{
+                fontSize: fontSize.SMALL,
+                fontFamily: "InterRegular",
+              }}
+            >
+              {suffix}
+            </TText>
+          </View>
         </View>
       </View>
     </TouchableOpacity>

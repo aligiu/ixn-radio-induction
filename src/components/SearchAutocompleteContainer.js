@@ -49,17 +49,18 @@ const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
   const queryLength = query.length;
 
   // Calculate the surrounding text of the first pattern match
-  const start = Math.min(...matchIndices) - boundaryWindowSize;
-  const end =
-    findLastConsecutive(matchIndices, Math.min(...matchIndices)) +
-    1 +
-    boundaryWindowSize;
+  const matchStart = Math.min(...matchIndices)
+  const matchEnd = findLastConsecutive(matchIndices, matchStart)
+  const surroundingStart = matchStart - boundaryWindowSize;
+  const surroundingEnd = matchEnd + boundaryWindowSize;
   
-  const hasPrefix = start > 0;
-  const hasSuffix = end < longString.length;
+  const prefixAtBorder = surroundingStart <= 0;
+  const suffixAtBorder = surroundingEnd >= longString.length;
 
-  const surroundingText = `${hasPrefix ? "...": ""}${longString.substring(start, end)}${hasSuffix ? "...": ""}`;
-  return { surroundingText, start, end };
+  const prefix = `${prefixAtBorder ? "": "..."}${longString.substring(surroundingStart, matchStart)}`
+  const surroundingText = `${longString.substring(matchStart, matchEnd + 1)}`;
+  const suffix = `${longString.substring(matchEnd + 1, surroundingEnd + 1)}${suffixAtBorder ? "": "..."}`
+  return { surroundingText, prefix, suffix };
 };
 
 function findLastConsecutive(array, start) {
@@ -202,7 +203,7 @@ const SearchAutocompleteContainer = ({
               console.log("matchKey: ", matchKey);
               // console.log("c[matchKey]", c[matchKey]);
 
-              const { surroundingText, start, end } = getSurroundingText(
+              const { surroundingText, prefix, suffix } = getSurroundingText(
                 c[matchKey],
                 query
               );
@@ -219,7 +220,9 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  matchingString={removeWhitespace(surroundingText)}
+                  surroundingText={removeWhitespace(surroundingText)}
+                  prefix={removeWhitespace(prefix)}
+                  suffix={removeWhitespace(suffix)}
                   contentData={contentData}
                   section={section} // section is one of: Title/Description/Content/Secret
                   routerLink={"topicsReadOnly/[id]"}

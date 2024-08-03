@@ -106,7 +106,7 @@ const SearchAutocompleteContainer = ({
             gap: 10, // gap must be placed in <View> not <ScrollView>
           }}
         >
-          {!searchbarText && (
+          {!searchbarText.trim() && (
             <View style={{ alignItems: "center" }}>
               <TText
                 style={{
@@ -118,7 +118,7 @@ const SearchAutocompleteContainer = ({
               </TText>
             </View>
           )}
-          {searchbarText &&
+          {searchbarText.trim() &&
             sortedResults.length > 0 &&
             sortedResults.map((s, index) => {
               c = getContentDataById(s.ref, contentData);
@@ -146,7 +146,7 @@ const SearchAutocompleteContainer = ({
                 />
               );
             })}
-          {searchbarText && sortedResults.length === 0 && (
+          {searchbarText.trim() && sortedResults.length === 0 && (
             <View style={{ alignItems: "center", gap: 8 }}>
               <TText
                 style={{

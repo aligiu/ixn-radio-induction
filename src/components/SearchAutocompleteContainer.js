@@ -23,7 +23,7 @@ import fuzzysort from "fuzzysort";
 // TODO: test
 function stripHtmlTags(html) {
   if (!html) {
-    return html
+    return html;
   }
   const noTags = html.replace(/<\/?[^>]+(>|$)/g, " ");
   const noTagsAndTrim = noTags.replace(/ +/g, " ").trim(); // convert multiple spaces to one space and trim start and ends
@@ -54,8 +54,11 @@ const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
     findLastConsecutive(matchIndices, Math.min(...matchIndices)) +
     1 +
     boundaryWindowSize;
+  
+  const hasPrefix = start > 0;
+  const hasSuffix = end < longString.length;
 
-  const surroundingText = longString.substring(start, end);
+  const surroundingText = `${hasPrefix ? "...": ""}${longString.substring(start, end)}${hasSuffix ? "...": ""}`;
   return { surroundingText, start, end };
 };
 

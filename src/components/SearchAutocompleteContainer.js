@@ -54,25 +54,33 @@ function getSurroundingText(
   return null; // No match found
 }
 
-function getHighlightedText(longString, query, maxDistance = 3, windowSize = 30) {
+function getHighlightedText(
+  longString,
+  query,
+  maxDistance = 3,
+  windowSize = 30
+) {
   const lowerQuery = query.toLowerCase();
   const lowerLongString = longString.toLowerCase();
 
   for (let i = 0; i < lowerLongString.length; i++) {
-      for (let j = i + 1; j <= lowerLongString.length; j++) {
-          const substring = lowerLongString.slice(i, j);
-          if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
-              // Calculate the surrounding text
-              const start = Math.max(0, i - windowSize);
-              const end = Math.min(longString.length, j + windowSize);
-              const surroundingText = longString.substring(start, end);
+    for (let j = i + 1; j <= lowerLongString.length; j++) {
+      const substring = lowerLongString.slice(i, j);
+      if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
+        // Calculate the surrounding text
+        const start = Math.max(0, i - windowSize);
+        const end = Math.min(longString.length, j + windowSize);
+        const surroundingText = longString.substring(start, end);
 
-              // Highlight the query in the surrounding text
-              const highlightedText = surroundingText.replace(new RegExp(`(${query})`, 'gi'), '<mark>$1</mark>');
+        // Highlight the query in the surrounding text
+        const highlightedText = surroundingText.replace(
+          new RegExp(`(${query})`, "gi"),
+          "<mark>$1</mark>"
+        );
 
-              return highlightedText;
-          }
+        return highlightedText;
       }
+    }
   }
 
   return null; // No match found
@@ -85,11 +93,12 @@ const SearchAutocompleteContainer = ({
 }) => {
   const query = searchbarText;
 
-  // Prepare data for Lunr.js
-  const docs = addTagFreeContent(contentData);
+  // contentDataX is an extension of contentData with one more field: tagFreeContent
+  // tagFreeContent improves search accuracy for lunr
+  const contentDataX = addTagFreeContent(contentData);
 
-  // console.log("docs:", docs.map((c) => {c.tagFreeContent}))
-  // console.log(docs);
+  // console.log("contentDataX:", contentDataX.map((c) => {c.tagFreeContent}))
+  // console.log(contentDataX);
 
   // Create Lunr index
   const idx = lunr(function () {
@@ -99,7 +108,7 @@ const SearchAutocompleteContainer = ({
     this.field("tagFreeContent");
     this.field("secret");
 
-    docs.forEach((doc) => {
+    contentDataX.forEach((doc) => {
       this.add(doc);
     });
   });
@@ -178,7 +187,7 @@ const SearchAutocompleteContainer = ({
           {searchbarText.trim() &&
             sortedResults.length > 0 &&
             sortedResults.map((s, index) => {
-              c = getContentDataById(s.ref, contentData);
+              c = getContentDataById(s.ref, contentDataX);
               const key = getNestedKey(s.matchData.metadata);
               const keyToSection = {
                 title: "Title",
@@ -187,6 +196,9 @@ const SearchAutocompleteContainer = ({
                 secret: "Secret",
               };
               const section = keyToSection[key];
+              console.log("c: ", c);
+              console.log("key: ", key);
+              console.log("c[key]", c[key]);
 
               return (
                 <SearchAutocompleteElement
@@ -195,8 +207,7 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  // matchingString={getSurroundingText(longString, fakeQuery)} // TODO: matching string
-                  matchingString={getHighlightedText(longString, fakeQuery)} // TODO: matching string
+                  matchingString={getHighlightedText(longString, fakeQuery)} // TODO: matching string -> c[key]
                   contentData={contentData}
                   section={section} // section is one of: Title/Description/Content/Secret
                   routerLink={"topicsReadOnly/[id]"}

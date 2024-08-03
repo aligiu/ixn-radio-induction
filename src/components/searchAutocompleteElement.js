@@ -115,21 +115,14 @@ export default function SearchAutocompleteElement({
               }}
             >
               {prefix}
-            </TText>
-            <TText
-              style={{
-                fontSize: fontSize.SMALL,
-                fontFamily: "InterSemiBold",
-              }}
-            >
-              {surroundingText}
-            </TText>
-            <TText
-              style={{
-                fontSize: fontSize.SMALL,
-                fontFamily: "InterRegular",
-              }}
-            >
+              <TText
+                style={{
+                  fontSize: fontSize.SMALL,
+                  fontFamily: "InterSemiBold",
+                }}
+              >
+                {surroundingText}
+              </TText>
               {suffix}
             </TText>
           </View>

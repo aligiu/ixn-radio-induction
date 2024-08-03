@@ -1,6 +1,12 @@
 import React, { useContext } from "react";
 
-import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+} from "react-native";
 import AutoScrollView from "../components/AutoScrollView";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
@@ -11,7 +17,8 @@ import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
 // import levenshtein from "levenshtein-edit-distance";
-import levenshtein from "fast-levenshtein";
+// import levenshtein from "fast-levenshtein";
+import fuzzysort from "fuzzysort";
 
 // TODO: test
 function stripHtmlTags(html) {
@@ -29,62 +36,24 @@ function addTagFreeContent(contentData) {
   }));
 }
 
-function getSurroundingText(
-  longString,
-  query,
-  maxDistance = 3,
-  windowSize = 30
-) {
-  const lowerQuery = query.toLowerCase();
-  const lowerLongString = longString.toLowerCase();
+const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
+  // Perform the fuzzy search using fuzzysort
+  const result = fuzzysort.single(query, longString);
 
-  for (let i = 0; i < lowerLongString.length; i++) {
-    for (let j = i + 1; j <= lowerLongString.length; j++) {
-      const substring = lowerLongString.slice(i, j);
-      if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
-        // Calculate the surrounding text
-        const start = Math.max(0, i - windowSize);
-        const end = Math.min(longString.length, j + windowSize);
+  console.log("result", result);
 
-        return longString.substring(start, end);
-      }
-    }
-  }
+  // Extract the best match index
+  const matchIndices = result._indexes;
+  console.log("matchIndices", matchIndices);
+  const queryLength = query.length;
 
-  return null; // No match found
-}
+  // Calculate the surrounding text
+  const start = Math.min(...matchIndices) - boundaryWindowSize;
+  const end = Math.max(...matchIndices) + boundaryWindowSize;
 
-function getHighlightedText(
-  longString,
-  query,
-  maxDistance = 3,
-  windowSize = 30
-) {
-  const lowerQuery = query.toLowerCase();
-  const lowerLongString = longString.toLowerCase();
-
-  for (let i = 0; i < lowerLongString.length; i++) {
-    for (let j = i + 1; j <= lowerLongString.length; j++) {
-      const substring = lowerLongString.slice(i, j);
-      if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
-        // Calculate the surrounding text
-        const start = Math.max(0, i - windowSize);
-        const end = Math.min(longString.length, j + windowSize);
-        const surroundingText = longString.substring(start, end);
-
-        // Highlight the query in the surrounding text
-        const highlightedText = surroundingText.replace(
-          new RegExp(`(${query})`, "gi"),
-          "<mark>$1</mark>"
-        );
-
-        return highlightedText;
-      }
-    }
-  }
-
-  return null; // No match found
-}
+  const surroundingText = longString.substring(start, end);
+  return { surroundingText, start, end };
+};
 
 const SearchAutocompleteContainer = ({
   contentData,
@@ -151,7 +120,7 @@ const SearchAutocompleteContainer = ({
         return nestedKey;
       }
     }
-    // Return null if no such key is found
+    // Return null if no such matchKey is found
     return null;
   }
 
@@ -188,26 +157,34 @@ const SearchAutocompleteContainer = ({
             sortedResults.length > 0 &&
             sortedResults.map((s, index) => {
               c = getContentDataById(s.ref, contentDataX);
-              const key = getNestedKey(s.matchData.metadata);
+              const matchKey = getNestedKey(s.matchData.metadata);
               const keyToSection = {
                 title: "Title",
                 description: "Description",
                 tagFreeContent: "Content",
                 secret: "Secret",
               };
-              const section = keyToSection[key];
-              console.log("c: ", c);
-              console.log("key: ", key);
-              console.log("c[key]", c[key]);
+              const section = keyToSection[matchKey];
+
+              // console.log("c: ", c);
+              console.log("matchKey: ", matchKey);
+              // console.log("c[matchKey]", c[matchKey]);
+
+              const { surroundingText, start, end } = getSurroundingText(
+                c[matchKey],
+                query
+              );
+
+              console.log("surroundingText", surroundingText);
 
               return (
                 <SearchAutocompleteElement
-                  key={index}
+                  matchKey={index}
                   id={c.id}
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  matchingString={getHighlightedText(longString, fakeQuery)} // TODO: matching string -> c[key]
+                  matchingString={surroundingText} // TODO: matching string -> c[matchKey]
                   contentData={contentData}
                   section={section} // section is one of: Title/Description/Content/Secret
                   routerLink={"topicsReadOnly/[id]"}

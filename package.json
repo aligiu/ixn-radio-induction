@@ -26,7 +26,9 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
     "expo-web-browser": "~13.0.3",
+    "fast-levenshtein": "^3.0.0",
     "fuse.js": "^7.0.0",
+    "levenshtein-edit-distance": "^3.0.1",
     "lodash": "^4.17.21",
     "lunr": "^2.3.9",
     "react": "18.2.0",
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/fast-levenshtein": "^0.0.4",
     "@types/lunr": "^2.3.7",
     "babel-plugin-module-resolver": "^5.0.2"
   },

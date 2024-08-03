@@ -10,6 +10,9 @@ import lunr from "lunr";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
 
+// import levenshtein from "levenshtein-edit-distance";
+import levenshtein from "fast-levenshtein";
+
 // TODO: test
 function stripHtmlTags(html) {
   const noTags = html.replace(/<\/?[^>]+(>|$)/g, " ");
@@ -24,6 +27,55 @@ function addTagFreeContent(contentData) {
     ...item,
     tagFreeContent: stripHtmlTags(item.content),
   }));
+}
+
+function getSurroundingText(
+  longString,
+  query,
+  maxDistance = 3,
+  windowSize = 30
+) {
+  const lowerQuery = query.toLowerCase();
+  const lowerLongString = longString.toLowerCase();
+
+  for (let i = 0; i < lowerLongString.length; i++) {
+    for (let j = i + 1; j <= lowerLongString.length; j++) {
+      const substring = lowerLongString.slice(i, j);
+      if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
+        // Calculate the surrounding text
+        const start = Math.max(0, i - windowSize);
+        const end = Math.min(longString.length, j + windowSize);
+
+        return longString.substring(start, end);
+      }
+    }
+  }
+
+  return null; // No match found
+}
+
+function getHighlightedText(longString, query, maxDistance = 3, windowSize = 30) {
+  const lowerQuery = query.toLowerCase();
+  const lowerLongString = longString.toLowerCase();
+
+  for (let i = 0; i < lowerLongString.length; i++) {
+      for (let j = i + 1; j <= lowerLongString.length; j++) {
+          const substring = lowerLongString.slice(i, j);
+          if (levenshtein.get(substring, lowerQuery) <= maxDistance) {
+              // Calculate the surrounding text
+              const start = Math.max(0, i - windowSize);
+              const end = Math.min(longString.length, j + windowSize);
+              const surroundingText = longString.substring(start, end);
+
+              // Highlight the query in the surrounding text
+              const highlightedText = surroundingText.replace(new RegExp(`(${query})`, 'gi'), '<mark>$1</mark>');
+
+              return highlightedText;
+          }
+      }
+  }
+
+  return null; // No match found
 }
 
 const SearchAutocompleteContainer = ({
@@ -63,6 +115,11 @@ const SearchAutocompleteContainer = ({
 
   const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
+
+  // Example usage of levenshtein
+  const longString =
+    "This is a long string that we will search through. It might contain some interesting patterns.";
+  const fakeQuery = "search through";
 
   // sortedResults.forEach((s) => {
   //   console.log("Document Ref:", s.ref);
@@ -138,9 +195,10 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  matchingString={"TODO: matching string!!"}
+                  // matchingString={getSurroundingText(longString, fakeQuery)} // TODO: matching string
+                  matchingString={getHighlightedText(longString, fakeQuery)} // TODO: matching string
                   contentData={contentData}
-                  section={section} // TODO: change to matching field
+                  section={section} // section is one of: Title/Description/Content/Secret
                   routerLink={"topicsReadOnly/[id]"}
                   setSearchbarInFocus={setSearchbarInFocus}
                 />

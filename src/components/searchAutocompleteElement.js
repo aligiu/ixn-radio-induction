@@ -26,7 +26,7 @@ export default function SearchAutocompleteElement({
   title = "",
   secret = "",
   contentData,
-  surroundingText = "",
+  matchedText = "",
   prefix = "",
   suffix = "",
 }) {
@@ -121,7 +121,7 @@ export default function SearchAutocompleteElement({
                   fontFamily: "InterSemiBold",
                 }}
               >
-                {surroundingText}
+                {matchedText}
               </TText>
               {suffix}
             </TText>

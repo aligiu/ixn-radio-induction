@@ -58,9 +58,9 @@ const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
   const suffixAtBorder = surroundingEnd >= longString.length;
 
   const prefix = `${prefixAtBorder ? "": "..."}${longString.substring(surroundingStart, matchStart)}`
-  const surroundingText = `${longString.substring(matchStart, matchEnd + 1)}`;
+  const matchedText = `${longString.substring(matchStart, matchEnd + 1)}`;
   const suffix = `${longString.substring(matchEnd + 1, surroundingEnd + 1)}${suffixAtBorder ? "": "..."}`
-  return { surroundingText, prefix, suffix };
+  return { matchedText, prefix, suffix };
 };
 
 function findLastConsecutive(array, start) {
@@ -203,12 +203,12 @@ const SearchAutocompleteContainer = ({
               console.log("matchKey: ", matchKey);
               // console.log("c[matchKey]", c[matchKey]);
 
-              const { surroundingText, prefix, suffix } = getSurroundingText(
+              const { matchedText, prefix, suffix } = getSurroundingText(
                 c[matchKey],
                 query
               );
 
-              console.log("surroundingText", surroundingText);
+              console.log("matchedText", matchedText);
               function removeWhitespace(str) {
                 return str.replace(/\s+/g, " ");
               }
@@ -220,7 +220,7 @@ const SearchAutocompleteContainer = ({
                   content={c.content} // content necessary if using topics route
                   title={c.title} // title necessary if using topics route
                   secret={c.secret}
-                  surroundingText={removeWhitespace(surroundingText)}
+                  matchedText={removeWhitespace(matchedText)}
                   prefix={removeWhitespace(prefix)}
                   suffix={removeWhitespace(suffix)}
                   contentData={contentData}

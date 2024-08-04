@@ -41,29 +41,34 @@ function addTagFreeContentAndSecret(contentData) {
 }
 
 function removeNonAlphanumeric(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, '');
+  return str.replace(/[^a-zA-Z0-9]/g, "");
 }
 
 // TODO: test
 const getSurroundingText = (longString, query, boundaryWindowSize = 30) => {
-  const cleanQuery = removeNonAlphanumeric(query)
+  const cleanQuery = removeNonAlphanumeric(query);
 
   // Perform the fuzzy search using fuzzysort
   const result = fuzzysort.single(cleanQuery, longString);
   const matchIndices = result._indexes;
 
   // Calculate the surrounding text of the first pattern match
-  const matchStart = Math.min(...matchIndices)
-  const matchEnd = findLastConsecutive(matchIndices, matchStart)
+  const matchStart = Math.min(...matchIndices);
+  const matchEnd = findLastConsecutive(matchIndices, matchStart);
   const surroundingStart = matchStart - boundaryWindowSize;
   const surroundingEnd = matchEnd + boundaryWindowSize;
-  
+
   const prefixAtBorder = surroundingStart <= 0;
   const suffixAtBorder = surroundingEnd >= longString.length;
 
-  const prefix = `${prefixAtBorder ? "": "..."}${longString.substring(surroundingStart, matchStart)}`
+  const prefix = `${prefixAtBorder ? "" : "..."}${longString.substring(
+    surroundingStart,
+    matchStart
+  )}`;
   const matchedText = `${longString.substring(matchStart, matchEnd + 1)}`;
-  const suffix = `${longString.substring(matchEnd + 1, surroundingEnd + 1)}${suffixAtBorder ? "": "..."}`
+  const suffix = `${longString.substring(matchEnd + 1, surroundingEnd + 1)}${
+    suffixAtBorder ? "" : "..."
+  }`;
   return { matchedText, prefix, suffix };
 };
 
@@ -219,6 +224,7 @@ const SearchAutocompleteContainer = ({
 
               return (
                 <SearchAutocompleteElement
+                  key={index}
                   matchKey={index}
                   id={c.id}
                   content={c.content} // content necessary if using topics route

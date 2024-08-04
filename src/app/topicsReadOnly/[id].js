@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Linking } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { contentContainerStyles } from "/src/styles/contentContainer";
 
@@ -10,7 +10,8 @@ import AutoScrollView from "../../components/AutoScrollView";
 import { Button } from "react-native-paper";
 
 import { useSQLiteContext } from "expo-sqlite";
-import { RichText, useEditorBridge } from "@10play/tentap-editor";
+import { WebView } from "react-native-webview";
+// import { RichText, useEditorBridge } from "@10play/tentap-editor";
 import { useRoute } from "@react-navigation/native";
 
 import FileModalReadOnly from "../../components/FileModalReadOnly";
@@ -26,12 +27,33 @@ export default function Topic() {
   const route = useRoute();
   const { content, title, secret, contentData } = route.params;
 
-  const editor = useEditorBridge({
-    editable: false,
-    autofocus: false,
-    avoidIosKeyboard: true,
-    initialContent: content ? content : "<p> No content yet. </p>",
-  });
+  // const editor = useEditorBridge({
+  //   editable: false,
+  //   autofocus: false,
+  //   avoidIosKeyboard: true,
+  //   initialContent: content ? content : "<p> No content yet. </p>",
+  // });
+
+  const handleLinkPress = (url) => {
+    Linking.openURL(url).catch((err) =>
+      console.error("Failed to open URL:", err)
+    );
+  };
+
+  const onMessage = (event) => {
+    const url = event.nativeEvent.data;
+    handleLinkPress(url);
+  };
+
+  const injectedJavaScript = `
+    document.addEventListener('click', function(event) {
+      var target = event.target;
+      if (target.tagName === 'A' && target.href) {
+        event.preventDefault();
+        window.ReactNativeWebView.postMessage(target.href);
+      }
+    });
+  `;
 
   return (
     <>
@@ -50,7 +72,16 @@ export default function Topic() {
               flex: 1,
             }}
           >
-            <RichText editor={editor} />
+            {/* <RichText editor={editor} /> */}
+            <WebView
+              source={{
+                html:
+                  `<meta name="viewport" content="initial-scale=1.0" />` +
+                    content || "<p>No content yet.</p>",
+              }}
+              injectedJavaScript={injectedJavaScript}
+              onMessage={onMessage}
+            />
             <View
               style={{
                 display: "flex",

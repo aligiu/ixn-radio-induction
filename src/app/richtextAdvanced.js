@@ -1,123 +1,95 @@
-// import React from "react";
-// import {
-//   SafeAreaView,
-//   View,
-//   KeyboardAvoidingView,
-//   Platform,
-//   StyleSheet,
-// } from "react-native";
-// import {
-//   RichText,
-//   Toolbar,
-//   useEditorBridge,
-//   useEditorContent,
-// } from "@10play/tentap-editor";
+import React from "react";
+import {
+  SafeAreaView,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from "react-native";
+import {
+  RichText,
+  Toolbar,
+  useEditorBridge,
+} from "@10play/tentap-editor";
 
-// import { useEffect, useState, useCallback } from "react";
-// import { Keyboard } from "react-native";
-// import { debounce } from "lodash";
+import { useEffect, useState, useCallback } from "react";
+import { Keyboard } from "react-native";
+import { debounce } from "lodash";
 
-// import {
-//   SafeAreaProvider,
-//   useSafeAreaInsets,
-// } from "react-native-safe-area-context";
+import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 
-// import { contentContainerStyles } from "/src/styles/contentContainer";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
-// // Node.js file system promises API (for client-side)
-// // For mocking, will not be needed
+import { contentContainerStyles } from "/src/styles/contentContainer";
 
-// // existing bug: keyboard height doesn't update when change keyboard (eg text -> emoji) on Android
-// // can be solved using keyboardWillChangeFrame and keyboardDidChangeFrame, but they do not fire due to a bug on Android
-// // hence not implemented
-// // see more: https://github.com/facebook/react-native/issues/44200
+// Node.js file system promises API (for client-side)
+// For mocking, will not be needed
 
-// export const useKeyboardHeight = () => {
-//   const [keyboardHeight, setKeyboardHeight] = useState(0);
-//   const insets = useSafeAreaInsets(); // get rid of extra padding for ios devices with home indicator/bars
+// existing bug: keyboard height doesn't update when change keyboard (eg text -> emoji) on Android
+// can be solved using keyboardWillChangeFrame and keyboardDidChangeFrame, but they do not fire due to a bug on Android
+// hence not implemented
+// see more: https://github.com/facebook/react-native/issues/44200
 
-//   useEffect(() => {
-//     function onKeyboardDidShow(e) {
-//       setKeyboardHeight(e.endCoordinates.height - insets.bottom);
-//     }
 
-//     function onKeyboardDidHide() {
-//       setKeyboardHeight(0);
-//     }
+export default function RichtextAdvanced() {
+  const editor = useEditorBridge({
+    autofocus: true,
+    avoidIosKeyboard: true,
+  });
 
-//     const showSubscription = Keyboard.addListener(
-//       "keyboardDidShow",
-//       onKeyboardDidShow
-//     );
-//     const hideSubscription = Keyboard.addListener(
-//       "keyboardDidHide",
-//       onKeyboardDidHide
-//     );
-//     return () => {
-//       showSubscription.remove();
-//       hideSubscription.remove();
-//     };
-//   }, [insets.bottom]);
+  const content = useEditorContent(editor, { type: "html" });
 
-//   return keyboardHeight;
-// };
+  const debouncedEffect = useCallback(
+    debounce((content) => {
+      content && console.log(content);
+    }, 300), // Debounce delay in milliseconds
+    []
+  );
 
-// export default function RichtextAdvanced() {
-//   const editor = useEditorBridge({
-//     autofocus: true,
-//     avoidIosKeyboard: true,
-//   });
+  useEffect(() => {
+    debouncedEffect(content);
+    return () => {
+      debouncedEffect.cancel();
+    };
+  }, [content, debouncedEffect]);
 
-//   const content = useEditorContent(editor, { type: "html" });
+  const keyboardHeight = useKeyboardHeight();
 
-//   const debouncedEffect = useCallback(
-//     debounce((content) => {
-//       content && console.log(content);
-//     }, 300), // Debounce delay in milliseconds
-//     []
-//   );
+  return (
+    <SafeAreaView style={styles.fullScreen}>
+      <RichText editor={editor} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardAvoidingView}
+      >
+        <SafeAreaView
+          style={{
+            position: "absolute",
+            bottom: keyboardHeight,
+          }}
+        >
+          <Toolbar editor={editor} />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
 
-//   useEffect(() => {
-//     debouncedEffect(content);
-//     return () => {
-//       debouncedEffect.cancel();
-//     };
-//   }, [content, debouncedEffect]);
+const styles = StyleSheet.create({
+  fullScreen: {
+    flex: 1,
+    marginTop: 8,
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  keyboardAvoidingView: {
+    position: "absolute",
+    width: "100%",
+    bottom: 0,
+  },
+});
 
-//   const keyboardHeight = useKeyboardHeight();
-
-//   return (
-//     <SafeAreaView style={styles.fullScreen}>
-//       <RichText editor={editor} />
-//       <KeyboardAvoidingView
-//         behavior={Platform.OS === "ios" ? "padding" : "height"}
-//         style={styles.keyboardAvoidingView}
-//       >
-//         <SafeAreaView
-//           style={{
-//             position: "absolute",
-//             bottom: keyboardHeight,
-//           }}
-//         >
-//           <Toolbar editor={editor} />
-//         </SafeAreaView>
-//       </KeyboardAvoidingView>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   fullScreen: {
-//     flex: 1,
-//     marginTop: 8,
-//     marginLeft: 16,
-//     marginRight: 16,
-//   },
-//   keyboardAvoidingView: {
-//     position: "absolute",
-//     width: "100%",
-//     bottom: 0,
-//   },
-// });
-
-// // const initialContent = `<p>This is a RichtextAdvanced example!</p>`;
+// const initialContent = `<p>This is a RichtextAdvanced example!</p>`;

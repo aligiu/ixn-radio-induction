@@ -48,7 +48,7 @@ import { Button, Portal, TextInput } from "react-native-paper";
 import { getAllContentSorted } from "../../../db/queries";
 import { useSQLiteContext } from "expo-sqlite";
 
-import { RichText, useEditorBridge } from "@10play/tentap-editor";
+import { RichText, useEditorBridge, Toolbar } from "@10play/tentap-editor";
 
 import { useRoute } from "@react-navigation/native";
 
@@ -56,6 +56,7 @@ import FileModalWrite from "../../../components/FileModalWrite";
 import SecretModal from "../../../components/SecretModal";
 import { updateFieldById_ContentToEdit } from "../../../db/queries";
 import { useNavigation } from "@react-navigation/native";
+import { useKeyboardHeight } from "../../../hooks/keyboard/keyboardHeight";
 
 export default function Topic() {
   const db = useSQLiteContext();
@@ -84,6 +85,8 @@ export default function Topic() {
   const [fileModalVisible, setFileModalVisible] = React.useState(false);
   const [titleValue, setTitleValue] = React.useState(title);
   const [descriptionValue, setDescriptionValue] = React.useState(description);
+
+  const keyboardHeight = useKeyboardHeight();
 
   return (
     <>
@@ -126,9 +129,22 @@ export default function Topic() {
             }}
           >
             <RichText editor={editor} />
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <SafeAreaView
+                style={{
+                  position: "absolute",
+                  bottom: keyboardHeight - 60, // height of 50 + marginBottom of 10 for the Secrets File group
+                }}
+              >
+                <Toolbar editor={editor} />
+              </SafeAreaView>
+            </KeyboardAvoidingView>
             <View
               style={{
                 display: "flex",
+                height: 50,
                 flexDirection: "row",
                 gap: 10,
                 marginBottom: 10,

@@ -56,6 +56,7 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
   const [fileData, setFileData] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [fileFetchFailed, setFileFetchFailed] = useState(false)
 
   async function fetchFileDataRemotely() {
     const route = `/files/list/${id}`;
@@ -85,6 +86,7 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
           "Unable to fetch files from the server. Text content and secrets are shown, but files cannot be downloaded."
         );
         setSnackbarVisible(true);
+        setFileFetchFailed(true);
       }
     }
     setFileDataOrShowError();
@@ -148,7 +150,7 @@ const FileModalReadOnly = ({ visible, closeModal, id }) => {
                     fontFamily: "InterRegular",
                   }}
                 >
-                  No files found
+                  {fileFetchFailed ? "Files cannot be fetched due to network failure" : "No files found"}
                 </TText>
               </View>
             )}

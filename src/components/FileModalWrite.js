@@ -83,15 +83,21 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   const [numOps, setNumOps] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [fileFetchFailed, setFileFetchFailed] = useState(false)
+  
   async function fetchFileDataRemotely() {
     const route = `/files/list/${id}`;
-    const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response;
+    try {
+      const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response;
+    } catch {
+      return null;
+    }
   }
 
   console.log("fileData:", fileData);
@@ -101,7 +107,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
   useEffect(() => {
     async function setFileDataOrShowError() {
       response = await fetchFileDataRemotely();
-      if (response.ok) {
+      if (response && response.ok) {
         const fetchedFilesOfId = await response.json();
         console.log(fetchedFilesOfId);
         setFileData(fetchedFilesOfId);
@@ -111,6 +117,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
           "Unable to fetch files from the server. Text content and secrets are shown, but files cannot be downloaded."
         );
         setSnackbarVisible(true);
+        setFileFetchFailed(true);
       }
     }
     setFileDataOrShowError();
@@ -356,7 +363,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
                         fontFamily: "InterRegular",
                       }}
                     >
-                      No files found
+                      {fileFetchFailed ? "Files cannot be fetched due to network failure" : "No files found"}
                     </TText>
                   </View>
                 )}

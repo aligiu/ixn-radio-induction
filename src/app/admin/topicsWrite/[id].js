@@ -1,27 +1,3 @@
-// Skip fetch for now, assume already have json data
-
-// // Define the URL of the JSON endpoint
-// const url = 'https://api.example.com/data';
-
-// // Use the fetch API to get data from the endpoint
-// fetch(url)
-//   .then(response => {
-//     // Check if the request was successful
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     // Parse the JSON from the response
-//     return response.json();
-//   })
-//   .then(data => {
-//     // Handle the parsed JSON data
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     // Handle any errors that occurred during the fetch
-//     console.error('There has been a problem with your fetch operation:', error);
-//   });
-
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import {

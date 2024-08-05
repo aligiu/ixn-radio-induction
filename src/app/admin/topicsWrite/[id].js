@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import {
   ScrollView,
   Text,
@@ -33,8 +33,11 @@ import SecretModal from "../../../components/SecretModal";
 import { updateFieldById_ContentToEdit } from "../../../db/queries";
 import { useNavigation } from "@react-navigation/native";
 import { useKeyboardHeight } from "../../../hooks/keyboard/keyboardHeight";
+import InputContext from "../../../context/InputContext";
 
 export default function Topic() {
+  const { inputInFocus, setInputInFocus } = React.useContext(InputContext);
+
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
 
@@ -66,13 +69,14 @@ export default function Topic() {
 
   return (
     <>
-      <AutoScrollView
+      <View
         keyboardDismissMode="on-drag"
-        style={contentContainerStyles.container}
+        style={{ flex: 1, paddingTop: 8, paddingLeft: 16, paddingRight: 16 }}
       >
         {/* Scroll view needed to dismiss search bar */}
         <View style={{ flex: 1, gap: 10 }}>
           <TextInput
+            onFocus={() => setInputInFocus(true)}
             label="Title"
             mode="outlined"
             numberOfLines={1}
@@ -83,6 +87,7 @@ export default function Topic() {
             value={titleValue}
           />
           <TextInput
+            onFocus={() => setInputInFocus(true)}
             label="Description"
             mode="outlined"
             multiline={true}
@@ -101,23 +106,43 @@ export default function Topic() {
 
           <View
             style={{
-              minHeight: 100,
+              // minHeight: 100,
               flex: 1,
+              borderWidth: 1,
+              borderColor: "grey",
+              borderRadius: 4,
+              paddingLeft: 5,
+              paddingRight: 5,
+              // borderColor: "red",
+              marginBottom:
+                Platform.OS === "ios" && keyboardHeight > 0 ? 40 : 0, // (*) corresponds to toolbar height
             }}
           >
             <RichText editor={editor} />
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-            >
-              <SafeAreaView
-                style={{
-                  position: "absolute",
-                  bottom: keyboardHeight - 60, // height of 50 + marginBottom of 10 for the Secrets File group
-                }}
-              >
-                <Toolbar editor={editor} />
-              </SafeAreaView>
-            </KeyboardAvoidingView>
+          </View>
+
+          <View
+            style={{
+              position: "absolute",
+              minHeight: 40, // (*)
+              // bottom: 0,
+              bottom: keyboardHeight,
+              marginLeft: -16,
+              marginRight: -16,
+            }}
+          >
+            <Toolbar editor={editor} />
+          </View>
+          <View
+            style={{
+              minHeight: keyboardHeight,
+              // backgroundColor: "yellow",
+            }}
+          >
+            {/* spacer */}
+          </View>
+
+          {keyboardHeight === 0 && (
             <View
               style={{
                 display: "flex",
@@ -138,9 +163,9 @@ export default function Topic() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          )}
         </View>
-      </AutoScrollView>
+      </View>
       <View>
         <SecretModal
           visible={secretModalVisible}
@@ -163,27 +188,3 @@ export default function Topic() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  textArea: {
-    flex: 1,
-    borderWidth: 2,
-    borderColor: "red",
-  },
-  pageTitle: {
-    fontSize: fontSize.LARGE,
-    fontFamily: "InterSemiBold",
-    paddingBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: fontSize.LARGE,
-    fontFamily: "InterMedium",
-    paddingBottom: 8,
-  },
-  sectionContent: {
-    fontSize: fontSize.MEDIUM,
-    fontFamily: "InterRegular",
-    paddingBottom: 8,
-    textAlign: "justify",
-  },
-});

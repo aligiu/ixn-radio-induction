@@ -291,7 +291,7 @@ const FileModalWrite = ({ visible, closeModal, id }) => {
             <View>
               <IconButton
                 size={26}
-                style={{ ...styles.iconButtonContent, display: "none" }}
+                style={{ ...styles.iconButtonContent, opacity: 0 }}
               />
             </View>
           </View>

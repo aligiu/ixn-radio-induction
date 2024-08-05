@@ -110,16 +110,19 @@ export default function Topic() {
             <RichText editor={editor} />
 
             
+          </View>
             <View
               style={{
                 position: "absolute",
-                bottom: 0,
-                // bottom: keyboardHeight, // height of 50 + marginBottom of 10 for the Secrets File group
+                minHeight: 40,
+                // bottom: 0,
+                bottom: keyboardHeight,
+                marginLeft: -16,
+                marginRight: -16,
               }}
             >
               <Toolbar editor={editor} />
             </View>
-          </View>
           <View
             style={{
               minHeight: keyboardHeight,

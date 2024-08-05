@@ -105,7 +105,7 @@ export default function Topic() {
               flex: 1,
               borderWidth: 2,
               borderColor: "red",
-              marginBottom: 40, // (*) corresponds to toolbar height
+              marginBottom: Platform.OS === "ios" ? 40 : 0, // (*) corresponds to toolbar height
             }}
           >
             <RichText editor={editor} />

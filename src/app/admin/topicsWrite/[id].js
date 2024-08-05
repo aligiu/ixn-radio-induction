@@ -105,29 +105,26 @@ export default function Topic() {
               flex: 1,
               borderWidth: 2,
               borderColor: "red",
+              marginBottom: 40, // (*) corresponds to toolbar height
             }}
           >
             <RichText editor={editor} />
-
-            
           </View>
-            <View
-              style={{
-                position: "absolute",
-                minHeight: 40,
-                // bottom: 0,
-                bottom: keyboardHeight,
-                marginLeft: -16,
-                marginRight: -16,
-              }}
-            >
-              <Toolbar editor={editor} />
-            </View>
+          <View
+            style={{
+              position: "absolute",
+              minHeight: 40, // (*)
+              // bottom: 0,
+              bottom: keyboardHeight,
+              marginLeft: -16,
+              marginRight: -16,
+            }}
+          >
+            <Toolbar editor={editor} />
+          </View>
           <View
             style={{
               minHeight: keyboardHeight,
-              // minHeight: 100,
-
               backgroundColor: "yellow",
             }}
           >

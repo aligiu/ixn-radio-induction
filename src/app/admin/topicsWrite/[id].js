@@ -103,8 +103,12 @@ export default function Topic() {
             style={{
               // minHeight: 100,
               flex: 1,
-              borderWidth: 2,
-              borderColor: "red",
+              borderWidth: 1,
+              borderColor: "grey",
+              borderRadius: 4,
+              paddingLeft: 5,
+              paddingRight: 5,
+              // borderColor: "red",
               marginBottom: Platform.OS === "ios" ? 40 : 0, // (*) corresponds to toolbar height
             }}
           >
@@ -125,7 +129,7 @@ export default function Topic() {
           <View
             style={{
               minHeight: keyboardHeight,
-              backgroundColor: "yellow",
+              // backgroundColor: "yellow",
             }}
           >
             {/* spacer */}

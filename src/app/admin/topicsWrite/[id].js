@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import {
   ScrollView,
   Text,
@@ -33,8 +33,11 @@ import SecretModal from "../../../components/SecretModal";
 import { updateFieldById_ContentToEdit } from "../../../db/queries";
 import { useNavigation } from "@react-navigation/native";
 import { useKeyboardHeight } from "../../../hooks/keyboard/keyboardHeight";
+import InputContext from "../../../context/InputContext";
 
 export default function Topic() {
+  const { inputInFocus, setInputInFocus } = React.useContext(InputContext);
+
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
 
@@ -73,6 +76,7 @@ export default function Topic() {
         {/* Scroll view needed to dismiss search bar */}
         <View style={{ flex: 1, gap: 10 }}>
           <TextInput
+            onFocus={() => setInputInFocus(true)}
             label="Title"
             mode="outlined"
             numberOfLines={1}
@@ -83,6 +87,7 @@ export default function Topic() {
             value={titleValue}
           />
           <TextInput
+            onFocus={() => setInputInFocus(true)}
             label="Description"
             mode="outlined"
             multiline={true}
@@ -109,11 +114,13 @@ export default function Topic() {
               paddingLeft: 5,
               paddingRight: 5,
               // borderColor: "red",
-              marginBottom: Platform.OS === "ios" ? 40 : 0, // (*) corresponds to toolbar height
+              marginBottom:
+                Platform.OS === "ios" && keyboardHeight > 0 ? 40 : 0, // (*) corresponds to toolbar height
             }}
           >
             <RichText editor={editor} />
           </View>
+
           <View
             style={{
               position: "absolute",

@@ -48,6 +48,7 @@ import { overwriteContent } from "../db/queries";
 
 import { setSchema } from "../db/setSchema";
 import React from "react";
+import InputContext, { InputProvider } from "../context/InputContext";
 
 // themed text using custom color
 export const TText = ({ children, style, ...props }) => {
@@ -216,17 +217,21 @@ export default function Layout() {
   function renderHeaderLeft() {
     const { searchbarInFocus, setSearchbarInFocus } =
       useContext(SearchbarContext);
+    const { inputInFocus, setInputInFocus } = useContext(InputContext);
     const { setSidemenuVisible } = useContext(SidemenuContext);
     return (
       <View style={[styles.headerLeftContainer]}>
         <IconButton
           style={styles.iconButtonContent}
           icon={
-            !searchbarInFocus && !navigation.canGoBack() ? "menu" : "arrow-left"
+            !inputInFocus && !searchbarInFocus && !navigation.canGoBack()
+              ? "menu"
+              : "arrow-left"
           }
           size={24}
           onPress={() => {
-            if (searchbarInFocus) {
+            if (searchbarInFocus || inputInFocus) {
+              setInputInFocus(false);
               Keyboard.dismiss();
             } else if (navigation.canGoBack()) {
               navigation.goBack();
@@ -281,54 +286,58 @@ export default function Layout() {
         <StatusBar barStyle="dark-content" />
         <SidemenuProvider>
           <SearchbarProvider>
-            <SafeAreaView
-              style={[
-                styles.safeArea,
-                {
-                  backgroundColor: paperTheme.colors.background,
-                },
-              ]}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  backgroundColor: paperTheme.colors.background,
-                }}
-                onLayout={onLayoutRootView}
+            <InputProvider>
+              <SafeAreaView
+                style={[
+                  styles.safeArea,
+                  {
+                    backgroundColor: paperTheme.colors.background,
+                  },
+                ]}
               >
-                {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
-                {/* <PanGestureHandler> */}
-                <GestureHandlerRootView>
-                  <Stack
-                    screenOptions={{
-                      header: () => (
-                        <View>
-                          {!NO_HEADER_PATHS.includes(currentPathName) && (
-                            <View style={styles.headerPaddedContainer}>
-                              {renderHeaderLeft()}
-                              {/* Only render search bar if not excluded in NO_SEARCHBAR_PATHS nor NO_SEARCHBAR_PREFIXES*/}
-                              {!NO_SEARCHBAR_PATHS.includes(currentPathName) &&
-                                !startsWithAnyPrefix(
-                                  currentPathName,
-                                  NO_SEARCHBAR_PREFIXES
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    backgroundColor: paperTheme.colors.background,
+                  }}
+                  onLayout={onLayoutRootView}
+                >
+                  {/* Remove PanGestureHandler if there are bugs with scrolling (Android) */}
+                  {/* <PanGestureHandler> */}
+                  <GestureHandlerRootView>
+                    <Stack
+                      screenOptions={{
+                        header: () => (
+                          <View>
+                            {!NO_HEADER_PATHS.includes(currentPathName) && (
+                              <View style={styles.headerPaddedContainer}>
+                                {renderHeaderLeft()}
+                                {/* Only render search bar if not excluded in NO_SEARCHBAR_PATHS nor NO_SEARCHBAR_PREFIXES*/}
+                                {!NO_SEARCHBAR_PATHS.includes(
+                                  currentPathName
                                 ) &&
-                                renderHeaderRight()}
-                            </View>
-                          )}
-                        </View>
-                      ),
-                      headerTitle: "", // Remove header title for clean layout
-                      contentStyle: {
-                        backgroundColor: paperTheme.colors.background,
-                      },
-                    }}
-                  />
-                </GestureHandlerRootView>
-                {/* </PanGestureHandler> */}
-              </View>
-              <SideMenu />
-            </SafeAreaView>
+                                  !startsWithAnyPrefix(
+                                    currentPathName,
+                                    NO_SEARCHBAR_PREFIXES
+                                  ) &&
+                                  renderHeaderRight()}
+                              </View>
+                            )}
+                          </View>
+                        ),
+                        headerTitle: "", // Remove header title for clean layout
+                        contentStyle: {
+                          backgroundColor: paperTheme.colors.background,
+                        },
+                      }}
+                    />
+                  </GestureHandlerRootView>
+                  {/* </PanGestureHandler> */}
+                </View>
+                <SideMenu />
+              </SafeAreaView>
+            </InputProvider>
           </SearchbarProvider>
         </SidemenuProvider>
       </PaperProvider>

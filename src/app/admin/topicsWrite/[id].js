@@ -66,9 +66,9 @@ export default function Topic() {
 
   return (
     <>
-      <AutoScrollView
+      <View
         keyboardDismissMode="on-drag"
-        style={contentContainerStyles.container}
+        style={{ flex: 1, paddingTop: 8, paddingLeft: 16, paddingRight: 16 }}
       >
         {/* Scroll view needed to dismiss search bar */}
         <View style={{ flex: 1, gap: 10 }}>
@@ -101,23 +101,40 @@ export default function Topic() {
 
           <View
             style={{
-              minHeight: 100,
+              // minHeight: 100,
               flex: 1,
+              borderWidth: 2,
+              borderColor: "red",
             }}
           >
             <RichText editor={editor} />
+
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
               <SafeAreaView
                 style={{
                   position: "absolute",
-                  bottom: keyboardHeight - 60, // height of 50 + marginBottom of 10 for the Secrets File group
+                  bottom: 0,
+                  // bottom: keyboardHeight, // height of 50 + marginBottom of 10 for the Secrets File group
                 }}
               >
                 <Toolbar editor={editor} />
               </SafeAreaView>
             </KeyboardAvoidingView>
+          </View>
+          <View
+            style={{
+              minHeight: keyboardHeight,
+              // minHeight: 100,
+
+              backgroundColor: "yellow",
+            }}
+          >
+            {/* spacer */}
+          </View>
+
+          {keyboardHeight === 0 && (
             <View
               style={{
                 display: "flex",
@@ -138,9 +155,9 @@ export default function Topic() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          )}
         </View>
-      </AutoScrollView>
+      </View>
       <View>
         <SecretModal
           visible={secretModalVisible}
@@ -163,27 +180,3 @@ export default function Topic() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  textArea: {
-    flex: 1,
-    borderWidth: 2,
-    borderColor: "red",
-  },
-  pageTitle: {
-    fontSize: fontSize.LARGE,
-    fontFamily: "InterSemiBold",
-    paddingBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: fontSize.LARGE,
-    fontFamily: "InterMedium",
-    paddingBottom: 8,
-  },
-  sectionContent: {
-    fontSize: fontSize.MEDIUM,
-    fontFamily: "InterRegular",
-    paddingBottom: 8,
-    textAlign: "justify",
-  },
-});

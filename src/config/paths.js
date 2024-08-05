@@ -18,8 +18,8 @@ export const NO_SEARCHBAR_PREFIXES = [
 
 export const NO_LEFTSWIPE_PATHS = ["/auth/login", "/auth/registerUser"];
 
-// export const PROTOCOL = "http";
-// export const SERVER_API_BASE = "localhost:8080/api";
+export const PROTOCOL = "http";
+export const SERVER_API_BASE = "localhost:8080/api";
 
-export const PROTOCOL = "https";
-export const SERVER_API_BASE = "ixn-backend.onrender.com/api";
+// export const PROTOCOL = "https";
+// export const SERVER_API_BASE = "ixn-backend.onrender.com/api";

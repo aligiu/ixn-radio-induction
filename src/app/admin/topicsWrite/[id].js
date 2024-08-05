@@ -109,19 +109,16 @@ export default function Topic() {
           >
             <RichText editor={editor} />
 
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                // bottom: keyboardHeight, // height of 50 + marginBottom of 10 for the Secrets File group
+              }}
             >
-              <SafeAreaView
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  // bottom: keyboardHeight, // height of 50 + marginBottom of 10 for the Secrets File group
-                }}
-              >
-                <Toolbar editor={editor} />
-              </SafeAreaView>
-            </KeyboardAvoidingView>
+              <Toolbar editor={editor} />
+            </View>
           </View>
           <View
             style={{

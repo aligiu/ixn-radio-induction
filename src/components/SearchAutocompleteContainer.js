@@ -7,7 +7,6 @@ import {
   Platform,
   Text,
 } from "react-native";
-import AutoScrollView from "../components/AutoScrollView";
 import SearchAutocompleteElement from "../components/searchAutocompleteElement";
 import { contentContainerStyles } from "../styles/contentContainer";
 import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";

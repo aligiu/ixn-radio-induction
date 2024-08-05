@@ -75,6 +75,7 @@ export default function Topic() {
           <TextInput
             label="Title"
             mode="outlined"
+            numberOfLines={1}
             onChangeText={(titleValue) => {
               setTitleValue(titleValue);
               updateFieldById_ContentToEdit(db, id, "title", titleValue);
@@ -85,7 +86,7 @@ export default function Topic() {
             label="Description"
             mode="outlined"
             multiline={true}
-            numberOfLines={4}
+            numberOfLines={2}
             value={descriptionValue}
             onChangeText={(descriptionValue) => {
               setDescriptionValue(descriptionValue);

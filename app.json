@@ -23,10 +23,12 @@
     },
     "android": {
       "package": "com.nghugo.ixn",
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "icon": "./assets/icon.png"
     },
     "ios": {
-      "bundleIdentifier": "com.nghugo.ixn"
+      "bundleIdentifier": "com.nghugo.ixn",
+      "icon": "./assets/icon.png"
     }
   }
 }

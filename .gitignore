@@ -57,3 +57,6 @@ yarn-error.*
 # Builds
 ios/
 android/
+
+# ios build
+ixn-ios.zip

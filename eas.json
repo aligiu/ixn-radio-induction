@@ -7,18 +7,30 @@
       "developmentClient": true,
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "default"
+      },
+      "ios": {
+        "image": "default"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "default"
+      },
+      "ios": {
+        "image": "default"
       }
     },
     "production": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "default"
+      },
+      "ios": {
+        "image": "default"
       }
     }
   },

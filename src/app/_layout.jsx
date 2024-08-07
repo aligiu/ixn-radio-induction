@@ -119,7 +119,7 @@ const PanGestureHandler = ({ children }) => {
   );
 };
 
-export default function Layout() {
+const Layout = () => {
   // SideMenu: use require instead of import to avoid circular dependency
   const SideMenu = require("../components/sidemenu").default;
 
@@ -131,15 +131,15 @@ export default function Layout() {
   // also hide secrets anyway if user
 
   const [fontsLoaded, fontError] = useFonts({
-    InterThin: require("assets/fonts/Inter-Thin.ttf"),
-    InterExtraLight: require("assets/fonts/Inter-ExtraLight.ttf"),
-    InterLight: require("assets/fonts/Inter-Light.ttf"),
-    InterRegular: require("assets/fonts/Inter-Regular.ttf"),
-    InterMedium: require("assets/fonts/Inter-Medium.ttf"),
-    InterSemiBold: require("assets/fonts/Inter-SemiBold.ttf"),
-    InterBold: require("assets/fonts/Inter-Bold.ttf"),
-    InterExtraBold: require("assets/fonts/Inter-ExtraBold.ttf"),
-    InterBlack: require("assets/fonts/Inter-Black.ttf"),
+    InterThin: require("../../assets/fonts/Inter-Thin.ttf"),
+    InterExtraLight: require("../../assets/fonts/Inter-ExtraLight.ttf"),
+    InterLight: require("../../assets/fonts/Inter-Light.ttf"),
+    InterRegular: require("../../assets/fonts/Inter-Regular.ttf"),
+    InterMedium: require("../../assets/fonts/Inter-Medium.ttf"),
+    InterSemiBold: require("../../assets/fonts/Inter-SemiBold.ttf"),
+    InterBold: require("../../assets/fonts/Inter-Bold.ttf"),
+    InterExtraBold: require("../../assets/fonts/Inter-ExtraBold.ttf"),
+    InterBlack: require("../../assets/fonts/Inter-Black.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -276,7 +276,7 @@ export default function Layout() {
     );
   }
 
-  function startsWithAnyPrefix(str: string, prefixList: string[]): boolean {
+  function startsWithAnyPrefix(str, prefixList) {
     return prefixList.some((prefix) => str.startsWith(prefix));
   }
 
@@ -344,3 +344,5 @@ export default function Layout() {
     </SQLiteProvider>
   );
 }
+
+export default Layout;

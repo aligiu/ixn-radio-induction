@@ -248,7 +248,7 @@ const SearchAutocompleteContainer = ({
                   textAlign: "center",
                 }}
               >
-                {`No matching results.`}
+                {`No matching results`}
               </TText>
               <TText
                 style={{
@@ -257,7 +257,7 @@ const SearchAutocompleteContainer = ({
                   textAlign: "center",
                 }}
               >
-                {`Continue typing or try a different query.`}
+                {`Continue typing or try a different query`}
               </TText>
             </View>
           )}

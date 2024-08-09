@@ -232,6 +232,7 @@ const Layout = () => {
           onPress={() => {
             if (searchbarInFocus || inputInFocus) {
               setInputInFocus(false);
+              setSearchbarInFocus(false)
               Keyboard.dismiss();
             } else if (navigation.canGoBack()) {
               navigation.goBack();
@@ -267,10 +268,10 @@ const Layout = () => {
           onFocus={() => {
             setSearchbarInFocus(true);
           }}
-          onBlur={() => {
-            Keyboard.dismiss();
-            setSearchbarInFocus(false);
-          }}
+          // onBlur={() => {
+          //   Keyboard.dismiss();
+          //   setSearchbarInFocus(false);
+          // }}
         />
       </View>
     );

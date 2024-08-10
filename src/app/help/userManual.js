@@ -17,7 +17,6 @@ import { fontSize } from "src/styles/fontConfig";
 import { TText } from "../_layout";
 
 export default function UserManual() {
-
   return (
     <ScrollView
       keyboardDismissMode="on-drag"
@@ -40,49 +39,86 @@ export default function UserManual() {
               style={styles.nhsLogo}
             />
           </View>
-          <TText variant="headlineSmall" style={[styles.pageTitle, {textAlign: "center"}]}>
+          <TText
+            variant="headlineSmall"
+            style={[styles.pageTitle, { textAlign: "center" }]}
+          >
             Radiologist Induction Companion{"\n"}User Manual
           </TText>
         </View>
         <View style={{ flex: 1 }}>
-          <TText style={styles.sectionTitle}>Section 1</TText>
-          <TText style={styles.sectionContent}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+          <TText style={styles.sectionTitle}>Overview</TText>
+          <TText style={styles.sectionSubTitle}>
+            Main Purpose of the Application
           </TText>
-
-          <TText style={styles.sectionTitle}>Section 2</TText>
           <TText style={styles.sectionContent}>
-            Sorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.ed ut
-            perspiciatis unde omnis iste natus error sit voluptatem accusantium
-            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-            inventore veritatis et quasi architecto beatae vitae dicta sunt
-            explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur
-            aut odit aut fugit, sed quia consequuntur magni dolores eos qui
-            ratione voluptatem sequi nesciunt.
+            The application serves as an "Induction Booklet" designed for easy
+            access by all radiology trainees within the deanery. It provides
+            organized information on various essential topics such as hospital
+            sites, educational resources, timetables, and more. The application
+            is structured with different sections, each accessible through
+            intuitive tabs.
           </TText>
-
-          <TText style={styles.sectionTitle}>Section 3</TText>
+          <TText style={styles.sectionSubTitle}>
+            Role-Based Access Control
+          </TText>
           <TText style={styles.sectionContent}>
-            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-            consectetur, adipisci velit, sed quia non numquam eius modi tempora
-            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut
-            enim ad minima veniam, quis nostrum exercitationem ullam corporis
-            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis
-            autem vel eum iure reprehenderit qui in ea voluptate velit esse quam
-            nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo
-            voluptas nulla pariatur?"
+            The application features three types of users:
+          </TText>
+          <TText style={styles.sectionContent}>
+            Guests: Can view text and files across all sections.
+          </TText>
+          <TText style={styles.sectionContent}>
+            Registered Users: Have the same access as guests but can
+            additionally view secret credentials.
+          </TText>
+          <TText style={styles.sectionContent}>
+            Admins: Have full access, including the ability to edit any content
+            within the application.
+          </TText>
+          <TText style={styles.sectionTitle}>Content Management</TText>
+          <TText style={styles.sectionSubTitle}>Reading Content</TText>
+          <TText style={styles.sectionContent}>
+            Automatic Updates: When an internet connection is available, the
+            application automatically updates its content upon launch, ensuring
+            that users always have access to the most recent information without
+            needing to perform any manual updates.
+          </TText>
+          <TText style={styles.sectionContent}>
+            Offline Usage: If the user is offline, a notification will inform
+            them that they are viewing offline content. The application will
+            automatically update the content once the internet connection is
+            reestablished.
+          </TText>
+          <TText style={styles.sectionSubTitle}>
+            Writing Content (For Admins)
+          </TText>
+          <TText style={styles.sectionContent}>
+            Content Editing: Admins have access to a built-in rich-text content
+            editor and file uploader, allowing them to edit and distribute new
+            content.
+          </TText>
+          <TText style={styles.sectionContent}>
+            Automatic Synchronization: Any new content distributed by admins
+            will be automatically synchronized across all users without
+            requiring them to update the application manually.
+          </TText>
+          <TText style={styles.sectionTitle}>Navigation</TText>
+          <TText style={styles.sectionSubTitle}>Content Organization</TText>
+          <TText style={styles.sectionContent}>
+            The application’s content is divided into individual sections, each
+            represented by clickable elements on the home page.
+          </TText>
+          <TText style={styles.sectionSubTitle}>User interaction</TText>
+          <TText style={styles.sectionContent}>
+            Primary Navigation: Users can navigate through the content by
+            clicking on these elements and using the back button located at the
+            top left corner of the screen.
+          </TText>
+          <TText style={styles.sectionContent}>
+            Search Bar: For quick access, users can utilize the search bar.
+            Entering a search term will display relevant pages if a match is
+            found, enabling efficient navigation to specific content.
           </TText>
         </View>
       </View>
@@ -106,7 +142,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: fontSize.LARGE,
-    fontFamily: "InterMedium",
+    fontFamily: "InterSemiBold",
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  sectionSubTitle: {
+    fontSize: fontSize.MEDIUM,
+    fontFamily: "InterSemiBold",
     paddingTop: 16,
     paddingBottom: 8,
   },
@@ -114,6 +156,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize.MEDIUM,
     fontFamily: "InterRegular",
     paddingBottom: 8,
-    textAlign: "justify",
+    textAlign: "left",
   },
 });

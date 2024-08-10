@@ -8,29 +8,30 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
-        "image": "default"
+        "image": "latest"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
-        "image": "default"
+        "image": "latest"
       }
     },
     "production": {
+      "owner": "nghugo",
       "android": {
         "buildType": "apk",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
-        "image": "default"
+        "image": "latest"
       }
     }
   },

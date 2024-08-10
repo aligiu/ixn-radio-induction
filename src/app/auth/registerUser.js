@@ -16,8 +16,15 @@ import { contentContainerStyles } from "src/styles/contentContainer";
 import { TText } from "../_layout";
 import { SERVER_API_BASE, PROTOCOL } from "../../config/paths";
 import { useNavigation } from "@react-navigation/native";
-import { getToken, storeToken, removeToken, getEmail, storeEmail, storeIsAdmin,
-  getIsAdmin, } from "../../utils/auth";
+import {
+  getToken,
+  storeToken,
+  removeToken,
+  getEmail,
+  storeEmail,
+  storeIsAdmin,
+  getIsAdmin,
+} from "../../utils/auth";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -41,14 +48,16 @@ export default function Register() {
       return;
     }
 
+    const payload = JSON.stringify({
+      email: data.email,
+      password: data.password,
+    });
+
+    console.log(payload);
+    const route = "/auth/register-user";
+
     try {
-      const payload = JSON.stringify({
-        email: data.email,
-        password: data.password,
-      });
-      console.log(payload);
-      const route = "/auth/register-user";
-      // no need to use fetchWithAuth because assume no JWT in local storage before registration
+      // Attempt to fetch the data
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {
@@ -63,26 +72,14 @@ export default function Register() {
         console.log("***", result);
         setErrorMessage(result.errorMessage);
       } else if (!response.ok) {
-        setErrorMessage("Network failure");
-      } else {
-        // response is ok at this point
-        const result = await response.json();
-        console.log("Registration successful:", result);
-        
-        await storeToken(result.token);
-        await storeEmail(result.email);
-        console.log("result.isAdmin", result.isAdmin)
-        await storeIsAdmin(result.isAdmin ? "true" : "false");
-        console.log('JWT stored locally in expo-secure-store');
-
-        setErrorMessage(" "); // set as 1 char space to prevent layout shift
-
-        // Navigate to the home screen upon successful registration
-        navigation.navigate("index");
+        // Handle other HTTP errors
+        setErrorMessage("Something went wrong. Please try again.");
       }
     } catch (error) {
-      console.error("Registration failed:", error);
-      setErrorMessage("An unknown error occurred");
+      // Catch network errors or other issues
+      setErrorMessage(
+        "Network failure. Please check your internet connection."
+      );
     }
   };
 
@@ -143,7 +140,6 @@ export default function Register() {
           </View>
 
           <View style={{ height: "50%", justifyContent: "flex-end", gap: 6 }}>
-  
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (

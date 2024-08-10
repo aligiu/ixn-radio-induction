@@ -39,7 +39,8 @@ export default function Login() {
       });
       console.log(payload);
       const route = "/auth/authenticate";
-      // no need to use fetchWithAuth because assume no JWT in local storage before login
+      
+      // Attempt to fetch the data
       const response = await fetch(`${PROTOCOL}://${SERVER_API_BASE}${route}`, {
         method: "POST",
         headers: {
@@ -47,12 +48,13 @@ export default function Login() {
         },
         body: payload,
       });
-
+    
       if (response.status === 403) {
         // Handle incorrect credentials
         setErrorMessage("Incorrect email or password");
       } else if (!response.ok) {
-        setErrorMessage("Network failure");
+        // Handle other HTTP errors
+        setErrorMessage("Something went wrong. Please try again.");
       } else {
         // response is ok at this point
         const result = await response.json();
@@ -60,7 +62,7 @@ export default function Login() {
         
         await storeToken(result.token);
         await storeEmail(result.email);
-        console.log("result.isAdmin", result.isAdmin)
+        console.log("result.isAdmin", result.isAdmin);
         await storeIsAdmin(result.isAdmin ? "true" : "false");
         console.log('JWT stored locally in expo-secure-store');
         
@@ -68,8 +70,8 @@ export default function Login() {
         
         // Navigate to the home screen upon successful login
         // navigation.navigate("index"); 
-          // the above navigation is commented out and replaced with the following
-          // reset stack to reload pages after login
+        // the above navigation is commented out and replaced with the following
+        // reset stack to reload pages after login
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -79,7 +81,14 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setErrorMessage("An unknown error occurred");
+    
+      if (error.name === 'TypeError') {
+        // Handle network errors
+        setErrorMessage("Network failure. Please check your internet connection.");
+      } else {
+        // Handle any other errors
+        setErrorMessage("An unknown error occurred.");
+      }
     }
   };
 

@@ -57,11 +57,7 @@ export default function AdminPanel() {
             </Button>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push("/auth/registerAdminOrUser")}>
-            <Button mode="elevated" style={{ marginTop: 15 }}>
-              <TText>Add a user</TText>
-            </Button>
-          </TouchableOpacity>
+
 
           <TouchableOpacity onPress={() => router.push("/sqlTest")}>
             <Button mode="elevated" style={{ marginTop: 15 }}>

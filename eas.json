@@ -1,4 +1,5 @@
 {
+  "owner": "nghugo",
   "cli": {
     "version": ">= 10.0.0"
   },
@@ -25,7 +26,6 @@
       }
     },
     "production": {
-      "owner": "nghugo",
       "android": {
         "buildType": "apk",
         "image": "latest"

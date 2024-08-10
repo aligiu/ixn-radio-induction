@@ -1,5 +1,4 @@
 {
-  "owner": "nghugo",
   "cli": {
     "version": ">= 10.0.0"
   },

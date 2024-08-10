@@ -79,14 +79,11 @@ export default function Login() {
           })
         );
       }
-    } catch (error) {
-      console.error("Login failed:", error);
-    
+    } catch (error) {    
+      // Catch network errors or other issues
       if (error.name === 'TypeError') {
-        // Handle network errors
         setErrorMessage("Network failure. Please check your internet connection.");
       } else {
-        // Handle any other errors
         setErrorMessage("An unknown error occurred.");
       }
     }

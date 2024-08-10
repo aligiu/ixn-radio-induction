@@ -77,9 +77,11 @@ export default function Register() {
       }
     } catch (error) {
       // Catch network errors or other issues
-      setErrorMessage(
-        "Network failure. Please check your internet connection."
-      );
+      if (error.name === 'TypeError') {
+        setErrorMessage("Network failure. Please check your internet connection.");
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
     }
   };
 

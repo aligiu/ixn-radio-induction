@@ -29,6 +29,7 @@
     "ios": {
       "bundleIdentifier": "com.nghugo.ixn",
       "icon": "./assets/icon.png"
-    }
+    },
+    "owner": "nghugo"
   }
 }

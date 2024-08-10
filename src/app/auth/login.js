@@ -82,7 +82,7 @@ export default function Login() {
     } catch (error) {    
       // Catch network errors or other issues
       if (error.name === 'TypeError') {
-        setErrorMessage("Network failure. Please check your internet connection.");
+        setErrorMessage("Connection failed. Please check your internet.");
       } else {
         setErrorMessage("An unknown error occurred.");
       }

@@ -65,8 +65,22 @@ export default function Register() {
         },
         body: payload,
       });
+      if (response.ok) {
+        // response is ok at this point
+        const result = await response.json();
+        console.log("Registration successful:", result);
+        
+        await storeToken(result.token);
+        await storeEmail(result.email);
+        console.log("result.isAdmin", result.isAdmin)
+        await storeIsAdmin(result.isAdmin ? "true" : "false");
+        console.log('JWT stored locally in expo-secure-store');
 
-      if (response.status === 409) {
+        setErrorMessage(" "); // set as 1 char space to prevent layout shift
+
+        // Navigate to the home screen upon successful registration
+        navigation.navigate("index");
+      } else if (response.status === 409) {
         // Handle conflicting request
         const result = await response.json();
         console.log("***", result);
@@ -77,8 +91,10 @@ export default function Register() {
       }
     } catch (error) {
       // Catch network errors or other issues
-      if (error.name === 'TypeError') {
-        setErrorMessage("Network failure. Please check your internet connection.");
+      if (error.name === "TypeError") {
+        setErrorMessage(
+          "Connection failed. Please check your internet."
+        );
       } else {
         setErrorMessage("An unknown error occurred.");
       }

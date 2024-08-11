@@ -18,36 +18,12 @@ export function getModifiedContent(contentToEdit, content, fileOps) {
       return false;
     }
     const originalItem = contentMap.get(item.id);
-    console.log(
-      "title mod:",
-      item.title,
-      originalItem.title,
-      item.title !== originalItem.title
-    );
-    console.log(
-      "description mod:",
-      item.description,
-      originalItem.description,
-      item.description !== originalItem.description
-    );
-    console.log(
-      "content mod:",
-      item.content,
-      originalItem.content,
-      item.content !== originalItem.content
-    );
-    console.log(
-      "secret mod:",
-      item.secret,
-      originalItem.secret,
-      item.secret !== originalItem.secret
-    );
     return (
       item.title !== originalItem.title ||
       item.description !== originalItem.description ||
       item.content !== originalItem.content ||
       item.secret !== originalItem.secret || 
-      (fileOps.filter(f=>f.folderId==item.id).length > 0)  // has either "add" or "delete" op
+      (fileOps.filter(f=>f.folderId==item.id).length > 0)  // has either "add" or "delete" op on files
     );
   });
 }

@@ -1,6 +1,4 @@
-import fuzzysort from "fuzzysort";
-
-// Function to strip HTML tags from a string
+// TODO: test
 export function stripHtmlTags(html) {
   if (!html) {
     return html;
@@ -10,6 +8,7 @@ export function stripHtmlTags(html) {
   return noTagsAndTrim;
 }
 
+// TODO: test
 // Function to add tagFreeContent field to each item in contentData
 export function addTagFreeContentAndSecret(contentData) {
   return contentData.map((item) => ({
@@ -18,22 +17,20 @@ export function addTagFreeContentAndSecret(contentData) {
     tagFreeSecret: stripHtmlTags(item.secret),
   }));
 }
-
 // Function to remove non-alphanumeric characters from a string
 export function removeNonAlphanumeric(str) {
   return str.replace(/[^a-zA-Z0-9]/g, "");
 }
 
-// Function to get surrounding text around a fuzzy search query
+// Function to get surrounding text around a query using exact match
 export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
   const cleanQuery = removeNonAlphanumeric(query);
 
-  // Perform the fuzzy search using fuzzysort
-  const result = fuzzysort.single(cleanQuery, longString);
-  const matchIndices = result ? result._indexes : [];
+  // Find the exact match using indexOf
+  const matchStart = longString.indexOf(cleanQuery);
 
-  // If no matches, return the full text with boundaries
-  if (matchIndices.length === 0) {
+  // If no match found, return empty matchedText and just the boundaries
+  if (matchStart === -1) {
     const prefix = longString.substring(0, boundaryWindowSize);
     const suffix = longString.substring(
       Math.max(0, longString.length - boundaryWindowSize)
@@ -45,48 +42,58 @@ export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
     };
   }
 
-  // Calculate the start and end of the surrounding text
-  const matchStart = Math.min(...matchIndices);
-  const matchEnd = findLastConsecutive(matchIndices, matchStart) + 1;
-  const surroundingStart = Math.max(matchStart - boundaryWindowSize, 0);
-  const surroundingEnd = Math.min(
-    matchEnd + boundaryWindowSize,
-    longString.length
-  );
+  // Calculate matchEnd based on the length of the cleanQuery
+  const matchEnd = matchStart + cleanQuery.length;
 
-  const prefixAtBorder = surroundingStart === 0;
-  const suffixAtBorder = surroundingEnd === longString.length;
-
-  const prefix = `${prefixAtBorder ? "" : "..."}${longString.substring(
-    surroundingStart,
-    matchStart
-  )}`;
+  // Extract the exact match
   const matchedText = longString.substring(matchStart, matchEnd);
-  const suffix = `${longString.substring(matchEnd, surroundingEnd)}${
-    suffixAtBorder ? "" : "..."
-  }`;
 
-  return { matchedText, prefix, suffix };
+  // Extend surroundingStart and surroundingEnd to include full words
+  const [surroundingStart, surroundingEnd] = [
+    extendSurroundingStart(
+      longString,
+      Math.max(matchStart - boundaryWindowSize, 0)
+    ),
+    extendSurroundingEnd(
+      longString,
+      Math.min(matchEnd + boundaryWindowSize, longString.length)
+    ),
+  ];
+
+  // Get the prefix and suffix
+  const prefix = longString.substring(surroundingStart, matchStart);
+  const suffix = longString.substring(matchEnd, surroundingEnd);
+
+  // Handle edge cases for prefix and suffix
+  const prefixText = surroundingStart === 0 ? prefix : `...${prefix}`;
+  const suffixText =
+    surroundingEnd === longString.length ? suffix : `${suffix}...`;
+
+  return {
+    matchedText,
+    prefix: prefixText,
+    suffix: suffixText,
+  };
 }
 
-// Helper function to find the last consecutive index in an array
-function findLastConsecutive(array, start) {
-  if (!Array.isArray(array)) {
-    throw new TypeError("Input must be an array");
+// Function to extend surroundingStart to include the first letter of the word
+function extendSurroundingStart(longString, surroundingStart) {
+  while (
+    surroundingStart > 0 &&
+    /[a-zA-Z0-9]/.test(longString[surroundingStart - 1])
+  ) {
+    surroundingStart--;
   }
+  return surroundingStart;
+}
 
-  const startIndex = array.indexOf(start);
-
-  if (startIndex === -1) return null;
-
-  let lastConsecutive = start;
-  for (let i = startIndex + 1; i < array.length; i++) {
-    if (array[i] === lastConsecutive + 1) {
-      lastConsecutive = array[i];
-    } else {
-      break;
-    }
+// Function to extend surroundingEnd to include the last letter of the word
+function extendSurroundingEnd(longString, surroundingEnd) {
+  while (
+    surroundingEnd < longString.length &&
+    /[a-zA-Z0-9]/.test(longString[surroundingEnd])
+  ) {
+    surroundingEnd++;
   }
-
-  return lastConsecutive;
+  return surroundingEnd;
 }

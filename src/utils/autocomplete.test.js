@@ -107,7 +107,9 @@ describe("autocomplete.js functions", () => {
       fuzzysort.single.mockReturnValue(null);
 
       const result = getSurroundingText(longString, query);
-      expect(result.matchedText).toEqual("");
+      expect(result.matchedText).toEqual(
+        ""
+      );
     });
 
     it("should handle queries at the beginning and end of the string", () => {

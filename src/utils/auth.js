@@ -9,7 +9,6 @@ export const storeToken = async (token) => {
   }
 };
 
-
 export const storeEmail = async (email) => {
   try {
     await SecureStore.setItemAsync("email", email);
@@ -28,7 +27,6 @@ export const storeIsAdmin = async (isAdmin) => {
   }
 };
 
-
 export const getToken = async () => {
   try {
     const token = await SecureStore.getItemAsync("jwt");
@@ -45,14 +43,13 @@ export const getToken = async () => {
 };
 
 export const getEmail = async () => {
-  const jwt = await getToken()
+  const jwt = await getToken();
   if (jwt === null) {
-    return null
+    return null;
   }
   try {
     const email = await SecureStore.getItemAsync("email");
     if (email) {
-      // console.log("Email retrieved successfully");
       return email;
     } else {
       console.log("No email stored");
@@ -61,7 +58,7 @@ export const getEmail = async () => {
     console.error("Error retrieving the email", error);
   }
   return null;
-}
+};
 
 export const getIsAdmin = async () => {
   try {
@@ -78,7 +75,6 @@ export const getIsAdmin = async () => {
   return null;
 };
 
-
 export const removeToken = async () => {
   try {
     await SecureStore.deleteItemAsync("jwt");
@@ -91,27 +87,25 @@ export const removeToken = async () => {
 export const removeIsAdmin = async () => {
   try {
     await SecureStore.deleteItemAsync("isAdmin");
-    console.log("Token removed successfully");
+    console.log("isAdmin removed successfully");
   } catch (error) {
-    console.error("Error removing the token", error);
+    console.error("Error removing the isAdmin", error);
   }
 };
 
-
 export const fetchWithJWT = async (url, options = {}) => {
-
   // fetch wrapper function which automatically includes the JWT in local secure store in fetch request
-  const token = await SecureStore.getItemAsync('jwt');
-  
+  const token = await SecureStore.getItemAsync("jwt");
+
   const headers = {
     ...options.headers,
     Authorization: `Bearer ${token}`,
   };
 
   if (options.body instanceof FormData) {
-    headers['Content-Type'] = 'multipart/form-data';
+    headers["Content-Type"] = "multipart/form-data";
   } else {
-    headers['Content-Type'] = 'application/json';
+    headers["Content-Type"] = "application/json";
   }
 
   return fetch(url, {
@@ -119,4 +113,3 @@ export const fetchWithJWT = async (url, options = {}) => {
     headers,
   });
 };
-

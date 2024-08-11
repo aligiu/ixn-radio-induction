@@ -39,6 +39,7 @@ function addTagFreeContentAndSecret(contentData) {
   }));
 }
 
+// TODO: test
 function removeNonAlphanumeric(str) {
   return str.replace(/[^a-zA-Z0-9]/g, "");
 }

@@ -1,4 +1,3 @@
-// TODO: test
 export function getContentById(data, id) {
   console.log("data is: ", data);
   for (let d of data) {
@@ -9,7 +8,6 @@ export function getContentById(data, id) {
   throw new Error(`No record with id = ${id}!`);
 }
 
-// TODO: test
 export function getPrevContentById(data, id) {
   const currentRecord = getContentById(data, id);
   if (currentRecord.prevId === null) {
@@ -18,7 +16,6 @@ export function getPrevContentById(data, id) {
   return getContentById(data, currentRecord.prevId);
 }
 
-// TODO: test
 export function getNextContentById(data, id) {
   const currentRecord = getContentById(data, id);
   if (currentRecord.nextId === null) {
@@ -27,7 +24,6 @@ export function getNextContentById(data, id) {
   return getContentById(data, currentRecord.nextId);
 }
 
-// TODO: test
 export function getMaxNumPlusOne(nums) {
   // Finds the max number + 1
   let maxFound = 0;

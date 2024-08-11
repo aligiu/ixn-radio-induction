@@ -26,7 +26,21 @@ global.fetch = jest.fn(() =>
   })
 );
 
+let originalConsoleError;
+
+beforeEach(() => {
+  // Save the original console.error
+  originalConsoleError = console.error;
+
+  // Mock console.error to suppress output
+  console.error = jest.fn();
+});
+
 afterEach(() => {
+  // Restore the original console.error
+  console.error = originalConsoleError;
+
+  // Clear all mocks
   jest.clearAllMocks();
 });
 

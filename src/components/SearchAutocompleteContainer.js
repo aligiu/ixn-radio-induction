@@ -14,7 +14,84 @@ import { useKeyboardHeight } from "../hooks/keyboard/keyboardHeight";
 import lunr from "lunr";
 import { TText } from "../app/_layout";
 import { fontSize } from "src/styles/fontConfig";
-import { addTagFreeContentAndSecret, getSurroundingText } from "../utils/autocomplete";
+
+
+
+import fuzzysort from "fuzzysort";
+
+export function stripHtmlTags(html) {
+  if (!html) {
+    return html;
+  }
+  const noTags = html.replace(/<\/?[^>]+(>|$)/g, " ");
+  const noTagsAndTrim = noTags.replace(/ +/g, " ").trim(); // convert multiple spaces to one space and trim start and ends
+  return noTagsAndTrim;
+}
+
+// Function to add tagFreeContent field to each item in contentData
+export function addTagFreeContentAndSecret(contentData) {
+  return contentData.map((item) => ({
+    ...item,
+    tagFreeContent: stripHtmlTags(item.content),
+    tagFreeSecret: stripHtmlTags(item.secret),
+  }));
+}
+
+export function removeNonAlphanumeric(str) {
+  return str.replace(/[^a-zA-Z0-9]/g, "");
+}
+
+export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
+  const cleanQuery = removeNonAlphanumeric(query);
+  // Perform the fuzzy search using fuzzysort
+  const result = fuzzysort.single(cleanQuery, longString);
+  const matchIndices = result ? result._indexes : [-1];
+
+  // Calculate the surrounding text of the first pattern match
+  const matchStart = Math.min(...matchIndices);
+  const matchEnd = findLastConsecutive(matchIndices, matchStart);
+  const surroundingStart = matchStart - boundaryWindowSize;
+  const surroundingEnd = matchEnd + boundaryWindowSize;
+
+  const prefixAtBorder = surroundingStart <= 0;
+  const suffixAtBorder = surroundingEnd >= longString.length;
+
+  const prefix = `${prefixAtBorder ? "" : "..."}${longString.substring(
+    surroundingStart,
+    matchStart
+  )}`;
+  const matchedText = `${longString.substring(matchStart, matchEnd + 1)}`;
+  const suffix = `${longString.substring(matchEnd + 1, surroundingEnd + 1)}${
+    suffixAtBorder ? "" : "..."
+  }`;
+  return { matchedText, prefix, suffix };
+}
+
+function findLastConsecutive(array, start) {
+    if (!Array.isArray(array)) {
+      throw new TypeError("Input must be an array");
+    }
+    // Find the index of the starting point
+    const startIndex = array.indexOf(start);
+  
+    // If the starting point is not found, return null
+    if (startIndex === -1) return null;
+  
+    // Traverse the array from the startIndex
+    let lastConsecutive = start;
+    for (let i = startIndex + 1; i < array.length; i++) {
+      // Check if the current element is consecutive to the lastConsecutive
+      if (array[i] === lastConsecutive + 1) {
+        lastConsecutive = array[i];
+      } else {
+        // Break the loop if the sequence is broken
+        break;
+      }
+    }
+  
+    return lastConsecutive;
+  }
+  
 
 
 const SearchAutocompleteContainer = ({
@@ -27,9 +104,6 @@ const SearchAutocompleteContainer = ({
   // contentDataX is an extension of contentData with two more fields: tagFreeContent, tagFreeSecret
   // removing tags improves search accuracy for lunr
   const contentDataX = addTagFreeContentAndSecret(contentData);
-
-  // console.log("contentDataX:", contentDataX.map((c) => {c.tagFreeContent}))
-  // console.log(contentDataX);
 
   // Create Lunr index
   const idx = lunr(function () {
@@ -55,24 +129,6 @@ const SearchAutocompleteContainer = ({
 
   const results = idx.search(query);
   const sortedResults = sortSearchResults(results);
-
-  // Example usage of levenshtein
-  const longString =
-    "This is a long string that we will search through. It might contain some interesting patterns.";
-  const fakeQuery = "search through";
-
-  // sortedResults.forEach((s) => {
-  //   console.log("Document Ref:", s.ref);
-  //   console.log("Metadata:", s.matchData.metadata);
-  // });
-
-  // // Log the results
-  // console.log("sortedResults:", sortedResults);
-  // sortedResults.forEach((s) => {
-  //   console.log("metadata", s.matchData.metadata);
-  //   c = getContentDataById(s.ref, contentData);
-  //   console.log("c", c);
-  // });
 
   function getNestedKey(obj) {
     // Iterate over the top-level keys of the object

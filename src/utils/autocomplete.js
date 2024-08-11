@@ -1,6 +1,5 @@
 import fuzzysort from "fuzzysort";
 
-// TODO: test
 export function stripHtmlTags(html) {
   if (!html) {
     return html;
@@ -10,7 +9,6 @@ export function stripHtmlTags(html) {
   return noTagsAndTrim;
 }
 
-// TODO: test
 // Function to add tagFreeContent field to each item in contentData
 export function addTagFreeContentAndSecret(contentData) {
   return contentData.map((item) => ({
@@ -20,17 +18,15 @@ export function addTagFreeContentAndSecret(contentData) {
   }));
 }
 
-// TODO: test
 export function removeNonAlphanumeric(str) {
   return str.replace(/[^a-zA-Z0-9]/g, "");
 }
 
-// TODO: test
 export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
   const cleanQuery = removeNonAlphanumeric(query);
   // Perform the fuzzy search using fuzzysort
   const result = fuzzysort.single(cleanQuery, longString);
-  const matchIndices = result ? result._indexes : [];
+  const matchIndices = result ? result._indexes : [-1];
 
   // Calculate the surrounding text of the first pattern match
   const matchStart = Math.min(...matchIndices);

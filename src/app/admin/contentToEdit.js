@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
@@ -19,16 +11,19 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 import { TText } from "../_layout";
 import { fontSize } from "src/styles/fontConfig";
-import AutoScrollView from "../../components/AutoScrollView";
 
-import SearchAutocompleteElement from "../../components/searchAutocompleteElement";
-import SearchbarContext from "../../context/SearchbarContext";
-import { contentContainerStyles } from "../../styles/contentContainer";
 import CancelEditModal from "../../components/CancelEditModal";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 import ReviewModal from "../../components/ReviewModal";
 
 import { overwriteContentToEdit } from "../../db/queries";
+
+import {
+  getContentById,
+  getPrevContentById,
+  getNextContentById,
+  getMaxNumPlusOne,
+} from "../../utils/editContent";
 
 export default function RearrangableTopics() {
   // const { searchbarInFocus, setSearchbarInFocus } =
@@ -144,7 +139,6 @@ export default function RearrangableTopics() {
     );
   };
 
-  // TODO: test
   const handleDeleteById = (data, id) => {
     console.log(`want to delete id ${id}`);
     // Create a new copy of the data array to avoid mutating the original array
@@ -170,36 +164,6 @@ export default function RearrangableTopics() {
     overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
   };
 
-  // TODO: test
-  function getContentById(data, id) {
-    console.log("data is: ", data);
-    for (let d of data) {
-      if (d.id === id) {
-        return d;
-      }
-    }
-    throw new Error(`No record with id = ${id}!`);
-  }
-
-  // TODO: test
-  function getPrevContentById(data, id) {
-    const currentRecord = getContentById(data, id);
-    if (currentRecord.prevId === null) {
-      return null; // Return null if the record is the root
-    }
-    return getContentById(data, currentRecord.prevId);
-  }
-
-  // TODO: test
-  function getNextContentById(data, id) {
-    const currentRecord = getContentById(data, id);
-    if (currentRecord.nextId === null) {
-      return null; // Return null if the record is the tail
-    }
-    return getContentById(data, currentRecord.nextId);
-  }
-
-  // TODO: test
   const handleDragEnd = ({ data }) => {
     // console.log("*** start");
     const newData = data.map((item, index) => ({
@@ -210,28 +174,9 @@ export default function RearrangableTopics() {
 
     // Update the state with the new data
     setContentData(newData);
-    // newData.forEach((item, i) => {
-    //   console.log(`i, prevId, id, nextId ${i}, ${item.prevId}, ${item.id}, ${item.nextId}`);
-    //   console.log("title", item.title)
-    // });
-    // console.log("*** end");
-    overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
-    // console.log("*** data abridged: ", data.map((d) => ({"title": d.title, "id": d.id, "next_id": d.next_id, "prev_id": d.prev_id, })));
-    // {"content": "", "description": "bruh", "id": 5, "nextId": 6, "prevId": 4, "timestamp": "2024-07-14 23:44:56", "title": "Wexham"},
-    // {"content": "", "description": "bruhh", "id": 6, "nextId": 7, "prevId": 5, "timestamp": "2024-07-14 23:44:56", "title": "Academy"},
+    overwriteContentToEdit(db, newData); // persist in ContentToEdit
   };
 
-  // TODO: test
-  function getMaxNumPlusOne(nums) {
-    // Finds the max number + 1
-    let maxFound = 0;
-    for (const num of nums) {
-      maxFound = Math.max(maxFound, num);
-    }
-    return maxFound + 1;
-  }
-
-  // TODO: test
   function appendToData(data, id, title, description, content) {
     // Create a new copy of the data array to avoid mutating the original array
     const newData = data.map((item) => ({ ...item }));
@@ -262,9 +207,6 @@ export default function RearrangableTopics() {
     setContentData(newData);
     overwriteContentToEdit(db, newData); // persist in ContentToEdit, IMPORTANT
   }
-
-  // console.log("***");
-  // appendToData(contentData, 999);
 
   // Custom DraggableFlatList for each list
   const RearrangableList = () => (

@@ -38,11 +38,12 @@ export function addTagFreeContentAndSecret(contentData) {
 }
 
 export function removeNonAlphanumeric(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, "");
+  return str.replace(/[^a-zA-Z0-9 ]/g, "");
 }
 
 export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
   const cleanQuery = removeNonAlphanumeric(query);
+  // const cleanQuery = query
   // Perform the fuzzy search using fuzzysort
   const result = fuzzysort.single(cleanQuery, longString);
   const matchIndices = result ? result._indexes : [-1];

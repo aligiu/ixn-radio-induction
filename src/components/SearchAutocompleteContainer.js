@@ -43,7 +43,6 @@ export function removeNonAlphanumeric(str) {
 
 export function getSurroundingText(longString, query, boundaryWindowSize = 30) {
   const cleanQuery = removeNonAlphanumeric(query);
-  // const cleanQuery = query
   // Perform the fuzzy search using fuzzysort
   const result = fuzzysort.single(cleanQuery, longString);
   const matchIndices = result ? result._indexes : [-1];

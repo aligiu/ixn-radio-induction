@@ -1,31 +1,14 @@
 import * as React from "react";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState } from "react";
 import {
-  ScrollView,
-  Text,
   View,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Link } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
-import { contentContainerStyles } from "/src/styles/contentContainer";
-
-import { TText } from "../../_layout";
-import { fontSize } from "src/styles/fontConfig";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRouter } from "expo-router";
-import AutoScrollView from "../../../components/AutoScrollView";
-import { Button, Portal, TextInput } from "react-native-paper";
-
-import { getAllContentSorted } from "../../../db/queries";
+import { Button,  TextInput } from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
-
 import { RichText, useEditorBridge, Toolbar } from "@10play/tentap-editor";
-
 import { useRoute } from "@react-navigation/native";
 
 import FileModalWrite from "../../../components/FileModalWrite";

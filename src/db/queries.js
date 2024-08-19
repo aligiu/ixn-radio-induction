@@ -153,30 +153,16 @@ export async function overwriteTargetWithSource(db, target, source) {
 // await db.execAsync(query, [newValue, id]);
 
 export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
-  try {
-    console.log(`Modifying field ${field} to newValue of ${newValue}`);
-
-    const statement = await db.prepareAsync(`
+  const statement = await db.prepareAsync(`
       UPDATE ContentToEdit
       SET ${field} = $newValue
       WHERE id = $id;
     `);
-
-    await statement.executeAsync({
-      $id: id,
-      $newValue: newValue,
-    });
-
-    console.log(`attempted updating ${id} ${field} to ${newValue}`);
-
-    const newContent = await getAllContentSorted(db, "ContentToEdit");
-    console.log("newContent ***", newContent);
-  } catch (error) {
-    console.log(
-      `Unable to update ${field} of ContentToEdit table to the new value of ${newValue}`
-    );
-    console.error(error);
-  }
+  await statement.executeAsync({
+    $id: id,
+    $newValue: newValue,
+  });
+  const newContent = await getAllContentSorted(db, "ContentToEdit");
 }
 
 export async function overwriteContentToEdit(db, contentToEditJson) {

@@ -219,55 +219,51 @@ export async function overwriteContentToEdit(db, contentToEditJson) {
 }
 
 export async function overwriteContent(db, contentData) {
-  try {
-    // set schema if not already existing
-    await setSchema(db);
+  // set schema if not already existing
+  await setSchema(db);
 
-    // Delete existing Content data for overwrite
-    await db.execAsync(`DELETE FROM Content`);
+  // Delete existing Content data for overwrite
+  await db.execAsync(`DELETE FROM Content`);
 
-    // Insert data for Content (prepared statement can take parameters)
-    const statement = await db.prepareAsync(`
+  // Insert data for Content (prepared statement can take parameters)
+  const statement = await db.prepareAsync(`
       INSERT INTO Content (id, title, description, content, nextId, prevId, secret)
       VALUES ($id, $title, $description, $content, $nextId, $prevId, $secret);
     `);
 
-    await Promise.all(
-      contentData.map((datapoint, index) => {
-        statement.executeAsync({
-          $id: datapoint.id,
-          $title: datapoint.title,
-          $description: datapoint.description,
-          $content: datapoint.content,
-          $nextId: datapoint.nextId,
-          $prevId: datapoint.prevId,
-          $secret: datapoint.secret ? datapoint.secret : null,
-        });
-      })
-    );
+  await Promise.all(
+    contentData.map((datapoint, index) => {
+      statement.executeAsync({
+        $id: datapoint.id,
+        $title: datapoint.title,
+        $description: datapoint.description,
+        $content: datapoint.content,
+        $nextId: datapoint.nextId,
+        $prevId: datapoint.prevId,
+        $secret: datapoint.secret ? datapoint.secret : null,
+      });
+    })
+  );
 
-    await statement.finalizeAsync();
+  await statement.finalizeAsync();
 
-    // Confirm success
-    console.log(`Content data has been updated in ${db.databaseName}`);
+  // Confirm success
+  console.log(`Content data has been updated in ${db.databaseName}`);
 
-    // Iterate over the results and print fields in the same row
-    const results = await db.getAllAsync("SELECT * FROM Content;");
-    for (let i = 0; i < results.length; i++) {
-      const row = results[i];
-      console.log(
-        `Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${
-          row.description
-        }, Content: ${row.content}, Next ID: ${row.nextId}, Previous ID: ${
-          row.prevId
-        }, Timestamp: ${row.timestamp}, Secret:${row.secret},
+  // Iterate over the results and print fields in the same row
+  const results = await db.getAllAsync("SELECT * FROM Content;");
+  for (let i = 0; i < results.length; i++) {
+    const row = results[i];
+    console.log(
+      `Row ${i + 1}: ID: ${row.id}, Title: ${row.title}, Description: ${
+        row.description
+      }, Content: ${row.content}, Next ID: ${row.nextId}, Previous ID: ${
+        row.prevId
+      }, Timestamp: ${row.timestamp}, Secret:${row.secret},
         `
-      );
-    }
-    console.log("All updated content data printed.");
-  } catch (error) {
-    console.error("Error updating content data: ", error);
+    );
   }
+  console.log("All updated content data printed.");
 }
 
 export async function removeOpInFileOps(db, folderId, fileName) {

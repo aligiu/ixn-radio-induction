@@ -212,37 +212,22 @@ const ReviewModal = ({ visible, closeModal, data }) => {
   };
 
   const handleConfirm = async () => {
-    try {
-      const [contentResponse, uploadFileResponses, deleteFileResponses] =
-        await Promise.all([uploadContent(), uploadFiles(), deleteFiles()]);
-
-      if (contentResponse.ok) {
-        console.log("Content uploaded successfully");
-        // Handle content response
-        overwriteTargetWithSource(db, "Content", "ContentToEdit");
-      } else {
-        throw new Error("Content upload failed");
-      }
-
-      const allFileUploadsOk = uploadFileResponses.every((res) => res.ok);
-      if (allFileUploadsOk) {
-        console.log("All files uploaded successfully");
-      } else {
-        throw new Error("One or more file uploads failed");
-      }
-
-      // const allFileDeletesOk = deleteFileResponses.every((res) => res.ok);
-      // if (allFileDeletesOk) {
-      //   console.log("All files deleted successfully");
-      // } else {
-      //   throw new Error("One or more file deletes failed");
-      // }
-
-      closeModal();
-      navigation.navigate(`index`);
-    } catch (error) {
-      console.error("Error deleting files:", error);
+    const [contentResponse, uploadFileResponses, deleteFileResponses] =
+      await Promise.all([uploadContent(), uploadFiles(), deleteFiles()]);
+    if (!contentResponse.ok) {
+      throw new Error("Content upload failed");
     }
+    overwriteTargetWithSource(db, "Content", "ContentToEdit");
+    const allFileUploadsOk = uploadFileResponses.every((res) => res.ok);
+    if (!allFileUploadsOk) {
+      throw new Error("One or more file uploads failed");
+    }
+    const allFileDeletesOk = deleteFileResponses.every((res) => res.ok);
+    if (!allFileDeletesOk) {
+      throw new Error("One or more file deletes failed");
+    }
+    closeModal();
+    navigation.navigate(`index`);
   };
   return (
     <Portal>

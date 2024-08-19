@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
-import {
-  View,
-  Platform,
-} from "react-native";
+import { View, Platform } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button,  TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
 import { RichText, useEditorBridge, Toolbar } from "@10play/tentap-editor";
 import { useRoute } from "@react-navigation/native";
@@ -25,8 +22,7 @@ export default function Topic() {
   const { id } = useLocalSearchParams();
 
   const route = useRoute();
-  const navigation = useNavigation();
-  const { content, title, description, secret, contentData } = route.params;
+  const { content, title, description, secret } = route.params;
   const [secretState, setSecretState] = useState(secret);
 
   const editor = useEditorBridge({

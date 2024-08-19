@@ -11,7 +11,6 @@ import { useRoute } from "@react-navigation/native";
 import FileModalWrite from "../../../components/FileModalWrite";
 import SecretModal from "../../../components/SecretModal";
 import { updateFieldById_ContentToEdit } from "../../../db/queries";
-import { useNavigation } from "@react-navigation/native";
 import { useKeyboardHeight } from "../../../hooks/keyboard/keyboardHeight";
 import InputContext from "../../../context/InputContext";
 

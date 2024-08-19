@@ -51,18 +51,18 @@ export default function RearrangableTopics() {
     }));
     setContentData(sortedContentWithKey);
   }
-
+  
   useEffect(() => {
     async function updateContentAndRerender() {
       try {
         await overwriteContentWithRemote(db);
-        setNumRefresh((prev) => prev + 1); // Increment numRefresh
       } catch {
         // Show error message if overwriteContentWithRemote fails
         setSnackbarMessage(
           "Unable to fetch data from the server. Showing local data instead."
         );
         setSnackbarVisible(true);
+      } finally {
         setNumRefresh((prev) => prev + 1); // Increment numRefresh
       }
     }

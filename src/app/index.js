@@ -51,7 +51,7 @@ export default function RearrangableTopics() {
     }));
     setContentData(sortedContentWithKey);
   }
-  
+
   useEffect(() => {
     async function updateContentAndRerender() {
       try {
@@ -72,7 +72,7 @@ export default function RearrangableTopics() {
   useFocusEffect(
     useCallback(() => {
       console.log("Focus effect triggered with numRefresh:", numRefresh);
-      if (snackbarVisible || numRefresh > 0) {
+      if (numRefresh > 0) {
         async function initData() {
           await setSchema(db);
           await fetchContentDataLocally();

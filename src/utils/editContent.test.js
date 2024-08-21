@@ -33,16 +33,35 @@ describe("RearrangableTopics", () => {
     expect(result).toEqual(mockData[0]);
   });
 
+  test("should throw error if no record is found by id", () => {
+    const data = [...mockData];
+    expect(() => getContentById(data, 999)).toThrowError(
+      new Error("No record with id = 999!")
+    );
+  });
+
   test("should get previous content by id", () => {
     const data = [...mockData];
     const result = getPrevContentById(data, 2);
     expect(result).toEqual(mockData[0]);
   });
 
+  test("should get null if no previous content", () => {
+    const data = [...mockData];
+    const result = getPrevContentById(data, 1);
+    expect(result).toEqual(null);
+  });
+
   test("should get next content by id", () => {
     const data = [...mockData];
     const result = getNextContentById(data, 1);
     expect(result).toEqual(mockData[1]);
+  });
+
+  test("should get null if no next content", () => {
+    const data = [...mockData];
+    const result = getNextContentById(data, 2);
+    expect(result).toEqual(null);
   });
 
   test("should get max number plus one", () => {

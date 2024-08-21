@@ -1,31 +1,3 @@
-// getAllContentSorted
-// getAllContentUnsorted
-// sortContent
-
-// CAUTION: sqlite can handle table names as parameters in ${} form
-// but not value parameters in ${} as they will be misunderstood as column names
-// Must use prepared statements for values
-
-// Eg
-
-// The following will fail
-
-// n = await db.getFirstAsync(
-//   `SELECT COUNT(*) AS n FROM FileOps WHERE folderId=${folderId} AND fileName=${fileName}`
-// )
-
-// Instead, use prepared statements to handle value parameters:
-
-// const getCountStatement = await db.prepareAsync(`
-//   SELECT COUNT(*) AS n FROM FileOps
-//   WHERE folderId=$folderId AND fileName=$fileName;
-// `);
-// res = await getCountStatement.executeAsync({
-//   $folderId: folderId,
-//   $fileName: fileName,
-// });
-// n = (await res.getFirstAsync())["n"];
-
 import { setSchema } from "./setSchema";
 
 export async function getRootContent(db, table) {

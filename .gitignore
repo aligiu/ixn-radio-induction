@@ -60,3 +60,6 @@ android/
 
 # ios build
 ixn-ios.zip
+
+# jest coverage
+coverage

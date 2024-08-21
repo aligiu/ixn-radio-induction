@@ -47,15 +47,11 @@ export const getEmail = async () => {
   if (jwt === null) {
     return null;
   }
-  try {
-    const email = await SecureStore.getItemAsync("email");
-    if (email) {
-      return email;
-    } else {
-      console.log("No email stored");
-    }
-  } catch (error) {
-    console.error("Error retrieving the email", error);
+  const email = await SecureStore.getItemAsync("email");
+  if (email) {
+    return email;
+  } else {
+    console.log("No email stored");
   }
   return null;
 };

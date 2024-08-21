@@ -276,5 +276,20 @@ describe("Utility Functions", () => {
       });
       expect(console.error).not.toHaveBeenCalled();
     });
+
+    it("should work with empty options and set default headers", async () => {
+      SecureStore.getItemAsync.mockResolvedValueOnce("test-token");
+      const url = "https://example.com";
+    
+      await fetchWithJWT(url); // No options provided
+      expect(fetch).toHaveBeenCalledWith(url, {
+        headers: {
+          Authorization: "Bearer test-token",
+          "Content-Type": "application/json", // Default Content-Type
+        },
+      });
+      expect(console.error).not.toHaveBeenCalled();
+    });
+    
   });
 });

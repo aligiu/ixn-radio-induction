@@ -24,9 +24,12 @@ import { fontSize } from "src/styles/fontConfig";
 import SearchAutocompleteContainer from "../components/SearchAutocompleteContainer";
 import SearchbarContext from "../context/SearchbarContext";
 
-import { overwriteContentWithRemote } from "../utils/content";
 import { getToken } from "../utils/auth";
 import { setSchema } from "../db/setSchema";
+
+import { SERVER_API_BASE, PROTOCOL } from "../config/paths";
+import { fetchWithJWT } from "../utils/auth";
+import { overwriteContent } from "../db/queries";
 
 export default function RearrangableTopics() {
   const { searchbarInFocus, setSearchbarInFocus, searchbarText } =
@@ -267,4 +270,27 @@ function TopicBlock({ title, description, imageSource }) {
       </View>
     </View>
   );
+}
+
+
+
+async function overwriteContentWithRemote(db) {
+  const route = "/content/latest";
+  const response = await fetchWithJWT(
+    `${PROTOCOL}://${SERVER_API_BASE}${route}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  console.log("done");
+  if (!response.ok) {
+    throw new Error("Error fetching remote content");
+  }
+  const latestContent = await response.json();
+
+  console.log("latestContent ***", latestContent);
+  await overwriteContent(db, latestContent);
 }

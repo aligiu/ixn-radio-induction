@@ -15,18 +15,6 @@ export async function getRootContent(db, table) {
   return roots[0]; // there should only be one root
 }
 
-export async function getTailContent(db, table) {
-  await setSchema(db);
-  const tails = await db.getAllAsync(`
-    SELECT *
-    FROM ${table} 
-    WHERE nextId IS NULL;`);
-  if (tails.length !== 1) {
-    throw new Error("More than one record with NULL nextId found!");
-  }
-  return tails[0]; // there should only be one tail
-}
-
 export async function getNextContent(db, table, curr_id) {
   await setSchema(db);
   const nexts = await db.getAllAsync(`
@@ -115,14 +103,6 @@ export async function overwriteTargetWithSource(db, target, source) {
 
   console.log("Content copied to ${target} successfully.");
 }
-
-// not working
-// const query = `
-//   UPDATE ContentToEdit
-//   SET ${field} = ?
-//   WHERE id = ?;
-// `;
-// await db.execAsync(query, [newValue, id]);
 
 export async function updateFieldById_ContentToEdit(db, id, field, newValue) {
   const statement = await db.prepareAsync(`

@@ -9,7 +9,7 @@ import {
   removeToken,
   removeIsAdmin,
   fetchWithJWT,
-} from "./auth"; // Update the path if needed
+} from "./auth";
 
 // Mock SecureStore module
 jest.mock("expo-secure-store", () => ({

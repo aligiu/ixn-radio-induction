@@ -1,6 +1,6 @@
 # Induction App for Radiologists  
 IXN project for UCL MSc Computer Science [NHS x IBM]  
-This is the frontend code. The backend code is in a [separate repository](https://nodejs.org/](https://github.com/nghugo/ixn-backend).
+This is the frontend code. The backend code is in a [separate repository](https://github.com/nghugo/ixn-backend).
 
 ## Explanation  
 With the frontend code, you can:  
